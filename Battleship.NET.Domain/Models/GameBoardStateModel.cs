@@ -7,6 +7,17 @@ namespace Battleship.NET.Domain.Models
 {
     public class GameBoardStateModel
     {
+        public static GameBoardStateModel CreateIdle(
+                GameBoardDefinitionModel definition,
+                IEnumerable<ShipDefinitionModel> ships)
+            => new GameBoardStateModel(
+                definition,
+                ImmutableHashSet<Point>.Empty,
+                ImmutableHashSet<Point>.Empty,
+                ships
+                    .Select(ship => ShipStateModel.CreateIdle(ship))
+                    .ToImmutableList());
+
         public GameBoardStateModel(
             GameBoardDefinitionModel definition,
             ImmutableHashSet<Point> hits,

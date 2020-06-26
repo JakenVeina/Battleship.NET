@@ -4,6 +4,13 @@ namespace Battleship.NET.Domain.Models
 {
     public class ShipStateModel
     {
+        public static ShipStateModel CreateIdle(
+                ShipDefinitionModel definitionModel)
+            => new ShipStateModel(
+                definitionModel,
+                default,
+                default);
+
         public ShipStateModel(
             ShipDefinitionModel definition,
             Rotation orientation,

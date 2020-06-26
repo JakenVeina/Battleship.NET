@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 
@@ -6,6 +8,20 @@ namespace Battleship.NET.Domain.Models
 {
     public class GameStateModel
     {
+        public static GameStateModel CreateIdle(
+                GameBoardDefinitionModel gameBoard,
+                IEnumerable<ShipDefinitionModel> ships,
+                PlayerDefinitionModel player1,
+                PlayerDefinitionModel player2)
+            => new GameStateModel(
+                default,
+                0,
+                default,
+                PlayerStateModel.CreateIdle(player1, gameBoard, ships),
+                PlayerStateModel.CreateIdle(player2, gameBoard, ships),
+                TimeSpan.Zero,
+                GameState.Idle);
+
         public GameStateModel(
             GamePlayer currentPlayer,
             int gamesPlayed,

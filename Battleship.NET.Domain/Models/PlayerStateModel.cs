@@ -1,10 +1,23 @@
-﻿using System.Drawing;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Net;
 
 namespace Battleship.NET.Domain.Models
 {
     public class PlayerStateModel
     {
+        public static PlayerStateModel CreateIdle(
+                PlayerDefinitionModel definition,
+                GameBoardDefinitionModel gameBoard,
+                IEnumerable<ShipDefinitionModel> ships)
+            => new PlayerStateModel(
+                false,
+                definition,
+                GameBoardStateModel.CreateIdle(gameBoard, ships),
+                false,
+                0);
+
         public PlayerStateModel(
             bool canFireShot,
             PlayerDefinitionModel definition,
