@@ -1,6 +1,6 @@
-﻿namespace Battleship.NET.Domain.Models
+﻿namespace System.Drawing
 {
-    public enum Orientation
+    public enum Rotation
     {
         Rotate0 = 0,
         Rotate90 = 90,

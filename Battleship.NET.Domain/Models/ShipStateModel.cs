@@ -6,7 +6,7 @@ namespace Battleship.NET.Domain.Models
     {
         public ShipStateModel(
             ShipDefinitionModel definition,
-            Orientation orientation,
+            Rotation orientation,
             Point position)
         {
             Definition = definition;
@@ -14,10 +14,20 @@ namespace Battleship.NET.Domain.Models
             Position = position;
         }
 
+
         public ShipDefinitionModel Definition { get; }
 
-        public Orientation Orientation { get; }
+        public Rotation Orientation { get; }
 
         public Point Position { get; }
+
+
+        public ShipStateModel Move(
+                Rotation orientation,
+                Point position)
+            => new ShipStateModel(
+                Definition,
+                orientation,
+                position);
     }
 }

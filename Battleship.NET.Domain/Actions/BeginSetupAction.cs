@@ -2,7 +2,7 @@
 
 namespace Battleship.NET.Domain.Actions
 {
-    public class StartNewGameAction
+    public class BeginSetupAction
         : IAction
     { }
 }

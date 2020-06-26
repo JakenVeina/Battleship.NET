@@ -8,11 +8,11 @@ namespace Battleship.NET.Domain.Actions
         : IAction
     {
         public UpdateRuntimeAction(
-            DateTimeOffset utcNow)
+            DateTime now)
         {
-            UtcNow = utcNow;
+            Now = now;
         }
 
-        public DateTimeOffset UtcNow { get; }
+        public DateTime Now { get; }
     }
 }

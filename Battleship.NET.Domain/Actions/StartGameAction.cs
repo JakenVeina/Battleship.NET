@@ -4,10 +4,10 @@ using Battleship.NET.Domain.Models;
 
 namespace Battleship.NET.Domain.Actions
 {
-    public class SetFirstPlayerAction
+    public class StartGameAction
         : IAction
     {
-        public SetFirstPlayerAction(
+        public StartGameAction(
             GamePlayer firstPlayer)
         {
             FirstPlayer = firstPlayer;
