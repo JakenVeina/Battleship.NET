@@ -5,16 +5,15 @@ using Battleship.NET.Domain.Actions;
 
 namespace Battleship.NET.Domain
 {
-    public class GameStateStore
+    public class Game
         : Store<GameStateModel>
     {
-        public GameStateStore(
-                GameStateModel initialState,
-                params Middleware<GameStateModel>[] middlewares)
-            : base(Reduce, initialState, middlewares)
+        public Game(
+                GameStateModel initialState)
+            : base(ReduceState, initialState)
         { }
 
-        private static GameStateModel Reduce(
+        public static GameStateModel ReduceState(
                 GameStateModel previousState,
                 IAction action)
             => action switch

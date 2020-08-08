@@ -8,21 +8,21 @@ namespace Battleship.NET.Domain.Models
     {
         public static GameBoardDefinitionModel Create(
                 string name,
-                IEnumerable<Point> points)
+                IEnumerable<Point> positions)
             => new GameBoardDefinitionModel(
                 name,
-                points.ToImmutableHashSet());
+                positions.ToImmutableHashSet());
 
         public GameBoardDefinitionModel(
             string name,
-            ImmutableHashSet<Point> points)
+            ImmutableHashSet<Point> positions)
         {
             Name = name;
-            Points = points;
+            Positions = positions;
         }
 
         public string Name { get; }
 
-        public ImmutableHashSet<Point> Points { get; }
+        public ImmutableHashSet<Point> Positions { get; }
     }
 }

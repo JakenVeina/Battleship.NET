@@ -1,39 +1,39 @@
-﻿using System.Drawing;
+﻿using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
 
 namespace Battleship.NET.Domain.Models
 {
     public class ShipStateModel
     {
-        public static ShipStateModel CreateIdle(
-                ShipDefinitionModel definitionModel)
-            => new ShipStateModel(
-                definitionModel,
+        public static readonly ShipStateModel Idle
+            = new ShipStateModel(
                 default,
                 default);
 
         public ShipStateModel(
-            ShipDefinitionModel definition,
             Rotation orientation,
             Point position)
         {
-            Definition = definition;
             Orientation = orientation;
             Position = position;
         }
 
-
-        public ShipDefinitionModel Definition { get; }
 
         public Rotation Orientation { get; }
 
         public Point Position { get; }
 
 
+        public IEnumerable<Point> EnumeratePositions(
+                ShipDefinitionModel definition)
+            => definition.Points
+                .Select(point => point.RotateOrigin(Orientation).Translate(Position));
+
         public ShipStateModel Move(
                 Rotation orientation,
                 Point position)
             => new ShipStateModel(
-                Definition,
                 orientation,
                 position);
     }

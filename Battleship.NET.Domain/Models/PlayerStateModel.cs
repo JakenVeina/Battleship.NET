@@ -8,25 +8,20 @@ namespace Battleship.NET.Domain.Models
     public class PlayerStateModel
     {
         public static PlayerStateModel CreateIdle(
-                PlayerDefinitionModel definition,
-                GameBoardDefinitionModel gameBoard,
                 IEnumerable<ShipDefinitionModel> ships)
             => new PlayerStateModel(
                 false,
-                definition,
-                GameBoardStateModel.CreateIdle(gameBoard, ships),
+                GameBoardStateModel.CreateIdle(ships),
                 false,
                 0);
 
         public PlayerStateModel(
             bool canFireShot,
-            PlayerDefinitionModel definition,
             GameBoardStateModel gameBoard,
             bool isSetupComplete,
             int wins)
         {
             CanFireShot = canFireShot;
-            Definition = definition;
             GameBoard = gameBoard;
             IsSetupComplete = isSetupComplete;
             Wins = wins;
@@ -35,8 +30,6 @@ namespace Battleship.NET.Domain.Models
 
         public bool CanFireShot { get; }
 
-        public PlayerDefinitionModel Definition { get; }
-
         public GameBoardStateModel GameBoard { get; }
 
         public bool IsSetupComplete { get; }
@@ -44,10 +37,11 @@ namespace Battleship.NET.Domain.Models
         public int Wins { get; }
 
 
-        public bool CanCompleteSetup
+        public bool CanCompleteSetup(
+                GameBoardDefinitionModel gameBoard,
+                IEnumerable<ShipDefinitionModel> ships)
             => !IsSetupComplete
-                && GameBoard.IsValid;
-
+                && GameBoard.IsValid(gameBoard, ships);
 
         public bool CanReceiveShot(
                 Point position)
@@ -57,7 +51,6 @@ namespace Battleship.NET.Domain.Models
         public PlayerStateModel BeginSetup()
             => new PlayerStateModel(
                 CanFireShot,
-                Definition,
                 GameBoard,
                 false,
                 Wins);
@@ -65,7 +58,6 @@ namespace Battleship.NET.Domain.Models
         public PlayerStateModel CompleteSetup()
             => new PlayerStateModel(
                 CanFireShot,
-                Definition,
                 GameBoard,
                 true,
                 Wins);
@@ -73,7 +65,6 @@ namespace Battleship.NET.Domain.Models
         public PlayerStateModel FireShot()
             => new PlayerStateModel(
                 false,
-                Definition,
                 GameBoard,
                 IsSetupComplete,
                 Wins);
@@ -81,7 +72,6 @@ namespace Battleship.NET.Domain.Models
         public PlayerStateModel IncrementWins()
             => new PlayerStateModel(
                 CanFireShot,
-                Definition,
                 GameBoard,
                 IsSetupComplete,
                 Wins + 1);
@@ -92,24 +82,22 @@ namespace Battleship.NET.Domain.Models
                 Point position)
             => new PlayerStateModel(
                 CanFireShot,
-                Definition,
                 GameBoard.MoveShip(shipIndex, orientation, position),
                 IsSetupComplete,
                 Wins);
 
         public PlayerStateModel ReceiveShot(
-                Point position)
+                Point position,
+                IEnumerable<ShipDefinitionModel> ships)
             => new PlayerStateModel(
                 CanFireShot,
-                Definition,
-                GameBoard.ReceiveShot(position),
+                GameBoard.ReceiveShot(position, ships),
                 IsSetupComplete,
                 Wins);
 
         public PlayerStateModel StartTurn()
             => new PlayerStateModel(
                 true,
-                Definition,
                 GameBoard,
                 IsSetupComplete,
                 Wins);
