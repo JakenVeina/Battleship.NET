@@ -1,0 +1,91 @@
+﻿<ResourceDictionary
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="clr-namespace:Battleship.NET.Avalonia.Controls;assembly=Battleship.NET.Avalonia"
+    x:Class="Battleship.NET.Avalonia.Resources.StandardGameSpriteDefinitions">
+  <c:VectorSpriteDefinition
+    x:Key="Sprite_Ship_Standard_Carrier_0_0"
+    CanvasHeight="10"
+    CanvasWidth="10"
+    Geometry="M10,2 L5,5 L10,8 Z"/>
+  <c:VectorSpriteDefinition
+    x:Key="Sprite_Ship_Standard_Carrier_1_0"
+    CanvasHeight="10"
+    CanvasWidth="10"
+    Geometry="M0,2 L10,2 L10,8 L0,8 Z"/>
+  <c:VectorSpriteDefinition
+    x:Key="Sprite_Ship_Standard_Carrier_2_0"
+    CanvasHeight="10"
+    CanvasWidth="10"
+    Geometry="M0,2 L10,2 L10,8 L0,8 Z"/>
+  <c:VectorSpriteDefinition
+    x:Key="Sprite_Ship_Standard_Carrier_3_0"
+    CanvasHeight="10"
+    CanvasWidth="10"
+    Geometry="M0,2 L10,2 L10,8 L0,8 Z"/>
+  <c:VectorSpriteDefinition
+    x:Key="Sprite_Ship_Standard_Carrier_4_0"
+    CanvasHeight="10"
+    CanvasWidth="10"
+    Geometry="M0,2 L5,2 L5,8 L0,8 Z"/>
+  <c:VectorSpriteDefinition
+    x:Key="Sprite_Ship_Standard_Battleship_0_0"
+    CanvasHeight="10"
+    CanvasWidth="10"
+    Geometry="M10,2 L5,5 L10,8 Z"/>
+  <c:VectorSpriteDefinition
+    x:Key="Sprite_Ship_Standard_Battleship_1_0"
+    CanvasHeight="10"
+    CanvasWidth="10"
+    Geometry="M0,2 L10,2 L10,8 L0,8 Z"/>
+  <c:VectorSpriteDefinition
+    x:Key="Sprite_Ship_Standard_Battleship_2_0"
+    CanvasHeight="10"
+    CanvasWidth="10"
+    Geometry="M0,2 L10,2 L10,8 L0,8 Z"/>
+  <c:VectorSpriteDefinition
+    x:Key="Sprite_Ship_Standard_Battleship_3_0"
+    CanvasHeight="10"
+    CanvasWidth="10"
+    Geometry="M0,2 L5,2 L5,8 L0,8 Z"/>
+  <c:VectorSpriteDefinition
+    x:Key="Sprite_Ship_Standard_Destroyer_0_0"
+    CanvasHeight="10"
+    CanvasWidth="10"
+    Geometry="M10,2 L5,5 L10,8 Z"/>
+  <c:VectorSpriteDefinition
+    x:Key="Sprite_Ship_Standard_Destroyer_1_0"
+    CanvasHeight="10"
+    CanvasWidth="10"
+    Geometry="M0,2 L10,2 L10,8 L0,8 Z"/>
+  <c:VectorSpriteDefinition
+    x:Key="Sprite_Ship_Standard_Destroyer_2_0"
+    CanvasHeight="10"
+    CanvasWidth="10"
+    Geometry="M0,2 L5,2 L5,8 L0,8 Z"/>
+  <c:VectorSpriteDefinition
+    x:Key="Sprite_Ship_Standard_Submarine_0_0"
+    CanvasHeight="10"
+    CanvasWidth="10"
+    Geometry="M10,2 L5,5 L10,8 Z"/>
+  <c:VectorSpriteDefinition
+    x:Key="Sprite_Ship_Standard_Submarine_1_0"
+    CanvasHeight="10"
+    CanvasWidth="10"
+    Geometry="M0,2 L10,2 L10,8 L0,8 Z"/>
+  <c:VectorSpriteDefinition
+    x:Key="Sprite_Ship_Standard_Submarine_2_0"
+    CanvasHeight="10"
+    CanvasWidth="10"
+    Geometry="M0,2 L5,2 L5,8 L0,8 Z"/>
+  <c:VectorSpriteDefinition
+    x:Key="Sprite_Ship_Standard_PatrolBoat_0_0"
+    CanvasHeight="10"
+    CanvasWidth="10"
+    Geometry="M10,2 L5,5 L10,8 Z"/>
+  <c:VectorSpriteDefinition
+    x:Key="Sprite_Ship_Standard_PatrolBoat_1_0"
+    CanvasHeight="10"
+    CanvasWidth="10"
+    Geometry="M0,2 L5,2 L5,8 L0,8 Z"/>
+</ResourceDictionary>

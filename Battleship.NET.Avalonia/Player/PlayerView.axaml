@@ -1,0 +1,23 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    x:Class="Battleship.NET.Avalonia.Player.PlayerView">
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+
+    <TextBlock
+      Grid.Row="0"
+      Text="{Binding Name^}"/>
+
+    <StackPanel
+        Grid.Row="1"
+        Orientation="Horizontal">
+      <TextBlock>Wins:</TextBlock>
+      <TextBlock Text="{Binding Wins^}"/>
+    </StackPanel>
+  </Grid>
+</UserControl>

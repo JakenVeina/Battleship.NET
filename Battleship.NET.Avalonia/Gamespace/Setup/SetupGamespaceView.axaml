@@ -1,0 +1,24 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:setup="clr-namespace:Battleship.NET.Avalonia.Gamespace.Setup;assembly=Battleship.NET.Avalonia"
+    x:Class="Battleship.NET.Avalonia.Gamespace.Setup.SetupGamespaceView">
+  
+  <Viewbox Stretch="Uniform">
+    <ItemsControl
+        Name="BoardTiles"
+        Items="{Binding BoardTiles^}">
+      <ItemsControl.ItemsPanel>
+        <ItemsPanelTemplate>
+          <UniformGrid
+            Columns="{Binding BoardSize^.Width}"
+            Rows="{Binding BoardSize^.Height}"/>
+        </ItemsPanelTemplate>
+      </ItemsControl.ItemsPanel>
+      <ItemsControl.DataTemplates>
+        <DataTemplate><setup:SetupGamespaceBoardTileView/></DataTemplate>
+      </ItemsControl.DataTemplates>
+    </ItemsControl>
+  </Viewbox>
+
+</UserControl>

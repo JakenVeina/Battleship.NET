@@ -1,0 +1,11 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    x:Class="Battleship.NET.Avalonia.Controls.VectorSprite">
+  <Viewbox Stretch="Uniform">
+    <Path Data="{Binding $parent[UserControl].Definition.Geometry}"
+          Width="{Binding $parent[UserControl].Definition.CanvasWidth}"
+          Height="{Binding $parent[UserControl].Definition.CanvasHeight}"
+          Fill="{Binding $parent[UserControl].Fill}"/>
+  </Viewbox>
+</UserControl>

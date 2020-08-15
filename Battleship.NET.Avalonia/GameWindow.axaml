@@ -1,0 +1,16 @@
+﻿<Window
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:c="clr-namespace:Battleship.NET.Avalonia.Controls;assembly=Battleship.NET.Avalonia"
+    xmlns:game="clr-namespace:Battleship.NET.Avalonia.Game;assembly=Battleship.NET.Avalonia"
+    x:Class="Battleship.NET.Avalonia.GameWindow"
+    mc:Ignorable="d"
+    d:DesignWidth="800"
+    d:DesignHeight="450"
+    Width="800"
+    Height="600"
+    Title="Battleship.NET">
+  <game:GameView/>
+</Window>

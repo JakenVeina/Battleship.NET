@@ -1,0 +1,45 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+    xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
+    xmlns:u="clr-namespace:Battleship.NET.Avalonia.ViewUtilities;assembly=Battleship.NET.Avalonia"
+    xmlns:setup="clr-namespace:Battleship.NET.Avalonia.Gamespace.Setup;assembly=Battleship.NET.Avalonia"
+    x:Class="Battleship.NET.Avalonia.Gamespace.Setup.SetupGamespaceBoardTileView">
+
+  <Border DragDrop.AllowDrop="True">
+
+    <Border.Styles>
+      <Style Selector="Border.EvenGridPosition">  <Setter Property="Background" Value="#DDDDFF" /></Style>
+      <Style Selector="Border.OddGridPosition">   <Setter Property="Background" Value="#EEEEFF" /></Style>
+    </Border.Styles>
+
+    <i:Interaction.Behaviors>
+
+      <u:DragEnterTriggerBehavior
+          DataFormat="Battleship.NET.ShipSegmentMovementModel"
+          Effects="Move">
+        <ia:InvokeCommandAction Command="{Binding ReceiveShipSegmentMovement}"/>
+      </u:DragEnterTriggerBehavior>
+
+      <u:ClassSelectorBehavior
+          Data="{Binding Position, Converter={x:Static u:GridPositionConverters.IsEven}}">
+        <u:ClassMapping Value="True"  Class="EvenGridPosition"/>
+        <u:ClassMapping Value="False" Class="OddGridPosition"/>
+      </u:ClassSelectorBehavior>
+
+    </i:Interaction.Behaviors>
+
+    <ItemsControl
+        Items="{Binding ShipSegments^}">
+      <ItemsControl.ItemsPanel>
+        <ItemsPanelTemplate><Grid /></ItemsPanelTemplate>
+      </ItemsControl.ItemsPanel>
+      <ItemsControl.DataTemplates>
+        <DataTemplate><setup:SetupGamespaceBoardTileShipSegmentView/></DataTemplate>
+      </ItemsControl.DataTemplates>
+    </ItemsControl>
+    
+  </Border>
+
+</UserControl>

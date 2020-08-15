@@ -1,0 +1,8 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    x:Class="Battleship.NET.Avalonia.Gamespace.Idle.IdleGamespaceView">
+
+  <Button Command="{Binding BeginSetup}">Begin Setup</Button>
+
+</UserControl>
