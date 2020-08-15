@@ -129,7 +129,7 @@ namespace Battleship.NET.Domain.Models
                 ? (0, 1, GamePlayer.Player2)
                 : (1, 0, GamePlayer.Player1);
 
-            if (players[nextPlayerIndex].GameBoard.Hits.Count == Definition.Ships.Sum(ship => ship.Points.Count))
+            if (players[nextPlayerIndex].GameBoard.Hits.Count == Definition.Ships.Sum(ship => ship.Segments.Count))
             {
                 players[currentPlayerIndex] = players[currentPlayerIndex].IncrementWins();
 
@@ -177,13 +177,34 @@ namespace Battleship.NET.Domain.Models
 
         public GameStateModel MoveShip(
             GamePlayer player,
-            int shipIndex,
-            Rotation orientation,
-            Point position)
+            int shipIndex, 
+            Point shipSegment,
+            Point targetPosition)
         {
             var (player1, player2) = (player == GamePlayer.Player1)
-                ? (Player1.MoveShip(shipIndex, orientation, position), Player2)
-                : (Player1, Player2.MoveShip(shipIndex, orientation, position));
+                ? (Player1.MoveShip(shipIndex, shipSegment, targetPosition), Player2)
+                : (Player1, Player2.MoveShip(shipIndex, shipSegment, targetPosition));
+
+            return new GameStateModel(
+                CurrentPlayer,
+                Definition,
+                GamesPlayed,
+                LastUpdate,
+                player1,
+                player2,
+                Runtime,
+                State);
+        }
+
+        public GameStateModel RotateShip(
+            GamePlayer player,
+            int shipIndex,
+            Point shipSegment,
+            Rotation targetOrientation)
+        {
+            var (player1, player2) = (player == GamePlayer.Player1)
+                ? (Player1.RotateShip(shipIndex, shipSegment, targetOrientation), Player2)
+                : (Player1, Player2.RotateShip(shipIndex, shipSegment, targetOrientation));
 
             return new GameStateModel(
                 CurrentPlayer,

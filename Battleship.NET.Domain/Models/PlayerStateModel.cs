@@ -78,11 +78,11 @@ namespace Battleship.NET.Domain.Models
 
         public PlayerStateModel MoveShip(
                 int shipIndex,
-                Rotation orientation,
-                Point position)
+                Point shipSegment,
+                Point targetPosition)
             => new PlayerStateModel(
                 CanFireShot,
-                GameBoard.MoveShip(shipIndex, orientation, position),
+                GameBoard.MoveShip(shipIndex, shipSegment, targetPosition),
                 IsSetupComplete,
                 Wins);
 
@@ -92,6 +92,16 @@ namespace Battleship.NET.Domain.Models
             => new PlayerStateModel(
                 CanFireShot,
                 GameBoard.ReceiveShot(position, ships),
+                IsSetupComplete,
+                Wins);
+
+        public PlayerStateModel RotateShip(
+                int shipIndex,
+                Point shipSegment,
+                Rotation targetOrientation)
+            => new PlayerStateModel(
+                CanFireShot,
+                GameBoard.RotateShip(shipIndex, shipSegment, targetOrientation),
                 IsSetupComplete,
                 Wins);
 

@@ -8,21 +8,21 @@ namespace Battleship.NET.Domain.Models
     {
         public static ShipDefinitionModel Create(
                 string name,
-                IEnumerable<Point> points)
+                IEnumerable<Point> segments)
             => new ShipDefinitionModel(
                 name,
-                points.ToImmutableHashSet());
+                segments.ToImmutableHashSet());
 
         public ShipDefinitionModel(
             string name,
-            ImmutableHashSet<Point> points)
+            ImmutableHashSet<Point> segments)
         {
             Name = name;
-            Points = points;
+            Segments = segments;
         }
 
         public string Name { get; }
 
-        public ImmutableHashSet<Point> Points { get; }
+        public ImmutableHashSet<Point> Segments { get; }
     }
 }

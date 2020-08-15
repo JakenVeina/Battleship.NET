@@ -25,16 +25,35 @@ namespace Battleship.NET.Domain.Models
         public Point Position { get; }
 
 
-        public IEnumerable<Point> EnumeratePositions(
+        public IEnumerable<Point> EnumerateSegmentPositions(
                 ShipDefinitionModel definition)
-            => definition.Points
-                .Select(point => point.RotateOrigin(Orientation).Translate(Position));
+            => definition.Segments
+                .Select(segment => segment.RotateOrigin(Orientation).Translate(Position));
 
         public ShipStateModel Move(
-                Rotation orientation,
-                Point position)
+                Point shipSegment,
+                Point targetPosition)
             => new ShipStateModel(
-                orientation,
-                position);
+                Orientation,
+                Position
+                    .Translate(shipSegment
+                        .RotateOrigin(Orientation)
+                        .Translate(Position)
+                        .Negate())
+                    .Translate(targetPosition));
+
+        public ShipStateModel Rotate(
+                Point shipSegment,
+                Rotation targetOrientation)
+            => new ShipStateModel(
+                targetOrientation,
+                Position
+                    .Translate(shipSegment
+                        .RotateOrigin(targetOrientation)
+                        .Translate(Position)
+                        .Negate())
+                    .Translate(shipSegment
+                        .RotateOrigin(Orientation)
+                        .Translate(Position)));
     }
 }

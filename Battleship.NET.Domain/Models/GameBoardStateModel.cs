@@ -44,15 +44,15 @@ namespace Battleship.NET.Domain.Models
         {
             var visitedPoints = new HashSet<Point>();
 
-            var occupiedPointsSequence = Ships
+            var occupiedPositionsSequence = Ships
                 .Zip(shipDefinitions, (ship, definition) => (ship, definition))
-                .SelectMany(x => x.ship.EnumeratePositions(x.definition));
+                .SelectMany(x => x.ship.EnumerateSegmentPositions(x.definition));
 
-            foreach (var occupiedPoint in occupiedPointsSequence)
+            foreach (var occupiedPosition in occupiedPositionsSequence)
             {
-                if (visitedPoints.Contains(occupiedPoint) || !definition.Positions.Contains(occupiedPoint))
+                if (visitedPoints.Contains(occupiedPosition) || !definition.Positions.Contains(occupiedPosition))
                     return false;
-                visitedPoints.Add(occupiedPoint);
+                visitedPoints.Add(occupiedPosition);
             }
 
             return true;
@@ -64,8 +64,8 @@ namespace Battleship.NET.Domain.Models
         {
             var shipsAtPosition = Ships
                 .Zip(shipDefinitions, (ship, definition) => (ship, definition))
-                .SelectMany(x => x.ship.EnumeratePositions(x.definition))
-                .Count(point => point == position);
+                .SelectMany(x => x.ship.EnumerateSegmentPositions(x.definition))
+                .Count(segmentPosition => segmentPosition == position);
 
             return (shipsAtPosition <= 1);
         }
@@ -73,18 +73,18 @@ namespace Battleship.NET.Domain.Models
 
         public GameBoardStateModel MoveShip(
                 int shipIndex,
-                Rotation orientation,
-                Point position)
+                Point shipSegment,
+                Point targetPosition)
             => new GameBoardStateModel(
                 Hits,
                 Misses,
-                Ships.SetItem(shipIndex, Ships[shipIndex].Move(orientation, position)));
+                Ships.SetItem(shipIndex, Ships[shipIndex].Move(shipSegment, targetPosition)));
 
         public GameBoardStateModel ReceiveShot(
                 Point position,
                 IEnumerable<ShipDefinitionModel> shipDefinitions)
             => Ships.Zip(shipDefinitions, (ship, definition) => (ship, definition))
-                    .SelectMany(x => x.ship.EnumeratePositions(x.definition))
+                    .SelectMany(x => x.ship.EnumerateSegmentPositions(x.definition))
                     .Contains(position)
                 ? new GameBoardStateModel(
                     Hits.Add(position),
@@ -100,5 +100,14 @@ namespace Battleship.NET.Domain.Models
                 ImmutableHashSet<Point>.Empty,
                 ImmutableHashSet<Point>.Empty,
                 Ships);
+
+        public GameBoardStateModel RotateShip(
+                int shipIndex,
+                Point shipSegment,
+                Rotation targetOrientation)
+            => new GameBoardStateModel(
+                Hits,
+                Misses,
+                Ships.SetItem(shipIndex, Ships[shipIndex].Rotate(shipSegment, targetOrientation)));
     }
 }
