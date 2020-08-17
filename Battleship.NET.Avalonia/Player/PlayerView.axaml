@@ -1,23 +1,52 @@
 ﻿<UserControl
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+    xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
+    xmlns:u="clr-namespace:Battleship.NET.Avalonia.ViewUtilities;assembly=Battleship.NET.Avalonia"
     x:Class="Battleship.NET.Avalonia.Player.PlayerView">
-  <Grid>
-    <Grid.RowDefinitions>
-      <RowDefinition Height="Auto" />
-      <RowDefinition Height="Auto" />
-      <RowDefinition Height="*" />
-    </Grid.RowDefinitions>
+  <UserControl.Styles>
+    <Style Selector="Border">
+      <Setter Property="Padding" Value="5"/>
+    </Style>
+    <Style Selector="Border.ActivePlayer">  <Setter Property="Background" Value="LightYellow"/> </Style>
+    <Style Selector="Border.InactivePlayer"><Setter Property="Background" Value="LightGray"/>   </Style>
 
-    <TextBlock
-      Grid.Row="0"
-      Text="{Binding Name^}"/>
+    <Style Selector="TextBlock">
+      <Setter Property="FontSize" Value="20"/>
+      <Setter Property="Padding"  Value="2"/>
+    </Style>
+    <Style Selector="Border.ActivePlayer    TextBlock"><Setter Property="Foreground" Value="Black"/>  </Style>
+    <Style Selector="Border.InactivePlayer  TextBlock"><Setter Property="Foreground" Value="Gray"/>    </Style>
+  </UserControl.Styles>
 
-    <StackPanel
-        Grid.Row="1"
-        Orientation="Horizontal">
-      <TextBlock>Wins:</TextBlock>
-      <TextBlock Text="{Binding Wins^}"/>
-    </StackPanel>
-  </Grid>
+  <Border>
+    <i:Interaction.Behaviors>
+      <u:ClassSelectorBehavior
+          Data="{Binding IsCurrent^}">
+        <u:ClassMapping Value="True"  Class="ActivePlayer"/>
+        <u:ClassMapping Value="False" Class="InactivePlayer"/>
+      </u:ClassSelectorBehavior>
+    </i:Interaction.Behaviors>
+
+    <Grid>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="*" />
+      </Grid.RowDefinitions>
+
+      <TextBlock
+        Grid.Row="0"
+        Text="{Binding Name^}"/>
+
+      <StackPanel
+          Grid.Row="1"
+          Orientation="Horizontal">
+        <TextBlock Text="{Binding Wins^, StringFormat=Wins: {0}}"/>
+      </StackPanel>
+    </Grid>
+
+  </Border>
+
 </UserControl>

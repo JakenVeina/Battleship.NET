@@ -27,7 +27,8 @@ namespace Battleship.NET.Avalonia.Player
                 .DistinctUntilChanged();
 
             IsCurrent = gameStateStore
-                .Select(gameState => gameState.CurrentPlayer == player)
+                .Select(gameState => (gameState.CurrentPlayer == player)
+                    && (gameState.State == GameState.Setup))
                 .DistinctUntilChanged();
 
             Name = model
