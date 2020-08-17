@@ -18,16 +18,17 @@ namespace Battleship.NET.Domain
                 IAction action)
             => action switch
             {
-                BeginSetupAction _                      => previousState.BeginSetup(),
-                CompleteSetupAction completeSetupAction => previousState.CompleteSetup(completeSetupAction.Player),
-                EndTurnAction _                         => previousState.EndTurn(),
-                FireShotAction fireShotAction           => previousState.FireShot(fireShotAction.Position),
-                MoveShipAction moveShipAction           => previousState.MoveShip(moveShipAction.Player, moveShipAction.ShipIndex, moveShipAction.ShipSegment, moveShipAction.TargetPosition),
-                RotateShipAction rotateShipAction       => previousState.RotateShip(rotateShipAction.Player, rotateShipAction.ShipIndex, rotateShipAction.ShipSegment, rotateShipAction.TargetOrientation),
-                StartGameAction startGameAction         => previousState.StartGame(startGameAction.FirstPlayer),
-                TogglePauseAction _                     => previousState.TogglePause(),
-                UpdateRuntimeAction updateRuntimeAction => previousState.UpdateRuntime(updateRuntimeAction.Now),
-                _                                       => previousState
+                BeginSetupAction _                          => previousState.BeginSetup(),
+                CompleteSetupAction completeSetupAction     => previousState.CompleteSetup(completeSetupAction.Player),
+                EndTurnAction _                             => previousState.EndTurn(),
+                FireShotAction fireShotAction               => previousState.FireShot(fireShotAction.Position),
+                MoveShipAction moveShipAction               => previousState.MoveShip(moveShipAction.Player, moveShipAction.ShipIndex, moveShipAction.ShipSegment, moveShipAction.TargetPosition),
+                RandomizeShipsAction randomizeShipsAction   => previousState.RandomizeShips(randomizeShipsAction.Player, randomizeShipsAction.Random),
+                RotateShipAction rotateShipAction           => previousState.RotateShip(rotateShipAction.Player, rotateShipAction.ShipIndex, rotateShipAction.ShipSegment, rotateShipAction.TargetOrientation),
+                StartGameAction startGameAction             => previousState.StartGame(startGameAction.FirstPlayer),
+                TogglePauseAction _                         => previousState.TogglePause(),
+                UpdateRuntimeAction updateRuntimeAction     => previousState.UpdateRuntime(updateRuntimeAction.Now),
+                _                                           => previousState
             };
     }
 }

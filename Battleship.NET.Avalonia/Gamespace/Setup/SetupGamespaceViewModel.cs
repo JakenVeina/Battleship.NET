@@ -16,18 +16,16 @@ namespace Battleship.NET.Avalonia.Gamespace.Setup
             SetupGamespaceBoardTileViewModelFactory gameBoardTileViewModelFactory,
             IStore<GameStateModel> gameStateStore)
         {
-            var boardPositions = gameStateStore
-                .Select(gameState => gameState.Definition.GameBoard.Positions)
+            var boardDefinition = gameStateStore
+                .Select(gameState => gameState.Definition.GameBoard)
                 .DistinctUntilChanged();
 
-            BoardSize = boardPositions
-                .Select(positions => new Size(
-                    width: positions.Max(position => position.X) + 1,
-                    height: positions.Max(position => position.Y) + 1))
+            BoardSize = boardDefinition
+                .Select(definition => definition.Size)
                 .DistinctUntilChanged();
 
-            BoardTiles = boardPositions
-                .Select(positions => positions
+            BoardTiles = boardDefinition
+                .Select(definition => definition.Positions
                     .OrderBy(position => position.Y)
                         .ThenBy(position => position.X)
                     .Select(position => gameBoardTileViewModelFactory.Create(position))

@@ -1,7 +1,6 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Net;
 
 namespace Battleship.NET.Domain.Models
 {
@@ -83,6 +82,16 @@ namespace Battleship.NET.Domain.Models
             => new PlayerStateModel(
                 CanFireShot,
                 GameBoard.MoveShip(shipIndex, shipSegment, targetPosition),
+                IsSetupComplete,
+                Wins);
+
+        public PlayerStateModel RandomizeShips(
+                GameBoardDefinitionModel gameBoardDefinition,
+                IReadOnlyCollection<ShipDefinitionModel> shipDefinitions,
+                Random random)
+            => new PlayerStateModel(
+                CanFireShot,
+                GameBoard.RandomzieShips(gameBoardDefinition, shipDefinitions, random),
                 IsSetupComplete,
                 Wins);
 

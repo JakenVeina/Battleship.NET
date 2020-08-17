@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Drawing;
 using System.Linq;
@@ -79,6 +80,32 @@ namespace Battleship.NET.Domain.Models
                 Hits,
                 Misses,
                 Ships.SetItem(shipIndex, Ships[shipIndex].Move(shipSegment, targetPosition)));
+
+        public GameBoardStateModel RandomzieShips(
+            GameBoardDefinitionModel definition,
+            IReadOnlyCollection<ShipDefinitionModel> shipDefinitions,
+            Random random)
+        {
+            var size = definition.Size;
+
+            GameBoardStateModel state;
+            do
+            {
+                state = new GameBoardStateModel(
+                    Hits,
+                    Misses,
+                    Enumerable.Range(0, shipDefinitions.Count)
+                        .Select(shipIndex => new ShipStateModel(
+                            orientation: (Rotation)(random.Next(0, 4) * 90),
+                            position: new Point(
+                                random.Next(0, size.Width),
+                                random.Next(0, size.Height))))
+                        .ToImmutableList());
+            }
+            while (!state.IsValid(definition, shipDefinitions));
+
+            return state;
+        }
 
         public GameBoardStateModel ReceiveShot(
                 Point position,

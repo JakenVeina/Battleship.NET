@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+
+using Microsoft.Extensions.DependencyInjection;
 
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
@@ -26,6 +28,7 @@ namespace Battleship.NET.Avalonia
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
                 var serviceProvider = new ServiceCollection()
+                    .AddSingleton<Random>()
                     .AddSingleton<IStore<GameStateModel>, StandardGame>()
                     .AddTransient<GameViewModel>()
                     .AddTransient<IdleGamespaceViewModel>()

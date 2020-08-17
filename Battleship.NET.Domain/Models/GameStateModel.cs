@@ -196,6 +196,25 @@ namespace Battleship.NET.Domain.Models
                 State);
         }
 
+        public GameStateModel RandomizeShips(
+            GamePlayer player,
+            Random random)
+        {
+            var (player1, player2) = (player == GamePlayer.Player1)
+                ? (Player1.RandomizeShips(Definition.GameBoard, Definition.Ships, random), Player2)
+                : (Player1, Player2.RandomizeShips(Definition.GameBoard, Definition.Ships, random));
+
+            return new GameStateModel(
+                CurrentPlayer,
+                Definition,
+                GamesPlayed,
+                LastUpdate,
+                player1,
+                player2,
+                Runtime,
+                State);
+        }
+
         public GameStateModel RotateShip(
             GamePlayer player,
             int shipIndex,

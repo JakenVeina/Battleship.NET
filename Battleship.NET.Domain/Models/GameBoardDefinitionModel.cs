@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Drawing;
+using System.Linq;
 
 namespace Battleship.NET.Domain.Models
 {
@@ -24,5 +25,11 @@ namespace Battleship.NET.Domain.Models
         public string Name { get; }
 
         public ImmutableHashSet<Point> Positions { get; }
+
+
+        public Size Size
+            => new Size(
+                width:  (Positions.Max(position => position.X) + 1),
+                height: (Positions.Max(position => position.Y) + 1));
     }
 }
