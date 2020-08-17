@@ -7,85 +7,85 @@
     x:Key="Sprite_Ship_Standard_Carrier_0_0"
     CanvasHeight="10"
     CanvasWidth="10"
-    Geometry="M10,2 L5,5 L10,8 Z"/>
+    Geometry="M10,1.5 L2,1.5 L2,7.5 L10,7.5 Z"/>
   <c:VectorSpriteDefinition
     x:Key="Sprite_Ship_Standard_Carrier_1_0"
     CanvasHeight="10"
     CanvasWidth="10"
-    Geometry="M0,2 L10,2 L10,8 L0,8 Z"/>
+    Geometry="M10,1.5 L0,1.5 L0,7.5 L3,7.5 L3,8.5 L10,8.5 Z"/>
   <c:VectorSpriteDefinition
     x:Key="Sprite_Ship_Standard_Carrier_2_0"
     CanvasHeight="10"
     CanvasWidth="10"
-    Geometry="M0,2 L10,2 L10,8 L0,8 Z"/>
+    Geometry="M0,1.5 L10,1.5 L10,8.5 L0,8.5 Z"/>
   <c:VectorSpriteDefinition
     x:Key="Sprite_Ship_Standard_Carrier_3_0"
     CanvasHeight="10"
     CanvasWidth="10"
-    Geometry="M0,2 L10,2 L10,8 L0,8 Z"/>
+    Geometry="M0,1.5 L8,1.5 L8,2 L10,2 L10,8.5 L0,8.5 Z"/>
   <c:VectorSpriteDefinition
     x:Key="Sprite_Ship_Standard_Carrier_4_0"
     CanvasHeight="10"
     CanvasWidth="10"
-    Geometry="M0,2 L5,2 L5,8 L0,8 Z"/>
+    Geometry="M0,2 L8,2 L8,7.5 L1,7.5 L1,8.5 L0,8.5 Z"/>
   <c:VectorSpriteDefinition
     x:Key="Sprite_Ship_Standard_Battleship_0_0"
     CanvasHeight="10"
     CanvasWidth="10"
-    Geometry="M10,2 L5,5 L10,8 Z"/>
+    Geometry="M10,2.5 Q6,3.5 2,5 Q6,6.5 10,7.5 Z"/>
   <c:VectorSpriteDefinition
     x:Key="Sprite_Ship_Standard_Battleship_1_0"
     CanvasHeight="10"
     CanvasWidth="10"
-    Geometry="M0,2 L10,2 L10,8 L0,8 Z"/>
+    Geometry="M10,1.5 Q4.5,1.5 0,2.5 L0,7.5 Q4.5,8.5 10,8.5 Z"/>
   <c:VectorSpriteDefinition
     x:Key="Sprite_Ship_Standard_Battleship_2_0"
     CanvasHeight="10"
     CanvasWidth="10"
-    Geometry="M0,2 L10,2 L10,8 L0,8 Z"/>
+    Geometry="M0,1.5 Q5.5,1.5 10,2.5 L10,7.5 Q5.5,8.5 0,8.5 Z"/>
   <c:VectorSpriteDefinition
     x:Key="Sprite_Ship_Standard_Battleship_3_0"
     CanvasHeight="10"
     CanvasWidth="10"
-    Geometry="M0,2 L5,2 L5,8 L0,8 Z"/>
+    Geometry="M0,2.5 Q4,3.2 6,4 Q7,5 6,6 Q4,6.8 0,7.5 Z"/>
   <c:VectorSpriteDefinition
     x:Key="Sprite_Ship_Standard_Destroyer_0_0"
     CanvasHeight="10"
     CanvasWidth="10"
-    Geometry="M10,2 L5,5 L10,8 Z"/>
+    Geometry="M10,2 Q5,2.6 2,5 Q5,7.4 10,8 Z"/>
   <c:VectorSpriteDefinition
     x:Key="Sprite_Ship_Standard_Destroyer_1_0"
     CanvasHeight="10"
     CanvasWidth="10"
-    Geometry="M0,2 L10,2 L10,8 L0,8 Z"/>
+    Geometry="M0,2 Q3,1.9 10,2.1 L10,7.9 Q3,8.1 0,8 Z"/>
   <c:VectorSpriteDefinition
     x:Key="Sprite_Ship_Standard_Destroyer_2_0"
     CanvasHeight="10"
     CanvasWidth="10"
-    Geometry="M0,2 L5,2 L5,8 L0,8 Z"/>
+    Geometry="M0,2.1 Q4,2.3 7,3 C8.5,3.5 8.5,6.5 7,7 Q4,7.7 0,7.9 Z"/>
   <c:VectorSpriteDefinition
     x:Key="Sprite_Ship_Standard_Submarine_0_0"
     CanvasHeight="10"
     CanvasWidth="10"
-    Geometry="M10,2 L5,5 L10,8 Z"/>
+    Geometry="M10,2 Q4,2.5 2,5 Q4,7.5 10,8 Z"/>
   <c:VectorSpriteDefinition
     x:Key="Sprite_Ship_Standard_Submarine_1_0"
     CanvasHeight="10"
     CanvasWidth="10"
-    Geometry="M0,2 L10,2 L10,8 L0,8 Z"/>
+    Geometry="M0,2 Q4,1.9 10,2.8 L10,7.2 Q4,8.1 0,8 Z"/>
   <c:VectorSpriteDefinition
     x:Key="Sprite_Ship_Standard_Submarine_2_0"
     CanvasHeight="10"
     CanvasWidth="10"
-    Geometry="M0,2 L5,2 L5,8 L0,8 Z"/>
+    Geometry="M0,2.8 Q5,3.7 7.5,4.5 Q8,5 7.5,5.5 Q5,6.3 0,7.2 Z"/>
   <c:VectorSpriteDefinition
     x:Key="Sprite_Ship_Standard_PatrolBoat_0_0"
     CanvasHeight="10"
     CanvasWidth="10"
-    Geometry="M10,2 L5,5 L10,8 Z"/>
+    Geometry="M10,2.5 Q4.2,2.5 2,5 Q4.2,7.5 10,7.5 Z"/>
   <c:VectorSpriteDefinition
     x:Key="Sprite_Ship_Standard_PatrolBoat_1_0"
     CanvasHeight="10"
     CanvasWidth="10"
-    Geometry="M0,2 L5,2 L5,8 L0,8 Z"/>
+    Geometry="M0,2.5 Q4,2.5 6,3 C7,3.5 7,6.5 6,7 Q4,7.5 0,7.5 Z"/>
 </ResourceDictionary>
