@@ -3,6 +3,25 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     x:Class="Battleship.NET.Avalonia.Gamespace.Idle.IdleGamespaceView">
 
-  <Button Command="{Binding BeginSetup}">Begin Setup</Button>
+  <UserControl.Styles>
+    <Style Selector="Button">
+      <Setter Property="HorizontalAlignment"  Value="Center"/>
+      <Setter Property="VerticalAlignment"    Value="Center"/>
+    </Style>
+    <Style Selector="Button:mouseover">
+      <Setter Property="Background" Value="LightYellow"/>
+    </Style>
+    <Style Selector="Button > :is(Layoutable)">
+      <Setter Property="Margin" Value="5"/>
+    </Style>
+
+    <Style Selector="TextBlock">
+      <Setter Property="FontSize" Value="24"/>
+    </Style>
+  </UserControl.Styles>
+  
+  <Button Command="{Binding BeginSetup}">
+    <TextBlock>Begin Setup</TextBlock>
+  </Button>
 
 </UserControl>
