@@ -32,7 +32,8 @@ namespace Battleship.NET.Avalonia.Game
                     GameState.Running   => throw new NotImplementedException(),
                     GameState.Setup     => setupGamespace,
                     _                   => throw new InvalidOperationException("Dafuq did you do to the game state?"),
-                }));
+                }))
+                .DistinctUntilChanged();
 
             Player1 = playerViewModelFactory.CreatePlayerViewModel(GamePlayer.Player1);
             Player2 = playerViewModelFactory.CreatePlayerViewModel(GamePlayer.Player2);

@@ -57,9 +57,10 @@ namespace Battleship.NET.Avalonia.Gamespace.Setup
                 .DistinctUntilChanged();
 
             IsBoardValid = Observable.CombineLatest(
-                isPlayer1Valid,
-                isPlayer2Valid,
-                (isPlayer1Valid, isPlayer2Valid) => isPlayer1Valid && isPlayer2Valid);
+                    isPlayer1Valid,
+                    isPlayer2Valid,
+                    (isPlayer1Valid, isPlayer2Valid) => isPlayer1Valid && isPlayer2Valid)
+                .DistinctUntilChanged();
         }
 
         public IObservable<Size> BoardSize { get; }
