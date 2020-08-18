@@ -2,11 +2,14 @@
 using System.Collections.Immutable;
 using System.Drawing;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
+using System.Windows.Input;
 
 using Redux;
 
 using Battleship.NET.Domain.Models;
+using Battleship.NET.Domain.Actions;
 
 namespace Battleship.NET.Avalonia.Gamespace.Setup
 {
@@ -14,7 +17,8 @@ namespace Battleship.NET.Avalonia.Gamespace.Setup
     {
         public SetupGamespaceViewModel(
             SetupGamespaceBoardTileViewModelFactory gameBoardTileViewModelFactory,
-            IStore<GameStateModel> gameStateStore)
+            IStore<GameStateModel> gameStateStore,
+            Random random)
         {
             var boardDefinition = gameStateStore
                 .Select(gameState => gameState.Definition.GameBoard)
@@ -32,39 +36,31 @@ namespace Battleship.NET.Avalonia.Gamespace.Setup
                     .ToImmutableArray())
                 .DistinctUntilChanged();
 
-            var isPlayer1Valid = gameStateStore
-                .Select(gameState =>
-                (
-                    boardDefinition: gameState.Definition.GameBoard,
-                    shipDefinitions: gameState.Definition.Ships,
-                    boardState: gameState.Player1.GameBoard
-                ))
-                .DistinctUntilChanged()
-                .Select(model => model.boardState.IsValid(model.boardDefinition, model.shipDefinitions))
+            var currentPlayer = gameStateStore
+                .Select(gameState => gameState.CurrentPlayer)
                 .DistinctUntilChanged();
 
-            var isPlayer2Valid = gameStateStore
-                .Select(gameState =>
-                (
-                    boardDefinition: gameState.Definition.GameBoard,
-                    shipDefinitions: gameState.Definition.Ships,
-                    boardState: gameState.Player2.GameBoard
-                ))
-                .DistinctUntilChanged()
-                .Select(model => model.boardState.IsValid(model.boardDefinition, model.shipDefinitions))
-                .DistinctUntilChanged();
+            RandomizeShips = ReactiveCommand.Create(
+                currentPlayer
+                    .Select(currentPlayer => new Action(() => gameStateStore.Dispatch(new RandomizeShipsAction(
+                        currentPlayer,
+                        random)))));
 
-            IsBoardValid = Observable.CombineLatest(
-                    isPlayer1Valid,
-                    isPlayer2Valid,
-                    (isPlayer1Valid, isPlayer2Valid) => isPlayer1Valid && isPlayer2Valid)
-                .DistinctUntilChanged();
+            CompleteSetup = ReactiveCommand.Create(
+                currentPlayer
+                    .Select(currentPlayer => new Action(() => gameStateStore.Dispatch(new CompleteSetupAction(
+                        currentPlayer)))),
+                gameStateStore
+                    .Select(gameState => gameState.CanCompleteSetup(gameState.CurrentPlayer))
+                    .DistinctUntilChanged());
         }
 
         public IObservable<Size> BoardSize { get; }
 
         public IObservable<ImmutableArray<SetupGamespaceBoardTileViewModel>> BoardTiles { get; }
 
-        public IObservable<bool> IsBoardValid { get; }
+        public ICommand<Unit> RandomizeShips { get; }
+
+        public ICommand<Unit> CompleteSetup { get; }
     }
 }

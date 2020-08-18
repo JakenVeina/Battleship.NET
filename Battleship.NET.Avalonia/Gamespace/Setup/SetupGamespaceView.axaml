@@ -3,22 +3,65 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:setup="clr-namespace:Battleship.NET.Avalonia.Gamespace.Setup;assembly=Battleship.NET.Avalonia"
     x:Class="Battleship.NET.Avalonia.Gamespace.Setup.SetupGamespaceView">
-  
-  <Viewbox Stretch="Uniform">
-    <ItemsControl
-        Name="BoardTiles"
-        Items="{Binding BoardTiles^}">
-      <ItemsControl.ItemsPanel>
-        <ItemsPanelTemplate>
-          <UniformGrid
-            Columns="{Binding BoardSize^.Width}"
-            Rows="{Binding BoardSize^.Height}"/>
-        </ItemsPanelTemplate>
-      </ItemsControl.ItemsPanel>
-      <ItemsControl.DataTemplates>
-        <DataTemplate><setup:SetupGamespaceBoardTileView/></DataTemplate>
-      </ItemsControl.DataTemplates>
-    </ItemsControl>
-  </Viewbox>
+
+  <UserControl.Styles>
+    <Style Selector="Button:mouseover">
+      <Setter Property="Background" Value="LightYellow"/>
+    </Style>
+
+    <Style Selector="Button > TextBlock">
+      <Setter Property="Margin"   Value="5"/>
+      <Setter Property="FontSize" Value="24"/>
+    </Style>
+  </UserControl.Styles>
+
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+
+    <Viewbox
+        Grid.Column="0"
+        Grid.ColumnSpan="2"
+        Grid.Row="0"
+        Stretch="Uniform">
+      <ItemsControl
+          Name="BoardTiles"
+          Items="{Binding BoardTiles^}">
+        <ItemsControl.ItemsPanel>
+          <ItemsPanelTemplate>
+            <UniformGrid
+              Columns="{Binding BoardSize^.Width}"
+              Rows="{Binding BoardSize^.Height}"/>
+          </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.DataTemplates>
+          <DataTemplate>
+            <setup:SetupGamespaceBoardTileView/>
+          </DataTemplate>
+        </ItemsControl.DataTemplates>
+      </ItemsControl>
+    </Viewbox>
+
+    <Button
+        Grid.Column="0"
+        Grid.Row="1"
+        Command="{Binding RandomizeShips}">
+      <TextBlock>Randomize</TextBlock>
+    </Button>
+
+    <Button
+        Grid.Column="1"
+        Grid.Row="1"
+        Command="{Binding CompleteSetup}">
+      <TextBlock>Complete Setup</TextBlock>
+    </Button>
+
+  </Grid>
 
 </UserControl>

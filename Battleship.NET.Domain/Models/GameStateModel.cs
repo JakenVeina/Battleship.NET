@@ -85,7 +85,7 @@ namespace Battleship.NET.Domain.Models
         public bool CanCompleteSetup(
                 GamePlayer player)
             => (State == GameState.Setup)
-                && (((player == GamePlayer.Player1) && !Player1.CanCompleteSetup(Definition.GameBoard, Definition.Ships))
+                && !(((player == GamePlayer.Player1) && !Player1.CanCompleteSetup(Definition.GameBoard, Definition.Ships))
                     || ((player == GamePlayer.Player2) && !Player2.CanCompleteSetup(Definition.GameBoard, Definition.Ships)));
 
         public bool CanMoveShip(
@@ -105,12 +105,12 @@ namespace Battleship.NET.Domain.Models
         public GameStateModel CompleteSetup(
             GamePlayer player)
         {
-            var (player1, player2) = (player == GamePlayer.Player1)
-                ? (Player1.CompleteSetup(), Player2)
-                : (Player1, Player2.CompleteSetup());
+            var (player1, player2, nextPlayer) = (player == GamePlayer.Player1)
+                ? (Player1.CompleteSetup(), Player2, GamePlayer.Player2)
+                : (Player1, Player2.CompleteSetup(), GamePlayer.Player1);
 
             return new GameStateModel(
-                CurrentPlayer,
+                nextPlayer,
                 Definition,
                 GamesPlayed,
                 LastUpdate,
