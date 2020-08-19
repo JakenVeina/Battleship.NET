@@ -10,6 +10,7 @@ using Redux;
 using Battleship.NET.Avalonia.Game;
 using Battleship.NET.Avalonia.Gamespace.Idle;
 using Battleship.NET.Avalonia.Gamespace.Paused;
+using Battleship.NET.Avalonia.Gamespace.Ready;
 using Battleship.NET.Avalonia.Gamespace.Setup;
 using Battleship.NET.Avalonia.Player;
 using Battleship.NET.Domain;
@@ -33,7 +34,8 @@ namespace Battleship.NET.Avalonia
                     .AddTransient<GameViewModel>()
                     .AddTransient<IdleGamespaceViewModel>()
                     .AddTransient<PausedGamespaceViewModel>()
-                    .AddSingleton<SetupGamespaceViewModel>()
+                    .AddTransient<ReadyGamespaceViewModel>()
+                    .AddTransient<SetupGamespaceViewModel>()
                     .AddSingleton<SetupGamespaceBoardTileViewModelFactory>()
                     .AddSingleton<SetupGamespaceBoardTileShipSegmentViewModelFactory>()
                     .AddSingleton<PlayerViewModelFactory>()

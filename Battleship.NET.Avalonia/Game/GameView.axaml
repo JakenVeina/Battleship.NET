@@ -4,6 +4,7 @@
     xmlns:game="clr-namespace:Battleship.NET.Avalonia.Game;assembly=Battleship.NET.Avalonia"
     xmlns:idle="clr-namespace:Battleship.NET.Avalonia.Gamespace.Idle;assembly=Battleship.NET.Avalonia"
     xmlns:paused="clr-namespace:Battleship.NET.Avalonia.Gamespace.Paused;assembly=Battleship.NET.Avalonia"
+    xmlns:ready="clr-namespace:Battleship.NET.Avalonia.Gamespace.Ready;assembly=Battleship.NET.Avalonia"
     xmlns:setup="clr-namespace:Battleship.NET.Avalonia.Gamespace.Setup;assembly=Battleship.NET.Avalonia"
     xmlns:player="clr-namespace:Battleship.NET.Avalonia.Player;assembly=Battleship.NET.Avalonia"
     x:Class="Battleship.NET.Avalonia.Game.GameView">
@@ -11,6 +12,7 @@
   <UserControl.DataTemplates>
     <DataTemplate DataType="{x:Type idle:IdleGamespaceViewModel}">      <idle:IdleGamespaceView/>     </DataTemplate>
     <DataTemplate DataType="{x:Type paused:PausedGamespaceViewModel}">  <paused:PausedGamespaceView/> </DataTemplate>
+    <DataTemplate DataType="{x:Type ready:ReadyGamespaceViewModel}">    <ready:ReadyGamespaceView/>   </DataTemplate>
     <DataTemplate DataType="{x:Type setup:SetupGamespaceViewModel}">    <setup:SetupGamespaceView/>   </DataTemplate>
   </UserControl.DataTemplates>
 
