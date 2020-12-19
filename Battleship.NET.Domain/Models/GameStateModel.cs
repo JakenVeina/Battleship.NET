@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.Linq;
 
 namespace Battleship.NET.Domain.Models
 {
@@ -61,6 +60,11 @@ namespace Battleship.NET.Domain.Models
                 ? Player1
                 : Player2;
 
+        public PlayerStateModel OpponentPlayerState
+            => (CurrentPlayer == GamePlayer.Player2)
+                ? Player1
+                : Player2;
+
         public GameStateModel BeginSetup()
             => new GameStateModel(
                 CurrentPlayer,
@@ -102,6 +106,24 @@ namespace Battleship.NET.Domain.Models
                 || (State == GameState.Paused);
 
 
+        public GameStateModel CompleteGame(
+            GamePlayer winner)
+        {
+            var (player1, player2) = (winner == GamePlayer.Player1)
+                ? (Player1.IncrementWins(), Player2)
+                : (Player1, Player2.IncrementWins());
+
+            return new GameStateModel(
+                CurrentPlayer,
+                Definition,
+                GamesPlayed + 1,
+                LastUpdate,
+                player1,
+                player2,
+                Runtime,
+                GameState.Complete);
+        }
+
         public GameStateModel CompleteSetup(
             GamePlayer player)
         {
@@ -124,35 +146,17 @@ namespace Battleship.NET.Domain.Models
 
         public GameStateModel EndTurn()
         {
-            var players = new[] { Player1, Player2 };
-            var (currentPlayerIndex, nextPlayerIndex, nextPlayer) = (CurrentPlayer == GamePlayer.Player1)
-                ? (0, 1, GamePlayer.Player2)
-                : (1, 0, GamePlayer.Player1);
-
-            if (players[nextPlayerIndex].GameBoard.Hits.Count == Definition.Ships.Sum(ship => ship.Segments.Count))
-            {
-                players[currentPlayerIndex] = players[currentPlayerIndex].IncrementWins();
-
-                return new GameStateModel(
-                    CurrentPlayer,
-                    Definition,
-                    GamesPlayed + 1,
-                    LastUpdate,
-                    players[0],
-                    players[1],
-                    Runtime,
-                    GameState.Complete);
-            }
-
-            players[nextPlayerIndex] = players[nextPlayerIndex].StartTurn();
+            var (player1, player2, nextPlayer) = (CurrentPlayer == GamePlayer.Player1)
+                ? (Player1, Player2.StartTurn(), GamePlayer.Player2)
+                : (Player1.StartTurn(), Player2, GamePlayer.Player1);
 
             return new GameStateModel(
                 nextPlayer,
                 Definition,
                 GamesPlayed,
                 LastUpdate,
-                players[0],
-                players[1],
+                player1,
+                player2,
                 Runtime,
                 State);
         }
@@ -160,9 +164,17 @@ namespace Battleship.NET.Domain.Models
         public GameStateModel FireShot(
             Point position)
         {
-            var (player1, player2) = (CurrentPlayer == GamePlayer.Player1)
-                ? (Player1.FireShot(), Player2.ReceiveShot(position, Definition.Ships))
-                : (Player1.ReceiveShot(position, Definition.Ships), Player2.FireShot());
+            PlayerStateModel player1, player2;
+            if (CurrentPlayer == GamePlayer.Player1)
+            {
+                player2 = Player2.ReceiveShot(position, Definition.Ships);
+                player1 = Player1.FireShot(player2.GameBoard.Hits.Contains(position));
+            }
+            else
+            {
+                player1 = Player1.ReceiveShot(position, Definition.Ships);
+                player2 = Player2.FireShot(player1.GameBoard.Hits.Contains(position));
+            }
 
             return new GameStateModel(
                 CurrentPlayer,

@@ -1,0 +1,59 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:running="clr-namespace:Battleship.NET.Avalonia.Gamespace.Running;assembly=Battleship.NET.Avalonia"
+    x:Class="Battleship.NET.Avalonia.Gamespace.Running.RunningGamespaceView">
+
+  <UserControl.Styles>
+    <Style Selector="Button:mouseover">
+      <Setter Property="Background" Value="LightYellow"/>
+    </Style>
+
+    <Style Selector="Button > TextBlock">
+      <Setter Property="Margin"   Value="5"/>
+      <Setter Property="FontSize" Value="24"/>
+    </Style>
+  </UserControl.Styles>
+
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+
+    <Viewbox
+        Grid.Column="0"
+        Grid.ColumnSpan="2"
+        Grid.Row="0"
+        Stretch="Uniform">
+      <ItemsControl
+          Name="BoardTiles"
+          Items="{Binding BoardTiles^}">
+        <ItemsControl.ItemsPanel>
+          <ItemsPanelTemplate>
+            <UniformGrid
+              Columns="{Binding BoardSize^.Width}"
+              Rows="{Binding BoardSize^.Height}"/>
+          </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.DataTemplates>
+          <DataTemplate>
+            <running:RunningGamespaceBoardTileView/>
+          </DataTemplate>
+        </ItemsControl.DataTemplates>
+      </ItemsControl>
+    </Viewbox>
+
+    <Button
+        Grid.Column="0"
+        Grid.Row="1"
+        Command="{Binding EndTurn}">
+      <TextBlock>End Turn</TextBlock>
+    </Button>
+
+  </Grid>
+
+</UserControl>

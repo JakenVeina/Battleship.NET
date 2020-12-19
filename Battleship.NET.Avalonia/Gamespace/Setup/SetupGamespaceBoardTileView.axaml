@@ -39,7 +39,7 @@
         <DataTemplate><setup:SetupGamespaceBoardTileShipSegmentView/></DataTemplate>
       </ItemsControl.DataTemplates>
     </ItemsControl>
-    
+
   </Border>
 
 </UserControl>

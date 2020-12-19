@@ -62,7 +62,7 @@ namespace System.Windows.Input
                 });
         }
 
-        public event EventHandler CanExecuteChanged;
+        public event EventHandler? CanExecuteChanged;
 
         public bool CanExecute(T parameter)
             => _canExecute.Invoke(parameter);

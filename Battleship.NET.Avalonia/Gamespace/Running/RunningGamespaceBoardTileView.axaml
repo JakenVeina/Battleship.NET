@@ -1,0 +1,77 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+    xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
+    xmlns:c="clr-namespace:Battleship.NET.Avalonia.Controls;assembly=Battleship.NET.Avalonia"
+    xmlns:u="clr-namespace:Battleship.NET.Avalonia.ViewUtilities;assembly=Battleship.NET.Avalonia"
+    xmlns:running="clr-namespace:Battleship.NET.Avalonia.Gamespace.Running;assembly=Battleship.NET.Avalonia"
+    xmlns:ship="clr-namespace:Battleship.NET.Avalonia.Ship;assembly=Battleship.NET.Avalonia"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
+    x:Class="Battleship.NET.Avalonia.Gamespace.Running.RunningGamespaceBoardTileView">
+
+  <Border DragDrop.AllowDrop="True">
+
+    <Border.Styles>
+      <Style Selector="Border.EvenGridPosition">  <Setter Property="Background" Value="#DDDDFF" /></Style>
+      <Style Selector="Border.OddGridPosition">   <Setter Property="Background" Value="#EEEEFF" /></Style>
+    </Border.Styles>
+
+    <i:Interaction.Behaviors>
+      <u:ClassSelectorBehavior
+          Data="{Binding Position, Converter={x:Static u:GridPositionConverters.IsEven}}">
+        <u:ClassMapping Value="True"  Class="EvenGridPosition"/>
+        <u:ClassMapping Value="False" Class="OddGridPosition"/>
+      </u:ClassSelectorBehavior>
+
+      <ia:EventTriggerBehavior EventName="DoubleTapped">
+        <ia:InvokeCommandAction Command="{Binding FireShot}"/>
+      </ia:EventTriggerBehavior>
+    </i:Interaction.Behaviors>
+
+    <Grid>
+
+      <c:VectorSprite Fill="#770000">
+        <c:VectorSprite.Definition>
+          <MultiBinding
+              Converter="{x:Static ship:ShipSegmentAssetModelConverters.LookupSpriteResource}"
+              FallbackValue="{StaticResource Sprite_Empty}">
+            <Binding Path="$self" />
+            <Binding Path="ShipAsset^" />
+          </MultiBinding>
+        </c:VectorSprite.Definition>
+
+        <c:VectorSprite.RenderTransform>
+          <RotateTransform Angle="{Binding ShipOrientation^, Converter={x:Static u:RotationConverters.ToAngle}}"/>
+        </c:VectorSprite.RenderTransform>
+      </c:VectorSprite>
+
+      <c:VectorSprite>
+        <c:VectorSprite.Styles>
+          <Style Selector="c|VectorSprite.Hit">   <Setter Property="Fill" Value="#FF7733" /></Style>
+          <Style Selector="c|VectorSprite.Miss">  <Setter Property="Fill" Value="#7777FF" /></Style>
+        </c:VectorSprite.Styles>
+
+        <i:Interaction.Behaviors>
+          <u:ClassSelectorBehavior
+              Data="{Binding ShotAsset^.IsHit}">
+            <u:ClassMapping Value="True"  Class="Hit"/>
+            <u:ClassMapping Value="False" Class="Miss"/>
+          </u:ClassSelectorBehavior>
+        </i:Interaction.Behaviors>
+
+        <c:VectorSprite.Definition>
+          <MultiBinding
+              Converter="{x:Static running:ShotAssetModelConverters.LookupSpriteResource}"
+              FallbackValue="{StaticResource Sprite_Empty}">
+            <Binding Path="$self" />
+            <Binding Path="ShotAsset^" />
+          </MultiBinding>
+        </c:VectorSprite.Definition>
+      </c:VectorSprite>
+
+    </Grid>
+
+  </Border>
+
+</UserControl>

@@ -19,6 +19,7 @@ namespace Battleship.NET.Domain
             => action switch
             {
                 BeginSetupAction _                          => previousState.BeginSetup(),
+                CompleteGameAction completeGameAction       => previousState.CompleteGame(completeGameAction.Winner),
                 CompleteSetupAction completeSetupAction     => previousState.CompleteSetup(completeSetupAction.Player),
                 EndTurnAction _                             => previousState.EndTurn(),
                 FireShotAction fireShotAction               => previousState.FireShot(fireShotAction.Position),

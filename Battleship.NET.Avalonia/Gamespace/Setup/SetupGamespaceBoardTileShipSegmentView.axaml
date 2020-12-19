@@ -18,7 +18,8 @@
 
     <c:VectorSprite.Definition>
       <MultiBinding
-          Converter="{x:Static ship:ShipSegmentAssetModelConverters.LookupSpriteResource}">
+          Converter="{x:Static ship:ShipSegmentAssetModelConverters.LookupSpriteResource}"
+          FallbackValue="{StaticResource Sprite_Empty}">
         <Binding Path="$self" />
         <Binding Path="Asset^" />
       </MultiBinding>

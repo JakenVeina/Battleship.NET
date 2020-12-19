@@ -16,9 +16,9 @@ namespace Battleship.NET.Avalonia.Gamespace.Setup
     public class SetupGamespaceViewModel
     {
         public SetupGamespaceViewModel(
-            SetupGamespaceBoardTileViewModelFactory gameBoardTileViewModelFactory,
             IStore<GameStateModel> gameStateStore,
-            Random random)
+            Random random,
+            SetupGamespaceBoardTileViewModelFactory setupGamespaceBoardTileViewModelFactory)
         {
             var boardDefinition = gameStateStore
                 .Select(gameState => gameState.Definition.GameBoard)
@@ -32,7 +32,7 @@ namespace Battleship.NET.Avalonia.Gamespace.Setup
                 .Select(definition => definition.Positions
                     .OrderBy(position => position.Y)
                         .ThenBy(position => position.X)
-                    .Select(position => gameBoardTileViewModelFactory.Create(position))
+                    .Select(position => setupGamespaceBoardTileViewModelFactory.Create(position))
                     .ToImmutableArray())
                 .DistinctUntilChanged();
 

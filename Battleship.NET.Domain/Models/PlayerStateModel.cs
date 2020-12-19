@@ -61,9 +61,9 @@ namespace Battleship.NET.Domain.Models
                 true,
                 Wins);
 
-        public PlayerStateModel FireShot()
+        public PlayerStateModel FireShot(bool isHit)
             => new PlayerStateModel(
-                false,
+                isHit,
                 GameBoard,
                 IsSetupComplete,
                 Wins);

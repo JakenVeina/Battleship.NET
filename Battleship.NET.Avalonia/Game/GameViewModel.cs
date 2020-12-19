@@ -6,6 +6,7 @@ using Redux;
 using Battleship.NET.Avalonia.Gamespace.Idle;
 using Battleship.NET.Avalonia.Gamespace.Paused;
 using Battleship.NET.Avalonia.Gamespace.Ready;
+using Battleship.NET.Avalonia.Gamespace.Running;
 using Battleship.NET.Avalonia.Gamespace.Setup;
 using Battleship.NET.Avalonia.Player;
 using Battleship.NET.Domain.Models;
@@ -20,6 +21,7 @@ namespace Battleship.NET.Avalonia.Game
             PausedGamespaceViewModel pausedGamespace,
             PlayerViewModelFactory playerViewModelFactory,
             ReadyGamespaceViewModel readyGamespace,
+            RunningGamespaceViewModel runningGamespace,
             SetupGamespaceViewModel setupGamespace)
         {
             Gamespace = gameStateStore
@@ -31,7 +33,7 @@ namespace Battleship.NET.Avalonia.Game
                     GameState.Idle      => idleGamespace,
                     GameState.Paused    => pausedGamespace,
                     GameState.Ready     => readyGamespace,
-                    GameState.Running   => throw new NotImplementedException(),
+                    GameState.Running   => runningGamespace,
                     GameState.Setup     => setupGamespace,
                     _                   => throw new InvalidOperationException("Dafuq did you do to the game state?"),
                 }))
