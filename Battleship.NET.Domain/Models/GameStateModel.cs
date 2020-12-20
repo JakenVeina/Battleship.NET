@@ -92,19 +92,6 @@ namespace Battleship.NET.Domain.Models
                 && !(((player == GamePlayer.Player1) && !Player1.CanCompleteSetup(Definition.GameBoard, Definition.Ships))
                     || ((player == GamePlayer.Player2) && !Player2.CanCompleteSetup(Definition.GameBoard, Definition.Ships)));
 
-        public bool CanMoveShip(
-                GamePlayer player)
-            => (State == GameState.Setup)
-                && (((player == GamePlayer.Player1) && !Player1.IsSetupComplete)
-                    || ((player == GamePlayer.Player2) && !Player2.IsSetupComplete));
-
-        public bool CanStartGame()
-            => (State == GameState.Ready);
-
-        public bool CanTogglePause()
-            => (State == GameState.Running)
-                || (State == GameState.Paused);
-
 
         public GameStateModel CompleteGame(
             GamePlayer winner)

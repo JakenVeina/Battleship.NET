@@ -59,18 +59,6 @@ namespace Battleship.NET.Domain.Models
             return true;
         }
 
-        public bool IsValid(
-            Point position,
-            IEnumerable<ShipDefinitionModel> shipDefinitions)
-        {
-            var shipsAtPosition = Ships
-                .Zip(shipDefinitions, (ship, definition) => (ship, definition))
-                .SelectMany(x => x.ship.EnumerateSegmentPositions(x.definition))
-                .Count(segmentPosition => segmentPosition == position);
-
-            return (shipsAtPosition <= 1);
-        }
-
 
         public GameBoardStateModel ClearShots()
             => new GameBoardStateModel(
@@ -127,12 +115,6 @@ namespace Battleship.NET.Domain.Models
                     Hits,
                     Misses.Add(position),
                     Ships);
-
-        public GameBoardStateModel Reset()
-            => new GameBoardStateModel(
-                ImmutableHashSet<Point>.Empty,
-                ImmutableHashSet<Point>.Empty,
-                Ships);
 
         public GameBoardStateModel RotateShip(
                 int shipIndex,
