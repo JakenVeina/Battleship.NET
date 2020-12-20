@@ -8,6 +8,8 @@ using System.Windows.Input;
 
 using Redux;
 
+using Battleship.NET.Avalonia.State.Actions;
+using Battleship.NET.Avalonia.State.Models;
 using Battleship.NET.Domain.Models;
 using Battleship.NET.Domain.Actions;
 
@@ -16,42 +18,50 @@ namespace Battleship.NET.Avalonia.Gamespace.Setup
     public class SetupGamespaceViewModel
     {
         public SetupGamespaceViewModel(
+            SetupGamespaceBoardTileViewModelFactory boardTileFactory,
             IStore<GameStateModel> gameStateStore,
             Random random,
-            SetupGamespaceBoardTileViewModelFactory setupGamespaceBoardTileViewModelFactory)
+            IStore<ViewStateModel> viewStateStore)
         {
             var boardDefinition = gameStateStore
                 .Select(gameState => gameState.Definition.GameBoard)
-                .DistinctUntilChanged();
+                .ShareReplayDistinct(1);
 
             BoardSize = boardDefinition
                 .Select(definition => definition.Size)
-                .DistinctUntilChanged();
+                .ShareReplayDistinct(1);
 
             BoardTiles = boardDefinition
                 .Select(definition => definition.Positions
                     .OrderBy(position => position.Y)
                         .ThenBy(position => position.X)
-                    .Select(position => setupGamespaceBoardTileViewModelFactory.Create(position))
+                    .Select(position => boardTileFactory.Create(position))
                     .ToImmutableArray())
-                .DistinctUntilChanged();
+                .ShareReplayDistinct(1);
 
-            var currentPlayer = gameStateStore
-                .Select(gameState => gameState.CurrentPlayer)
-                .DistinctUntilChanged();
+            var activePlayer = viewStateStore
+                .Select(viewState => viewState.ActivePlayer)
+                .Where(activePlayer => activePlayer.HasValue)
+                .Select(activePlayer => activePlayer!.Value)
+                .ShareReplayDistinct(1);
 
             RandomizeShips = ReactiveCommand.Create(
-                currentPlayer
-                    .Select(currentPlayer => new Action(() => gameStateStore.Dispatch(new RandomizeShipsAction(
-                        currentPlayer,
+                activePlayer
+                    .Select(activePlayer => new Action(() => gameStateStore.Dispatch(new RandomizeShipsAction(
+                        activePlayer,
                         random)))));
 
             CompleteSetup = ReactiveCommand.Create(
-                currentPlayer
-                    .Select(currentPlayer => new Action(() => gameStateStore.Dispatch(new CompleteSetupAction(
-                        currentPlayer)))),
-                gameStateStore
-                    .Select(gameState => gameState.CanCompleteSetup(gameState.CurrentPlayer))
+                activePlayer
+                    .Select(activePlayer => new Action(() =>
+                    {
+                        gameStateStore.Dispatch(new CompleteSetupAction(activePlayer));
+                        viewStateStore.Dispatch(new ToggleActivePlayerAction());
+                    })),
+                Observable.CombineLatest(
+                        gameStateStore,
+                        activePlayer,
+                        (gameState, activePlayer) => gameState.CanCompleteSetup(activePlayer))
                     .DistinctUntilChanged());
         }
 

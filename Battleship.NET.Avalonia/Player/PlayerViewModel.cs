@@ -3,6 +3,7 @@ using System.Reactive.Linq;
 
 using Redux;
 
+using Battleship.NET.Avalonia.State.Models;
 using Battleship.NET.Domain.Models;
 
 namespace Battleship.NET.Avalonia.Player
@@ -11,7 +12,8 @@ namespace Battleship.NET.Avalonia.Player
     {
         public PlayerViewModel(
             IStore<GameStateModel> gameStateStore,
-            GamePlayer player)
+            GamePlayer player,
+            IStore<ViewStateModel> viewStateStore)
         {
             var model = ((player == GamePlayer.Player1)
                     ? gameStateStore.Select(gameState => 
@@ -24,24 +26,22 @@ namespace Battleship.NET.Avalonia.Player
                         definition: gameState.Definition.Player2,
                         state:      gameState.Player2
                     )))
-                .DistinctUntilChanged();
+                .ShareReplayDistinct(1);
 
-            IsCurrent = gameStateStore
-                .Select(gameState => (gameState.CurrentPlayer == player)
-                    && ((gameState.State == GameState.Setup)
-                        || (gameState.State == GameState.Running)))
-                .DistinctUntilChanged();
+            IsActive = viewStateStore
+                .Select(viewState => (viewState.ActivePlayer == player))
+                .ShareReplayDistinct(1);
 
             Name = model
                 .Select(model => model.definition.Name)
-                .DistinctUntilChanged();
+                .ShareReplayDistinct(1);
 
             Wins = model
                 .Select(model => model.state.Wins)
-                .DistinctUntilChanged();
+                .ShareReplayDistinct(1);
         }
 
-        public IObservable<bool> IsCurrent { get; }
+        public IObservable<bool> IsActive { get; }
 
         public IObservable<string> Name { get; }
 

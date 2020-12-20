@@ -127,12 +127,12 @@ namespace Battleship.NET.Domain.Models
         public GameStateModel CompleteSetup(
             GamePlayer player)
         {
-            var (player1, player2, nextPlayer) = (player == GamePlayer.Player1)
-                ? (Player1.CompleteSetup(), Player2, GamePlayer.Player2)
-                : (Player1, Player2.CompleteSetup(), GamePlayer.Player1);
+            var (player1, player2) = (player == GamePlayer.Player1)
+                ? (Player1.CompleteSetup(), Player2)
+                : (Player1, Player2.CompleteSetup());
 
             return new GameStateModel(
-                nextPlayer,
+                CurrentPlayer,
                 Definition,
                 GamesPlayed,
                 LastUpdate,

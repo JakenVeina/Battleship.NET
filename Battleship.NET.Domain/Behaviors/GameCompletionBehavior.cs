@@ -26,15 +26,17 @@ namespace Battleship.NET.Domain.Behaviors
                 (
                     maxHitCount:        gameState.Definition.Ships.Sum(ship => ship.Segments.Count),
                     player1HitCount:    gameState.Player1.GameBoard.Hits.Count,
-                    player2HitCount:    gameState.Player2.GameBoard.Hits.Count
+                    player2HitCount:    gameState.Player2.GameBoard.Hits.Count,
+                    state:              gameState.State
                 ))
                 .DistinctUntilChanged()
+                .Where(model => model.state == GameState.Running)
                 .Do(model =>
                 {
                     if (model.player1HitCount >= model.maxHitCount)
-                        _gameStateStore.Dispatch(new CompleteGameAction(GamePlayer.Player1));
-                    else if (model.player2HitCount >= model.maxHitCount)
                         _gameStateStore.Dispatch(new CompleteGameAction(GamePlayer.Player2));
+                    else if (model.player2HitCount >= model.maxHitCount)
+                        _gameStateStore.Dispatch(new CompleteGameAction(GamePlayer.Player1));
                 })
                 .Subscribe();
 

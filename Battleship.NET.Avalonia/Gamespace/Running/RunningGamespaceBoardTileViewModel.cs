@@ -50,7 +50,7 @@ namespace Battleship.NET.Avalonia.Gamespace.Running
                             .All(segmentPosition => model.gameBoard.Hits.Contains(segmentPosition)))
                     .Select(shipSegmentModel => shipSegmentModel.ToNullable())
                     .FirstOrDefault())
-                .DistinctUntilChanged();
+                .ShareReplayDistinct(1);
 
             ShipAsset = shipSegmentModel
                 .Select(shipSegmentModel => shipSegmentModel.HasValue
@@ -58,11 +58,11 @@ namespace Battleship.NET.Avalonia.Gamespace.Running
                         shipSegmentModel.Value.segment,
                         shipSegmentModel.Value.shipDefinition.Name)
                     : null)
-                .DistinctUntilChanged();
+                .ShareReplayDistinct(1);
 
             ShipOrientation = shipSegmentModel
                 .Select(shipSegmentModel => shipSegmentModel?.orientation)
-                .DistinctUntilChanged();
+                .ShareReplayDistinct(1);
 
             ShotAsset = gameStateStore
                 .Select(gameState => gameState.OpponentPlayerState.GameBoard)
@@ -73,7 +73,7 @@ namespace Battleship.NET.Avalonia.Gamespace.Running
                     _ when gameBoard.Misses.Contains(position)  => ShotAssetModel.Miss,
                     _                                           => null
                 })
-                .DistinctUntilChanged();
+                .ShareReplayDistinct(1);
 
             FireShot = ReactiveCommand.Create(
                 () => gameStateStore.Dispatch(new FireShotAction(position)),

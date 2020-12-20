@@ -22,6 +22,12 @@
     <Compile Update="Application.axaml.cs">
       <DependentUpon>Application.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Gamespace\Completed\CompletedGamespaceView.axaml.cs">
+      <DependentUpon>CompletedGamespaceView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Gamespace\Completed\CompletedGamespaceBoardTileView.axaml.cs">
+      <DependentUpon>CompletedGamespaceBoardTileView.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Gamespace\Running\RunningGamespaceView.axaml.cs">
       <DependentUpon>RunningGamespaceView.axaml</DependentUpon>
     </Compile>

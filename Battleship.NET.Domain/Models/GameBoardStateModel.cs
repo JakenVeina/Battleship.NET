@@ -72,6 +72,12 @@ namespace Battleship.NET.Domain.Models
         }
 
 
+        public GameBoardStateModel ClearShots()
+            => new GameBoardStateModel(
+                ImmutableHashSet<Point>.Empty,
+                ImmutableHashSet<Point>.Empty,
+                Ships);
+
         public GameBoardStateModel MoveShip(
                 int shipIndex,
                 Point shipSegment,

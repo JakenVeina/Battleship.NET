@@ -9,12 +9,16 @@ using Avalonia.Markup.Xaml;
 using Redux;
 
 using Battleship.NET.Avalonia.Game;
+using Battleship.NET.Avalonia.Gamespace.Completed;
 using Battleship.NET.Avalonia.Gamespace.Idle;
 using Battleship.NET.Avalonia.Gamespace.Paused;
 using Battleship.NET.Avalonia.Gamespace.Ready;
 using Battleship.NET.Avalonia.Gamespace.Running;
 using Battleship.NET.Avalonia.Gamespace.Setup;
 using Battleship.NET.Avalonia.Player;
+using Battleship.NET.Avalonia.State;
+using Battleship.NET.Avalonia.State.Behaviors;
+using Battleship.NET.Avalonia.State.Models;
 using Battleship.NET.Domain;
 using Battleship.NET.Domain.Models;
 using Battleship.NET.Domain.Behaviors;
@@ -35,7 +39,13 @@ namespace Battleship.NET.Avalonia
                     .AddSingleton<ISystemClock, DefaultSystemClock>()
                     .AddSingleton<Random>()
                     .AddSingleton<IStore<GameStateModel>, StandardGame>()
+                    .AddTransient<IBehavior, GameCompletionBehavior>()
+                    .AddTransient<IBehavior, GameClockBehavior>()
+                    .AddSingleton<IStore<ViewStateModel>, ViewStateStore>()
+                    .AddTransient<IBehavior, ActivePlayerSynchronizationBehavior>()
                     .AddTransient<GameViewModel>()
+                    .AddTransient<CompletedGamespaceBoardTileViewModelFactory>()
+                    .AddTransient<CompletedGamespaceViewModel>()
                     .AddTransient<IdleGamespaceViewModel>()
                     .AddTransient<PausedGamespaceViewModel>()
                     .AddTransient<ReadyGamespaceViewModel>()
@@ -45,8 +55,6 @@ namespace Battleship.NET.Avalonia
                     .AddSingleton<SetupGamespaceBoardTileViewModelFactory>()
                     .AddSingleton<SetupGamespaceBoardTileShipSegmentViewModelFactory>()
                     .AddSingleton<PlayerViewModelFactory>()
-                    .AddTransient<IBehavior, GameCompletionBehavior>()
-                    .AddTransient<IBehavior, GameClockBehavior>()
                     .BuildServiceProvider();
 
                 desktopLifetime.Exit += (_, _) => serviceProvider.Dispose();

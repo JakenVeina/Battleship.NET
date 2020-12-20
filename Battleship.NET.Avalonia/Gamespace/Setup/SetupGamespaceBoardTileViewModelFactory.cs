@@ -2,6 +2,7 @@
 
 using Redux;
 
+using Battleship.NET.Avalonia.State.Models;
 using Battleship.NET.Domain.Models;
 
 namespace Battleship.NET.Avalonia.Gamespace.Setup
@@ -10,10 +11,12 @@ namespace Battleship.NET.Avalonia.Gamespace.Setup
     {
         public SetupGamespaceBoardTileViewModelFactory(
             SetupGamespaceBoardTileShipSegmentViewModelFactory gameBoardTileShipSegmentViewModelFactory,
-            IStore<GameStateModel> gameStateStore)
+            IStore<GameStateModel> gameStateStore,
+            IStore<ViewStateModel> viewStateStore)
         {
             _gameBoardTileShipSegmentViewModelFactory = gameBoardTileShipSegmentViewModelFactory;
             _gameStateStore = gameStateStore;
+            _viewStateStore = viewStateStore;
         }
 
         public SetupGamespaceBoardTileViewModel Create(
@@ -21,9 +24,11 @@ namespace Battleship.NET.Avalonia.Gamespace.Setup
             => new SetupGamespaceBoardTileViewModel(
                 _gameBoardTileShipSegmentViewModelFactory,
                 _gameStateStore,
-                position);
+                position,
+                _viewStateStore);
 
         private readonly SetupGamespaceBoardTileShipSegmentViewModelFactory _gameBoardTileShipSegmentViewModelFactory;
         private readonly IStore<GameStateModel> _gameStateStore;
+        private readonly IStore<ViewStateModel> _viewStateStore;
     }
 }

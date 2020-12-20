@@ -1,6 +1,7 @@
 ﻿<UserControl
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:completed="clr-namespace:Battleship.NET.Avalonia.Gamespace.Completed;assembly=Battleship.NET.Avalonia"
     xmlns:game="clr-namespace:Battleship.NET.Avalonia.Game;assembly=Battleship.NET.Avalonia"
     xmlns:idle="clr-namespace:Battleship.NET.Avalonia.Gamespace.Idle;assembly=Battleship.NET.Avalonia"
     xmlns:paused="clr-namespace:Battleship.NET.Avalonia.Gamespace.Paused;assembly=Battleship.NET.Avalonia"
@@ -11,11 +12,12 @@
     x:Class="Battleship.NET.Avalonia.Game.GameView">
 
   <UserControl.DataTemplates>
-    <DataTemplate DataType="{x:Type idle:IdleGamespaceViewModel}">        <idle:IdleGamespaceView/>       </DataTemplate>
-    <DataTemplate DataType="{x:Type paused:PausedGamespaceViewModel}">    <paused:PausedGamespaceView/>   </DataTemplate>
-    <DataTemplate DataType="{x:Type ready:ReadyGamespaceViewModel}">      <ready:ReadyGamespaceView/>     </DataTemplate>
-    <DataTemplate DataType="{x:Type running:RunningGamespaceViewModel}">  <running:RunningGamespaceView/> </DataTemplate>
-    <DataTemplate DataType="{x:Type setup:SetupGamespaceViewModel}">      <setup:SetupGamespaceView/>     </DataTemplate>
+    <DataTemplate DataType="{x:Type completed:CompletedGamespaceViewModel}">  <completed:CompletedGamespaceView/> </DataTemplate>
+    <DataTemplate DataType="{x:Type idle:IdleGamespaceViewModel}">            <idle:IdleGamespaceView/>           </DataTemplate>
+    <DataTemplate DataType="{x:Type paused:PausedGamespaceViewModel}">        <paused:PausedGamespaceView/>       </DataTemplate>
+    <DataTemplate DataType="{x:Type ready:ReadyGamespaceViewModel}">          <ready:ReadyGamespaceView/>         </DataTemplate>
+    <DataTemplate DataType="{x:Type running:RunningGamespaceViewModel}">      <running:RunningGamespaceView/>     </DataTemplate>
+    <DataTemplate DataType="{x:Type setup:SetupGamespaceViewModel}">          <setup:SetupGamespaceView/>         </DataTemplate>
   </UserControl.DataTemplates>
 
   <Grid>

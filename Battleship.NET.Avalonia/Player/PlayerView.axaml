@@ -23,7 +23,7 @@
   <Border>
     <i:Interaction.Behaviors>
       <u:ClassSelectorBehavior
-          Data="{Binding IsCurrent^}">
+          Data="{Binding IsActive^}">
         <u:ClassMapping Value="True"  Class="ActivePlayer"/>
         <u:ClassMapping Value="False" Class="InactivePlayer"/>
       </u:ClassSelectorBehavior>

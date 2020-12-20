@@ -50,7 +50,7 @@ namespace Battleship.NET.Domain.Models
         public PlayerStateModel BeginSetup()
             => new PlayerStateModel(
                 CanFireShot,
-                GameBoard,
+                GameBoard.ClearShots(),
                 false,
                 Wins);
 

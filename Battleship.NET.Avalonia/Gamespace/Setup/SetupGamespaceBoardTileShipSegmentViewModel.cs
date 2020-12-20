@@ -8,6 +8,7 @@ using System.Windows.Input;
 using Redux;
 
 using Battleship.NET.Avalonia.Ship;
+using Battleship.NET.Avalonia.State.Models;
 using Battleship.NET.Domain.Actions;
 using Battleship.NET.Domain.Models;
 
@@ -18,20 +19,33 @@ namespace Battleship.NET.Avalonia.Gamespace.Setup
         public SetupGamespaceBoardTileShipSegmentViewModel(
             IStore<GameStateModel> gameStateStore,
             Point position,
-            int shipIndex)
+            int shipIndex,
+            IStore<ViewStateModel> viewStateStore)
         {
-            var segmentModel = gameStateStore
-                .Select(gameState =>
+            var segmentModel = Observable.CombineLatest(
+                    gameStateStore,
+                    viewStateStore,
+                    (gameState, viewState) => 
+                    (
+                        activePlayer:   viewState.ActivePlayer,
+                        definition:     gameState.Definition.Ships[shipIndex],
+                        player1State:   gameState.Player1.GameBoard.Ships[shipIndex],
+                        player2State:   gameState.Player2.GameBoard.Ships[shipIndex]
+                    ))
+                .Where(model => model.activePlayer.HasValue)
+                .Select(model => 
                 (
-                    currentPlayer:  gameState.CurrentPlayer,
-                    definition:     gameState.Definition.Ships[shipIndex],
-                    state:          gameState.CurrentPlayerState.GameBoard.Ships[shipIndex]
+                    activePlayer:   model.activePlayer!.Value,
+                    definition:     model.definition,
+                    state:          (model.activePlayer!.Value == GamePlayer.Player1)
+                                        ? model.player1State
+                                        : model.player2State
                 ))
                 .DistinctUntilChanged()
                 .Select(model => model.definition.Segments
                     .Select(segment => 
                     (
-                        currentPlayer:  model.currentPlayer,
+                        activePlayer:   model.activePlayer,
                         name:           model.definition.Name,
                         orientation:    model.state.Orientation,
                         position:       segment
@@ -40,7 +54,7 @@ namespace Battleship.NET.Avalonia.Gamespace.Setup
                         segment:        segment
                     ).ToNullable())
                     .FirstOrDefault(model => model!.Value.position == position))
-                .DistinctUntilChanged();
+                .ShareReplayDistinct(1);
 
             Asset = segmentModel
                 .Select(model => model.HasValue
@@ -48,22 +62,34 @@ namespace Battleship.NET.Avalonia.Gamespace.Setup
                         model.Value.segment,
                         model.Value.name)
                     : null)
-                .DistinctUntilChanged();
+                .ShareReplayDistinct(1);
 
             HasShip = segmentModel
                 .Select(model => model.HasValue)
-                .DistinctUntilChanged();
+                .ShareReplayDistinct(1);
 
-            IsShipValid = gameStateStore
-                .Select(gameState =>
+            IsShipValid = Observable.CombineLatest(
+                    gameStateStore,
+                    viewStateStore,
+                    (gameState, viewState) => 
+                    (
+                        activePlayer:       viewState.ActivePlayer,
+                        shipDefinitions:    gameState.Definition.Ships,
+                        player1ShipStates:  gameState.Player1.GameBoard.Ships,
+                        player2ShipStates:  gameState.Player2.GameBoard.Ships
+                    ))
+                .Where(model => model.activePlayer.HasValue)
+                .Select(model => 
                 (
-                    shipDefinitions: gameState.Definition.Ships,
-                    ShipStates: gameState.CurrentPlayerState.GameBoard.Ships
+                    shipDefinitions:    model.shipDefinitions,
+                    shipStates:         (model.activePlayer == GamePlayer.Player1)
+                                            ? model.player1ShipStates
+                                            : model.player2ShipStates
                 ))
                 .DistinctUntilChanged()
                 .Select(model => !Enumerable.Zip(
                         model.shipDefinitions,
-                        model.ShipStates,
+                        model.shipStates,
                         (definition, state) => (definition, state))
                     .SelectMany((ship, index) => ship.definition.Segments
                         .Select(segment =>
@@ -76,7 +102,7 @@ namespace Battleship.NET.Avalonia.Gamespace.Setup
                     .GroupBy(x => x.position)
                     .Any(group => group.Any(x => x.shipIndex == shipIndex)
                         && (group.Count() > 1)))
-                .DistinctUntilChanged();
+                .ShareReplayDistinct(1);
 
             Movement = segmentModel
                 .Select(model => model.HasValue
@@ -84,24 +110,24 @@ namespace Battleship.NET.Avalonia.Gamespace.Setup
                         model.Value.segment,
                         shipIndex)
                     : null)
-                .DistinctUntilChanged();
+                .ShareReplayDistinct(1);
 
             Orientation = segmentModel
                 .Select(model => model?.orientation)
-                .DistinctUntilChanged();
+                .ShareReplayDistinct(1);
 
             Rotate = ReactiveCommand.Create(
                 segmentModel
                     .Where(model => model.HasValue)
                     .Select(model => new Action(() => gameStateStore.Dispatch(new RotateShipAction(
-                        model!.Value.currentPlayer,
+                        model!.Value.activePlayer,
                         shipIndex,
                         model!.Value.segment,
                         model!.Value.orientation switch
                         {
-                            Rotation.Rotate0    => Rotation.Rotate90,
-                            Rotation.Rotate90   => Rotation.Rotate180,
-                            Rotation.Rotate180  => Rotation.Rotate270,
+                            Rotation.Rotate0    => Rotation.Rotate270,
+                            Rotation.Rotate270  => Rotation.Rotate180,
+                            Rotation.Rotate180  => Rotation.Rotate90,
                             _                   => Rotation.Rotate0
                         })))),
                 HasShip);

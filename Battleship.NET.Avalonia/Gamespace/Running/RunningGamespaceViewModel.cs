@@ -16,24 +16,24 @@ namespace Battleship.NET.Avalonia.Gamespace.Running
     public class RunningGamespaceViewModel
     {
         public RunningGamespaceViewModel(
-            IStore<GameStateModel> gameStateStore,
-            RunningGamespaceBoardTileViewModelFactory runningGamespaceBoardTileViewModelFactory)
+            RunningGamespaceBoardTileViewModelFactory boardTileFactory,
+            IStore<GameStateModel> gameStateStore)
         {
             var boardDefinition = gameStateStore
                 .Select(gameState => gameState.Definition.GameBoard)
-                .DistinctUntilChanged();
+                .ShareReplayDistinct(1);
 
             BoardSize = boardDefinition
                 .Select(definition => definition.Size)
-                .DistinctUntilChanged();
+                .ShareReplayDistinct(1);
 
             BoardTiles = boardDefinition
                 .Select(definition => definition.Positions
                     .OrderBy(position => position.Y)
                         .ThenBy(position => position.X)
-                    .Select(position => runningGamespaceBoardTileViewModelFactory.Create(position))
+                    .Select(position => boardTileFactory.Create(position))
                     .ToImmutableArray())
-                .DistinctUntilChanged();
+                .ShareReplayDistinct(1);
 
             EndTurn = ReactiveCommand.Create(
                 () => gameStateStore.Dispatch(new EndTurnAction()),
