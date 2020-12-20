@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 
-using Redux;
+using ReduxSharp;
 
 using Battleship.NET.Avalonia.Game;
 using Battleship.NET.Avalonia.Gamespace.Completed;
@@ -38,10 +38,10 @@ namespace Battleship.NET.Avalonia
                 var serviceProvider = new ServiceCollection()
                     .AddSingleton<ISystemClock, DefaultSystemClock>()
                     .AddSingleton<Random>()
-                    .AddSingleton<IStore<GameStateModel>, StandardGame>()
+                    .AddSingleton<IStore<GameStateModel>, Store<GameStateModel>>(_ => new Store<GameStateModel>(new GameStateReducer(), StandardGame.CreateIdle()))
                     .AddTransient<IBehavior, GameCompletionBehavior>()
                     .AddTransient<IBehavior, GameClockBehavior>()
-                    .AddSingleton<IStore<ViewStateModel>, ViewStateStore>()
+                    .AddSingleton<IStore<ViewStateModel>, Store<ViewStateModel>>(_ => new Store<ViewStateModel>(new ViewStateReducer(), ViewStateModel.Default))
                     .AddTransient<IBehavior, ActivePlayerSynchronizationBehavior>()
                     .AddTransient<GameViewModel>()
                     .AddTransient<CompletedGamespaceBoardTileViewModelFactory>()

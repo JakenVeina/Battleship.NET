@@ -1,6 +1,6 @@
 ﻿namespace System.Drawing
 {
-    public enum Rotation
+    public enum Orientation
     {
         Rotate0 = 0,
         Rotate90 = 90,

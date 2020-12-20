@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reactive.Linq;
 
-using Redux;
+using ReduxSharp;
 
 using Battleship.NET.Avalonia.State.Models;
 using Battleship.NET.Domain.Models;

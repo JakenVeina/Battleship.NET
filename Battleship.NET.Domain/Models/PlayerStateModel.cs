@@ -107,7 +107,7 @@ namespace Battleship.NET.Domain.Models
         public PlayerStateModel RotateShip(
                 int shipIndex,
                 Point shipSegment,
-                Rotation targetOrientation)
+                Orientation targetOrientation)
             => new PlayerStateModel(
                 CanFireShot,
                 GameBoard.RotateShip(shipIndex, shipSegment, targetOrientation),

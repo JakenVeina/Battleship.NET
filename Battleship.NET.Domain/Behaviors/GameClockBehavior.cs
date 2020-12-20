@@ -3,7 +3,7 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.PlatformServices;
 
-using Redux;
+using ReduxSharp;
 
 using Battleship.NET.Domain.Actions;
 using Battleship.NET.Domain.Models;

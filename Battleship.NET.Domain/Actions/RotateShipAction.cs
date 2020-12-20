@@ -1,20 +1,16 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 
 using Battleship.NET.Domain.Models;
-
-using Redux;
 
 namespace Battleship.NET.Domain.Actions
 {
     public class RotateShipAction
-        : IAction
     {
         public RotateShipAction(
             GamePlayer player,
             int shipIndex,
             Point shipSegment,
-            Rotation targetOrientation)
+            Orientation targetOrientation)
         {
             Player = player;
             ShipIndex = shipIndex;
@@ -28,6 +24,6 @@ namespace Battleship.NET.Domain.Actions
 
         public Point ShipSegment { get; }
 
-        public Rotation TargetOrientation { get; }
+        public Orientation TargetOrientation { get; }
     }
 }

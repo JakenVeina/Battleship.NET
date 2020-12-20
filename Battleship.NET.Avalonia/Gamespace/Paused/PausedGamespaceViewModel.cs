@@ -1,7 +1,7 @@
 ﻿using System.Reactive;
 using System.Windows.Input;
 
-using Redux;
+using ReduxSharp;
 
 using Battleship.NET.Domain.Actions;
 using Battleship.NET.Domain.Models;

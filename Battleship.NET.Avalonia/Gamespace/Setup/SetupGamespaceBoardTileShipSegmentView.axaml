@@ -26,7 +26,7 @@
     </c:VectorSprite.Definition>
 
     <c:VectorSprite.RenderTransform>
-      <RotateTransform Angle="{Binding Orientation^, Converter={x:Static u:RotationConverters.ToAngle}}"/>
+      <RotateTransform Angle="{Binding Orientation^, Converter={x:Static u:OrientationConverters.ToAngle}}"/>
     </c:VectorSprite.RenderTransform>
 
     <i:Interaction.Behaviors>

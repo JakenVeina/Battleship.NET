@@ -102,7 +102,7 @@ namespace Battleship.NET.Domain.Models
                     Misses,
                     Enumerable.Range(0, shipDefinitions.Count)
                         .Select(shipIndex => new ShipStateModel(
-                            orientation: (Rotation)(random.Next(0, 4) * 90),
+                            orientation: (Orientation)(random.Next(0, 4) * 90),
                             position: new Point(
                                 random.Next(0, size.Width),
                                 random.Next(0, size.Height))))
@@ -137,7 +137,7 @@ namespace Battleship.NET.Domain.Models
         public GameBoardStateModel RotateShip(
                 int shipIndex,
                 Point shipSegment,
-                Rotation targetOrientation)
+                Orientation targetOrientation)
             => new GameBoardStateModel(
                 Hits,
                 Misses,

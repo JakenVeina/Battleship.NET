@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reactive.Linq;
 
-using Redux;
+using ReduxSharp;
 
 using Battleship.NET.Avalonia.Gamespace.Completed;
 using Battleship.NET.Avalonia.Gamespace.Idle;

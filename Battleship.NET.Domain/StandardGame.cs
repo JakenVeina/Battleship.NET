@@ -7,9 +7,8 @@ using Battleship.NET.Domain.Models;
 namespace Battleship.NET.Domain
 {
     public class StandardGame
-        : Game
     {
-        public static GameStateModel CreateIniitalState()
+        public static GameStateModel CreateIdle()
             => GameStateModel.CreateIdle(
                 GameDefinitionModel.Create(
                     GameBoardDefinitionModel.Create("Standard", Enumerable.Range(0, 10).SelectMany(x => Enumerable.Range(0, 10).Select(y => new Point(x, y)))),
@@ -22,9 +21,5 @@ namespace Battleship.NET.Domain
                         .ToImmutableArray(),
                     PlayerDefinitionModel.Create("Player 1"),
                     PlayerDefinitionModel.Create("Player 2")));
-
-        public StandardGame()
-            : base(CreateIniitalState())
-        { }
     }
 }

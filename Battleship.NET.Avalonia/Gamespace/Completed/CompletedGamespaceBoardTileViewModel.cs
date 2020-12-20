@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Linq;
 using System.Reactive.Linq;
 
-using Redux;
+using ReduxSharp;
 
 using Battleship.NET.Avalonia.Ship;
 using Battleship.NET.Avalonia.State.Models;
@@ -99,7 +99,7 @@ namespace Battleship.NET.Avalonia.Gamespace.Completed
 
         public IObservable<ShipSegmentAssetModel?> ShipAsset { get; }
 
-        public IObservable<Rotation?> ShipOrientation { get; }
+        public IObservable<Orientation?> ShipOrientation { get; }
 
         public IObservable<ShotAssetModel?> ShotAsset { get; }
     }

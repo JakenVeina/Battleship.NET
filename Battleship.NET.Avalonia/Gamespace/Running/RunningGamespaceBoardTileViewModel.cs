@@ -5,7 +5,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Windows.Input;
 
-using Redux;
+using ReduxSharp;
 
 using Battleship.NET.Avalonia.Ship;
 using Battleship.NET.Domain.Actions;
@@ -86,7 +86,7 @@ namespace Battleship.NET.Avalonia.Gamespace.Running
 
         public IObservable<ShipSegmentAssetModel?> ShipAsset { get; }
         
-        public IObservable<Rotation?> ShipOrientation { get; }
+        public IObservable<Orientation?> ShipOrientation { get; }
 
         public IObservable<ShotAssetModel?> ShotAsset { get; }
 

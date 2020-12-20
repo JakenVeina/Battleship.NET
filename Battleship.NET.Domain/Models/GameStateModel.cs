@@ -231,7 +231,7 @@ namespace Battleship.NET.Domain.Models
             GamePlayer player,
             int shipIndex,
             Point shipSegment,
-            Rotation targetOrientation)
+            Orientation targetOrientation)
         {
             var (player1, player2) = (player == GamePlayer.Player1)
                 ? (Player1.RotateShip(shipIndex, shipSegment, targetOrientation), Player2)

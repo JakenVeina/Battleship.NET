@@ -2,7 +2,7 @@
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 
-using Redux;
+using ReduxSharp;
 
 using Battleship.NET.Avalonia.State.Actions;
 using Battleship.NET.Avalonia.State.Models;

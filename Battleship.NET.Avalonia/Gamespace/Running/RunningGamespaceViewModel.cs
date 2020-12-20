@@ -6,7 +6,7 @@ using System.Reactive.Linq;
 using System.Reactive;
 using System.Windows.Input;
 
-using Redux;
+using ReduxSharp;
 
 using Battleship.NET.Domain.Models;
 using Battleship.NET.Domain.Actions;

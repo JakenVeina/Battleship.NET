@@ -10,13 +10,13 @@
 
         public static Point RotateOrigin(
                 this Point point,
-                Rotation rotation)
+                Orientation rotation)
             => rotation switch
             {
-                Rotation.Rotate90   => new Point(point.Y, -point.X),
-                Rotation.Rotate180  => new Point(-point.X, -point.Y),
-                Rotation.Rotate270  => new Point(-point.Y, point.X),
-                _                   => point
+                Orientation.Rotate90    => new Point(point.Y, -point.X),
+                Orientation.Rotate180   => new Point(-point.X, -point.Y),
+                Orientation.Rotate270   => new Point(-point.Y, point.X),
+                _                       => point
             };
 
         public static Point Translate(

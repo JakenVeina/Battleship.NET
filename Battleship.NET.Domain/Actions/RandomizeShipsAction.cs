@@ -1,13 +1,10 @@
 ﻿using System;
 
-using Redux;
-
 using Battleship.NET.Domain.Models;
 
 namespace Battleship.NET.Domain.Actions
 {
     public class RandomizeShipsAction
-        : IAction
     {
         public RandomizeShipsAction(
             GamePlayer player,

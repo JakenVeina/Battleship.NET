@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Windows.Input;
 
-using Redux;
+using ReduxSharp;
 
 using Battleship.NET.Avalonia.Ship;
 using Battleship.NET.Avalonia.State.Models;

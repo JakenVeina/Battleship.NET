@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-using Redux;
+using ReduxSharp;
 
 using Battleship.NET.Domain.Models;
 

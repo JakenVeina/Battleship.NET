@@ -1,14 +1,10 @@
-﻿using System.ComponentModel;
-using System.Drawing;
+﻿using System.Drawing;
 
 using Battleship.NET.Domain.Models;
-
-using Redux;
 
 namespace Battleship.NET.Domain.Actions
 {
     public class MoveShipAction
-        : IAction
     {
         public MoveShipAction(
             GamePlayer player,

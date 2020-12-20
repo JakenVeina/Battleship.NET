@@ -5,7 +5,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Windows.Input;
 
-using Redux;
+using ReduxSharp;
 
 using Battleship.NET.Avalonia.Ship;
 using Battleship.NET.Avalonia.State.Models;
@@ -125,10 +125,10 @@ namespace Battleship.NET.Avalonia.Gamespace.Setup
                         model!.Value.segment,
                         model!.Value.orientation switch
                         {
-                            Rotation.Rotate0    => Rotation.Rotate270,
-                            Rotation.Rotate270  => Rotation.Rotate180,
-                            Rotation.Rotate180  => Rotation.Rotate90,
-                            _                   => Rotation.Rotate0
+                            System.Drawing.Orientation.Rotate0      => System.Drawing.Orientation.Rotate270,
+                            System.Drawing.Orientation.Rotate270    => System.Drawing.Orientation.Rotate180,
+                            System.Drawing.Orientation.Rotate180    => System.Drawing.Orientation.Rotate90,
+                            _                                       => System.Drawing.Orientation.Rotate0
                         })))),
                 HasShip);
         }
@@ -141,7 +141,7 @@ namespace Battleship.NET.Avalonia.Gamespace.Setup
 
         public IObservable<ShipSegmentMovementModel?> Movement { get; }
 
-        public IObservable<Rotation?> Orientation { get; }
+        public IObservable<Orientation?> Orientation { get; }
 
         public ICommand<Unit> Rotate { get; }
     }

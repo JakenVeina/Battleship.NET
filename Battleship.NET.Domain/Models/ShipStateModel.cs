@@ -12,7 +12,7 @@ namespace Battleship.NET.Domain.Models
                 default);
 
         public ShipStateModel(
-            Rotation orientation,
+            Orientation orientation,
             Point position)
         {
             Orientation = orientation;
@@ -20,7 +20,7 @@ namespace Battleship.NET.Domain.Models
         }
 
 
-        public Rotation Orientation { get; }
+        public Orientation Orientation { get; }
 
         public Point Position { get; }
 
@@ -44,7 +44,7 @@ namespace Battleship.NET.Domain.Models
 
         public ShipStateModel Rotate(
                 Point shipSegment,
-                Rotation targetOrientation)
+                Orientation targetOrientation)
             => new ShipStateModel(
                 targetOrientation,
                 Position
