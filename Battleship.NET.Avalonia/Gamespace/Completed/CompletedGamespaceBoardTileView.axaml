@@ -5,6 +5,7 @@
     xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
     xmlns:c="clr-namespace:Battleship.NET.Avalonia.Controls;assembly=Battleship.NET.Avalonia"
     xmlns:u="clr-namespace:Battleship.NET.Avalonia.ViewUtilities;assembly=Battleship.NET.Avalonia"
+    xmlns:gamespace="clr-namespace:Battleship.NET.Avalonia.Gamespace;assembly=Battleship.NET.Avalonia"
     xmlns:running="clr-namespace:Battleship.NET.Avalonia.Gamespace.Running;assembly=Battleship.NET.Avalonia"
     xmlns:ship="clr-namespace:Battleship.NET.Avalonia.Ship;assembly=Battleship.NET.Avalonia"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
@@ -67,7 +68,7 @@
 
         <c:VectorSprite.Definition>
           <MultiBinding
-              Converter="{x:Static running:ShotAssetModelConverters.LookupSpriteResource}"
+              Converter="{x:Static gamespace:ShotAssetModelConverters.LookupSpriteResource}"
               FallbackValue="{StaticResource Sprite_Empty}">
             <Binding Path="$self" />
             <Binding Path="ShotAsset^" />

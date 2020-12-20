@@ -7,7 +7,6 @@ using ReduxSharp;
 
 using Battleship.NET.Avalonia.Ship;
 using Battleship.NET.Avalonia.State.Models;
-using Battleship.NET.Avalonia.Gamespace.Running;
 using Battleship.NET.Domain.Models;
 
 namespace Battleship.NET.Avalonia.Gamespace.Completed

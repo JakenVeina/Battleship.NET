@@ -5,7 +5,7 @@ using System.Globalization;
 using Avalonia.Controls;
 using Avalonia.Data.Converters;
 
-namespace Battleship.NET.Avalonia.Gamespace.Running
+namespace Battleship.NET.Avalonia.Gamespace
 {
     public static class ShotAssetModelConverters
     {
