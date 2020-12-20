@@ -12,6 +12,6 @@ namespace Battleship.NET.Avalonia
         public static AppBuilder BuildAvaloniaApp()
             => AppBuilder.Configure<Application>()
                 .UsePlatformDetect()
-                .LogToDebug();
+                .LogToTrace();
     }
 }

@@ -39,7 +39,8 @@ namespace Battleship.NET.Avalonia.ViewUtilities
 
         private void OnDragEnter(object sender, DragEventArgs e)
         {
-            if ((e.DragEffects & Effects) == DragDropEffects.None)
+            if (((e.DragEffects & Effects) == DragDropEffects.None)
+                    || (DataFormat is null))
                 return;
 
             var dataValue = e.Data.Get(DataFormat);

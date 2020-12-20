@@ -6,10 +6,10 @@
     <Nullable>Enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.10.0-preview2" />
-    <PackageReference Include="Avalonia.Desktop" Version="0.10.0-preview2" />
-    <PackageReference Include="Avalonia.Xaml.Behaviors" Version="0.10.0-preview2" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.0-preview.7.20364.11" />
+    <PackageReference Include="Avalonia" Version="0.10.0-rc1" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.10.0-rc1" />
+    <PackageReference Include="Avalonia.Xaml.Behaviors" Version="0.10.0-rc1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Battleship.NET.Domain\Battleship.NET.Domain.csproj" />

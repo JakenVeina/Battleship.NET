@@ -55,7 +55,10 @@ namespace Battleship.NET.Avalonia.ViewUtilities
 
         private void OnPointerMoved(object sender, PointerEventArgs e)
         {
-            if ((e.Pointer.Captured is null) || !AllowDrag)
+            if ((e.Pointer.Captured is null)
+                    || !AllowDrag
+                    || (DataFormat is null)
+                    || (DataValue is null))
                 return;
 
             var dataObject = new DataObject();
