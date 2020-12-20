@@ -2,6 +2,7 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
+    <LanguageVersion>9</LanguageVersion>
     <Nullable>Enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
@@ -40,8 +41,8 @@
     <Compile Update="GameWindow.axaml.cs">
       <DependentUpon>GameWindow.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Gamespace\Paused\PausedGamespaceView.axaml.cs">
-      <DependentUpon>PausedGamespaceView.axaml</DependentUpon>
+    <Compile Update="Resources\SharedSpriteDefinitions.axaml.cs">
+      <DependentUpon>SharedSpriteDefinitions.axaml</DependentUpon>
     </Compile>
   </ItemGroup>
 </Project>
