@@ -1,12 +1,12 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-namespace Battleship.NET.Avalonia.Gamespace.Paused
+namespace Battleship.NET.Avalonia.Resources
 {
-    public class PausedGamespaceView
-        : UserControl
+    public class SharedSpriteDefinitions
+        : ResourceDictionary
     {
-        public PausedGamespaceView()
+        public SharedSpriteDefinitions()
             => InitializeComponent();
 
         private void InitializeComponent()

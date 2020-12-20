@@ -1,0 +1,21 @@
+﻿<ResourceDictionary
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="clr-namespace:Battleship.NET.Avalonia.Controls;assembly=Battleship.NET.Avalonia"
+    x:Class="Battleship.NET.Avalonia.Resources.SharedSpriteDefinitions">
+  <c:VectorSpriteDefinition
+    x:Key="Sprite_Empty"
+    CanvasHeight="10"
+    CanvasWidth="10"
+    Geometry="Z"/>
+  <c:VectorSpriteDefinition
+    x:Key="Sprite_Icon_Play"
+    CanvasHeight="24"
+    CanvasWidth="24"
+    Geometry="M8,5.14V19.14L19,12.14L8,5.14Z"/>
+  <c:VectorSpriteDefinition
+    x:Key="Sprite_Icon_Pause"
+    CanvasHeight="24"
+    CanvasWidth="24"
+    Geometry="M14,19H18V5H14M6,19H10V5H6V19Z"/>
+</ResourceDictionary>

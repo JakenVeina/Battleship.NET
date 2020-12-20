@@ -11,7 +11,6 @@ using ReduxSharp;
 using Battleship.NET.Avalonia.Game;
 using Battleship.NET.Avalonia.Gamespace.Completed;
 using Battleship.NET.Avalonia.Gamespace.Idle;
-using Battleship.NET.Avalonia.Gamespace.Paused;
 using Battleship.NET.Avalonia.Gamespace.Ready;
 using Battleship.NET.Avalonia.Gamespace.Running;
 using Battleship.NET.Avalonia.Gamespace.Setup;
@@ -47,7 +46,6 @@ namespace Battleship.NET.Avalonia
                     .AddTransient<CompletedGamespaceBoardTileViewModelFactory>()
                     .AddTransient<CompletedGamespaceViewModel>()
                     .AddTransient<IdleGamespaceViewModel>()
-                    .AddTransient<PausedGamespaceViewModel>()
                     .AddTransient<ReadyGamespaceViewModel>()
                     .AddTransient<RunningGamespaceViewModel>()
                     .AddTransient<RunningGamespaceBoardTileViewModelFactory>()

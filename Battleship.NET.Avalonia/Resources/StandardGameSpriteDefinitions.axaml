@@ -4,11 +4,6 @@
     xmlns:c="clr-namespace:Battleship.NET.Avalonia.Controls;assembly=Battleship.NET.Avalonia"
     x:Class="Battleship.NET.Avalonia.Resources.StandardGameSpriteDefinitions">
   <c:VectorSpriteDefinition
-    x:Key="Sprite_Empty"
-    CanvasHeight="10"
-    CanvasWidth="10"
-    Geometry="Z"/>
-  <c:VectorSpriteDefinition
     x:Key="Sprite_Ship_Standard_Carrier_0_0"
     CanvasHeight="10"
     CanvasWidth="10"

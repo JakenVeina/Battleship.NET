@@ -1,10 +1,12 @@
 ﻿<UserControl
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+    xmlns:c="clr-namespace:Battleship.NET.Avalonia.Controls;assembly=Battleship.NET.Avalonia"
+    xmlns:u="clr-namespace:Battleship.NET.Avalonia.ViewUtilities;assembly=Battleship.NET.Avalonia"
     xmlns:completed="clr-namespace:Battleship.NET.Avalonia.Gamespace.Completed;assembly=Battleship.NET.Avalonia"
     xmlns:game="clr-namespace:Battleship.NET.Avalonia.Game;assembly=Battleship.NET.Avalonia"
     xmlns:idle="clr-namespace:Battleship.NET.Avalonia.Gamespace.Idle;assembly=Battleship.NET.Avalonia"
-    xmlns:paused="clr-namespace:Battleship.NET.Avalonia.Gamespace.Paused;assembly=Battleship.NET.Avalonia"
     xmlns:ready="clr-namespace:Battleship.NET.Avalonia.Gamespace.Ready;assembly=Battleship.NET.Avalonia"
     xmlns:running="clr-namespace:Battleship.NET.Avalonia.Gamespace.Running;assembly=Battleship.NET.Avalonia"
     xmlns:setup="clr-namespace:Battleship.NET.Avalonia.Gamespace.Setup;assembly=Battleship.NET.Avalonia"
@@ -14,7 +16,6 @@
   <UserControl.DataTemplates>
     <DataTemplate DataType="{x:Type completed:CompletedGamespaceViewModel}">  <completed:CompletedGamespaceView/> </DataTemplate>
     <DataTemplate DataType="{x:Type idle:IdleGamespaceViewModel}">            <idle:IdleGamespaceView/>           </DataTemplate>
-    <DataTemplate DataType="{x:Type paused:PausedGamespaceViewModel}">        <paused:PausedGamespaceView/>       </DataTemplate>
     <DataTemplate DataType="{x:Type ready:ReadyGamespaceViewModel}">          <ready:ReadyGamespaceView/>         </DataTemplate>
     <DataTemplate DataType="{x:Type running:RunningGamespaceViewModel}">      <running:RunningGamespaceView/>     </DataTemplate>
     <DataTemplate DataType="{x:Type setup:SetupGamespaceViewModel}">          <setup:SetupGamespaceView/>         </DataTemplate>
@@ -26,10 +27,45 @@
       <ColumnDefinition Width="*"/>
       <ColumnDefinition Width="Auto"/>
     </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
 
-    <player:PlayerView  Grid.Column="0" DataContext="{Binding Player1}"/>
-    <ContentControl     Grid.Column="1" Content="{Binding Gamespace^}" />
-    <player:PlayerView  Grid.Column="2" DataContext="{Binding Player2}"/>
+    <StackPanel
+        Grid.Column="0"
+        Grid.Row="0"
+        Grid.ColumnSpan="3"
+        HorizontalAlignment="Center"
+        Orientation="Horizontal">
+
+      <Button Command="{Binding TogglePause}">
+        <c:VectorSprite Fill="#333377">
+          <c:VectorSprite.Styles>
+            <Style Selector="c|VectorSprite.PlayButton">  <Setter Property="Definition" Value="{StaticResource Sprite_Icon_Play}" /></Style>
+            <Style Selector="c|VectorSprite.PauseButton"> <Setter Property="Definition" Value="{StaticResource Sprite_Icon_Pause}" /></Style>
+          </c:VectorSprite.Styles>
+
+          <i:Interaction.Behaviors>
+            <u:ClassSelectorBehavior
+                Data="{Binding IsPaused^}">
+              <u:ClassMapping Value="True"  Class="PauseButton"/>
+              <u:ClassMapping Value="False" Class="PlayButton"/>
+            </u:ClassSelectorBehavior>
+          </i:Interaction.Behaviors>
+        </c:VectorSprite>
+      </Button>
+      
+      <TextBlock
+        VerticalAlignment="Center"
+        FontSize="20"
+        Text="{Binding Runtime^, Converter={x:Static u:TimeSpanConverters.Format}}"/>
+
+    </StackPanel>
+    
+    <player:PlayerView  Grid.Column="0" Grid.Row="1" DataContext="{Binding Player1}"/>
+    <ContentControl     Grid.Column="1" Grid.Row="1" Content="{Binding Gamespace^}" />
+    <player:PlayerView  Grid.Column="2" Grid.Row="1" DataContext="{Binding Player2}"/>
 
   </Grid>
 </UserControl>
