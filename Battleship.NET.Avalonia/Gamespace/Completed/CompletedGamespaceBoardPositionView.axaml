@@ -2,14 +2,13 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
-    xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
     xmlns:c="clr-namespace:Battleship.NET.Avalonia.Controls;assembly=Battleship.NET.Avalonia"
     xmlns:u="clr-namespace:Battleship.NET.Avalonia.ViewUtilities;assembly=Battleship.NET.Avalonia"
     xmlns:gamespace="clr-namespace:Battleship.NET.Avalonia.Gamespace;assembly=Battleship.NET.Avalonia"
     xmlns:running="clr-namespace:Battleship.NET.Avalonia.Gamespace.Running;assembly=Battleship.NET.Avalonia"
     xmlns:ship="clr-namespace:Battleship.NET.Avalonia.Ship;assembly=Battleship.NET.Avalonia"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
-    x:Class="Battleship.NET.Avalonia.Gamespace.Completed.CompletedGamespaceBoardTileView">
+    x:Class="Battleship.NET.Avalonia.Gamespace.Completed.CompletedGamespaceBoardPositionView">
 
   <Border DragDrop.AllowDrop="True">
 
@@ -24,10 +23,6 @@
         <u:ClassMapping Value="True"  Class="EvenGridPosition"/>
         <u:ClassMapping Value="False" Class="OddGridPosition"/>
       </u:ClassSelectorBehavior>
-
-      <ia:EventTriggerBehavior EventName="DoubleTapped">
-        <ia:InvokeCommandAction Command="{Binding FireShot}"/>
-      </ia:EventTriggerBehavior>
     </i:Interaction.Behaviors>
 
     <Grid>
@@ -41,7 +36,7 @@
         <c:VectorSprite.Definition>
           <MultiBinding
               Converter="{x:Static ship:ShipSegmentAssetModelConverters.LookupSpriteResource}"
-              FallbackValue="{StaticResource Sprite_Empty}">
+              TargetNullValue="{StaticResource Sprite_Empty}">
             <Binding Path="$self" />
             <Binding Path="ShipAsset^" />
           </MultiBinding>
@@ -69,7 +64,7 @@
         <c:VectorSprite.Definition>
           <MultiBinding
               Converter="{x:Static gamespace:ShotAssetModelConverters.LookupSpriteResource}"
-              FallbackValue="{StaticResource Sprite_Empty}">
+              TargetNullValue="{StaticResource Sprite_Empty}">
             <Binding Path="$self" />
             <Binding Path="ShotAsset^" />
           </MultiBinding>

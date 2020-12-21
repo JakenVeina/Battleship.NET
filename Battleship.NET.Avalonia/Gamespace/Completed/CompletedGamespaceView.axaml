@@ -31,8 +31,7 @@
         Grid.Row="0"
         Stretch="Uniform">
       <ItemsControl
-          Name="BoardTiles"
-          Items="{Binding BoardTiles^}">
+          Items="{Binding BoardPositions^}">
         <ItemsControl.ItemsPanel>
           <ItemsPanelTemplate>
             <UniformGrid
@@ -42,7 +41,7 @@
         </ItemsControl.ItemsPanel>
         <ItemsControl.DataTemplates>
           <DataTemplate>
-            <completed:CompletedGamespaceBoardTileView/>
+            <completed:CompletedGamespaceBoardPositionView/>
           </DataTemplate>
         </ItemsControl.DataTemplates>
       </ItemsControl>

@@ -11,15 +11,13 @@ using Battleship.NET.Domain.Models;
 
 namespace Battleship.NET.Avalonia.Gamespace.Completed
 {
-    public class CompletedGamespaceBoardTileViewModel
+    public class CompletedGamespaceBoardPositionViewModel
     {
-        public CompletedGamespaceBoardTileViewModel(
+        public CompletedGamespaceBoardPositionViewModel(
             IStore<GameStateModel> gameStateStore,
             Point position,
             IStore<ViewStateModel> viewStateStore)
         {
-            Position = position;
-
             var model = Observable.CombineLatest(
                     gameStateStore,
                     viewStateStore,
@@ -70,6 +68,8 @@ namespace Battleship.NET.Avalonia.Gamespace.Completed
                         .All(segmentPosition => shipSegmentModel.Value.gameBoardHits.Contains(segmentPosition)))
                 .ShareReplayDistinct(1);
 
+            Position = position;
+
             ShipAsset = shipSegmentModel
                 .Select(shipSegmentModel => shipSegmentModel.HasValue
                     ? new ShipSegmentAssetModel(
@@ -78,10 +78,6 @@ namespace Battleship.NET.Avalonia.Gamespace.Completed
                         shipSegmentModel.Value.orientation,
                         shipSegmentModel.Value.segment)
                     : null)
-                .ShareReplayDistinct(1);
-
-            ShipOrientation = shipSegmentModel
-                .Select(shipSegmentModel => shipSegmentModel?.orientation)
                 .ShareReplayDistinct(1);
 
             ShotAsset = model
@@ -94,13 +90,11 @@ namespace Battleship.NET.Avalonia.Gamespace.Completed
                 .ShareReplayDistinct(1);
         }
 
+        public IObservable<bool> IsShipSunk { get; }
+        
         public Point Position { get; }
 
-        public IObservable<bool> IsShipSunk { get; }
-
         public IObservable<ShipSegmentAssetModel?> ShipAsset { get; }
-
-        public IObservable<Orientation?> ShipOrientation { get; }
 
         public IObservable<ShotAssetModel?> ShotAsset { get; }
     }

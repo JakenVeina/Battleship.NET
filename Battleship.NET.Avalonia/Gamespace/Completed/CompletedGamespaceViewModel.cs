@@ -18,25 +18,13 @@ namespace Battleship.NET.Avalonia.Gamespace.Completed
     public class CompletedGamespaceViewModel
     {
         public CompletedGamespaceViewModel(
-            CompletedGamespaceBoardTileViewModelFactory boardTileFactory,
+            CompletedGamespaceBoardPositionViewModelFactory boardPositionFactory,
             IStore<GameStateModel> gameStateStore,
             Random random,
             IStore<ViewStateModel> viewStateStore)
         {
             var boardDefinition = gameStateStore
                 .Select(gameState => gameState.Definition.GameBoard)
-                .ShareReplayDistinct(1);
-
-            BoardSize = boardDefinition
-                .Select(definition => definition.Size)
-                .ShareReplayDistinct(1);
-
-            BoardTiles = boardDefinition
-                .Select(definition => definition.Positions
-                    .OrderBy(position => position.Y)
-                        .ThenBy(position => position.X)
-                    .Select(position => boardTileFactory.Create(position))
-                    .ToImmutableArray())
                 .ShareReplayDistinct(1);
 
             BeginSetupCommand = ReactiveCommand.Create(() =>
@@ -47,14 +35,26 @@ namespace Battleship.NET.Avalonia.Gamespace.Completed
                 viewStateStore.Dispatch(new SetActivePlayerAction(GamePlayer.Player1));
             });
 
+            BoardPositions = boardDefinition
+                .Select(definition => definition.Positions
+                    .OrderBy(position => position.Y)
+                        .ThenBy(position => position.X)
+                    .Select(position => boardPositionFactory.Create(position))
+                    .ToImmutableArray())
+                .ShareReplayDistinct(1);
+
+            BoardSize = boardDefinition
+                .Select(definition => definition.Size)
+                .ShareReplayDistinct(1);
+
             ToggleActivePlayerCommand = ReactiveCommand.Create(() => viewStateStore.Dispatch(new ToggleActivePlayerAction()));
         }
 
         public ICommand<Unit> BeginSetupCommand { get; }
 
-        public IObservable<Size> BoardSize { get; }
+        public IObservable<ImmutableArray<CompletedGamespaceBoardPositionViewModel>> BoardPositions { get; }
 
-        public IObservable<ImmutableArray<CompletedGamespaceBoardTileViewModel>> BoardTiles { get; }
+        public IObservable<Size> BoardSize { get; }
 
         public ICommand<Unit> ToggleActivePlayerCommand { get; }
     }

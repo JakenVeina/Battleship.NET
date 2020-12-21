@@ -7,9 +7,9 @@ using Battleship.NET.Domain.Models;
 
 namespace Battleship.NET.Avalonia.Gamespace.Completed
 {
-    public class CompletedGamespaceBoardTileViewModelFactory
+    public class CompletedGamespaceBoardPositionViewModelFactory
     {
-        public CompletedGamespaceBoardTileViewModelFactory(
+        public CompletedGamespaceBoardPositionViewModelFactory(
             IStore<GameStateModel> gameStateStore,
             IStore<ViewStateModel> viewStateStore)
         {
@@ -17,9 +17,9 @@ namespace Battleship.NET.Avalonia.Gamespace.Completed
             _viewStateStore = viewStateStore;
         }
 
-        public CompletedGamespaceBoardTileViewModel Create(
+        public CompletedGamespaceBoardPositionViewModel Create(
                 Point position)
-            => new CompletedGamespaceBoardTileViewModel(
+            => new CompletedGamespaceBoardPositionViewModel(
                 _gameStateStore,
                 position,
                 _viewStateStore);

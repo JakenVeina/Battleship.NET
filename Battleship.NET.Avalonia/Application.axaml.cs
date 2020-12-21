@@ -43,7 +43,7 @@ namespace Battleship.NET.Avalonia
                     .AddSingleton<IStore<ViewStateModel>, Store<ViewStateModel>>(_ => new Store<ViewStateModel>(new ViewStateReducer(), ViewStateModel.Default))
                     .AddTransient<IBehavior, ActivePlayerSynchronizationBehavior>()
                     .AddTransient<GameViewModel>()
-                    .AddTransient<CompletedGamespaceBoardTileViewModelFactory>()
+                    .AddTransient<CompletedGamespaceBoardPositionViewModelFactory>()
                     .AddTransient<CompletedGamespaceViewModel>()
                     .AddTransient<IdleGamespaceViewModel>()
                     .AddTransient<ReadyGamespaceViewModel>()
