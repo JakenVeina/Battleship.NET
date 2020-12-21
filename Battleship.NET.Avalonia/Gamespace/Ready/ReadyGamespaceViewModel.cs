@@ -15,12 +15,12 @@ namespace Battleship.NET.Avalonia.Gamespace.Ready
             IStore<GameStateModel> gameStateStore,
             Random random)
         {
-            StartGame = ReactiveCommand.Create(
+            StartGameCommand = ReactiveCommand.Create(
                 () => gameStateStore.Dispatch(new StartGameAction(
                         firstPlayer: EnumEx.GetValues<GamePlayer>()
                             .PickRandom(random))));
         }
 
-        public ICommand<Unit> StartGame { get; }
+        public ICommand<Unit> StartGameCommand { get; }
     }
 }

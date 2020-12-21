@@ -35,7 +35,7 @@ namespace Battleship.NET.Avalonia.Gamespace.Running
                     .ToImmutableArray())
                 .ShareReplayDistinct(1);
 
-            EndTurn = ReactiveCommand.Create(
+            EndTurnCommand = ReactiveCommand.Create(
                 () => gameStateStore.Dispatch(new EndTurnAction()),
                 gameStateStore
                     .Select(gameState => !gameState.CurrentPlayerState.CanFireShot)
@@ -46,6 +46,6 @@ namespace Battleship.NET.Avalonia.Gamespace.Running
 
         public IObservable<ImmutableArray<RunningGamespaceBoardTileViewModel>> BoardTiles { get; }
 
-        public ICommand<Unit> EndTurn { get; }
+        public ICommand<Unit> EndTurnCommand { get; }
     }
 }

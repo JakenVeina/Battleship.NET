@@ -21,7 +21,7 @@ namespace Battleship.NET.Avalonia.Gamespace.Setup
         {
             Position = position;
 
-            ReceiveShipSegment = ReactiveCommand.Create(
+            ReceiveShipSegmentCommand = ReactiveCommand.Create(
                 viewStateStore
                     .Select(viewState => viewState.ActivePlayer)
                     .Where(activePlayer => activePlayer.HasValue)
@@ -36,6 +36,6 @@ namespace Battleship.NET.Avalonia.Gamespace.Setup
 
         public Point Position { get; }
 
-        public ICommand<ShipSegmentAssetModel> ReceiveShipSegment { get; }
+        public ICommand<ShipSegmentAssetModel> ReceiveShipSegmentCommand { get; }
     }
 }

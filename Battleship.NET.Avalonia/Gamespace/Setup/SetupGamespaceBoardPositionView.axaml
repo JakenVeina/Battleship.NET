@@ -18,7 +18,7 @@
       <u:DragEnterTriggerBehavior
           DataFormat="Battleship.NET.ShipSegmentAssetModel"
           Effects="Move">
-        <ia:InvokeCommandAction Command="{Binding ReceiveShipSegment}"/>
+        <ia:InvokeCommandAction Command="{Binding ReceiveShipSegmentCommand}"/>
       </u:DragEnterTriggerBehavior>
 
       <u:ClassSelectorBehavior Data="{Binding Position, Converter={x:Static u:GridPositionConverters.IsEven}}">

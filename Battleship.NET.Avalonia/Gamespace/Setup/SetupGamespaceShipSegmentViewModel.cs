@@ -95,7 +95,7 @@ namespace Battleship.NET.Avalonia.Gamespace.Setup
                             .All(position => position != shipPosition)))
                 .ShareReplayDistinct(1);
 
-            ReceiveShipSegment = ReactiveCommand.Create(
+            ReceiveShipSegmentCommand = ReactiveCommand.Create(
                 execute:    Observable.CombineLatest(
                     viewStateStore
                         .Select(viewState => viewState.ActivePlayer)
@@ -111,7 +111,7 @@ namespace Battleship.NET.Avalonia.Gamespace.Setup
                 canExecute: Position
                     .Select(position => position.HasValue));
 
-            Rotate = ReactiveCommand.Create(
+            RotateCommand = ReactiveCommand.Create(
                 segmentModel
                     .Select(segmentModel => new Action(() => gameStateStore.Dispatch(new RotateShipAction(
                         player:             segmentModel.activePlayer,
@@ -134,8 +134,8 @@ namespace Battleship.NET.Avalonia.Gamespace.Setup
 
         public IObservable<Point?> Position { get; }
 
-        public ICommand<ShipSegmentAssetModel> ReceiveShipSegment { get; }
+        public ICommand<ShipSegmentAssetModel> ReceiveShipSegmentCommand { get; }
         
-        public ICommand<Unit> Rotate { get; }
+        public ICommand<Unit> RotateCommand { get; }
     }
 }

@@ -76,12 +76,14 @@ namespace Battleship.NET.Avalonia.Gamespace.Running
                 })
                 .ShareReplayDistinct(1);
 
-            FireShot = ReactiveCommand.Create(
+            FireShotCommand = ReactiveCommand.Create(
                 () => gameStateStore.Dispatch(new FireShotAction(position)),
                 gameStateStore
                     .Select(gameState => gameState.CanFireShot(position))
                     .DistinctUntilChanged());
         }
+
+        public ICommand<Unit> FireShotCommand { get; }
 
         public Point Position { get; }
 
@@ -90,7 +92,5 @@ namespace Battleship.NET.Avalonia.Gamespace.Running
         public IObservable<Orientation?> ShipOrientation { get; }
 
         public IObservable<ShotAssetModel?> ShotAsset { get; }
-
-        public ICommand<Unit> FireShot { get; }
     }
 }

@@ -18,7 +18,7 @@ namespace Battleship.NET.Avalonia.Gamespace.Idle
             Random random,
             IStore<ViewStateModel> viewStateStore)
         {
-            BeginSetup = ReactiveCommand.Create(
+            BeginSetupCommand = ReactiveCommand.Create(
                 () =>
                 {
                     gameStateStore.Dispatch(new BeginSetupAction());
@@ -28,6 +28,6 @@ namespace Battleship.NET.Avalonia.Gamespace.Idle
                 });
         }
 
-        public ICommand<Unit> BeginSetup { get; }
+        public ICommand<Unit> BeginSetupCommand { get; }
     }
 }

@@ -20,7 +20,7 @@
     </Style>
   </UserControl.Styles>
   
-  <Button Command="{Binding BeginSetup}">
+  <Button Command="{Binding BeginSetupCommand}">
     <TextBlock>Begin Setup</TextBlock>
   </Button>
 

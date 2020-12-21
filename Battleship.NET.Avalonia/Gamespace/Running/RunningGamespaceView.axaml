@@ -50,8 +50,8 @@
     <Button
         Grid.Column="0"
         Grid.Row="1"
-        Command="{Binding EndTurn}">
-      <TextBlock>End Turn</TextBlock>
+        Command="{Binding EndTurnCommand}">
+      <TextBlock>Done</TextBlock>
     </Button>
 
   </Grid>

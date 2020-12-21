@@ -20,7 +20,7 @@
     </Style>
   </UserControl.Styles>
 
-  <Button Command="{Binding StartGame}">
+  <Button Command="{Binding StartGameCommand}">
     <TextBlock>Start Game</TextBlock>
   </Button>
 

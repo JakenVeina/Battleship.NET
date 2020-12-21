@@ -39,7 +39,7 @@ namespace Battleship.NET.Avalonia.Gamespace.Completed
                     .ToImmutableArray())
                 .ShareReplayDistinct(1);
 
-            BeginSetup = ReactiveCommand.Create(() =>
+            BeginSetupCommand = ReactiveCommand.Create(() =>
             {
                 gameStateStore.Dispatch(new BeginSetupAction());
                 gameStateStore.Dispatch(new RandomizeShipsAction(GamePlayer.Player1, random));
@@ -47,15 +47,15 @@ namespace Battleship.NET.Avalonia.Gamespace.Completed
                 viewStateStore.Dispatch(new SetActivePlayerAction(GamePlayer.Player1));
             });
 
-            ToggleActivePlayer = ReactiveCommand.Create(() => viewStateStore.Dispatch(new ToggleActivePlayerAction()));
+            ToggleActivePlayerCommand = ReactiveCommand.Create(() => viewStateStore.Dispatch(new ToggleActivePlayerAction()));
         }
+
+        public ICommand<Unit> BeginSetupCommand { get; }
 
         public IObservable<Size> BoardSize { get; }
 
         public IObservable<ImmutableArray<CompletedGamespaceBoardTileViewModel>> BoardTiles { get; }
 
-        public ICommand<Unit> BeginSetup { get; }
-
-        public ICommand<Unit> ToggleActivePlayer { get; }
+        public ICommand<Unit> ToggleActivePlayerCommand { get; }
     }
 }

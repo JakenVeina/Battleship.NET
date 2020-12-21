@@ -43,11 +43,11 @@
       <u:DragEnterTriggerBehavior
           DataFormat="Battleship.NET.ShipSegmentAssetModel"
           Effects="Move">
-        <ia:InvokeCommandAction Command="{Binding ReceiveShipSegment}"/>
+        <ia:InvokeCommandAction Command="{Binding ReceiveShipSegmentCommand}"/>
       </u:DragEnterTriggerBehavior>
 
       <ia:EventTriggerBehavior EventName="DoubleTapped">
-        <ia:InvokeCommandAction Command="{Binding Rotate}"/>
+        <ia:InvokeCommandAction Command="{Binding RotateCommand}"/>
       </ia:EventTriggerBehavior>
 
       <u:ClickAndDragBehavior

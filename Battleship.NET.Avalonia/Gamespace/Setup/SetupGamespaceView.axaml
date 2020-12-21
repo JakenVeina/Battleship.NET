@@ -86,14 +86,14 @@
     <Button
         Grid.Column="0"
         Grid.Row="1"
-        Command="{Binding RandomizeShips}">
+        Command="{Binding RandomizeShipsCommand}">
       <TextBlock>Randomize</TextBlock>
     </Button>
 
     <Button
         Grid.Column="1"
         Grid.Row="1"
-        Command="{Binding CompleteSetup}">
+        Command="{Binding CompleteSetupCommand}">
       <TextBlock>Done</TextBlock>
     </Button>
 

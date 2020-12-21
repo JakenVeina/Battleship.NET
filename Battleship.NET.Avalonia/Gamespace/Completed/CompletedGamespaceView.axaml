@@ -51,14 +51,14 @@
     <Button
         Grid.Column="0"
         Grid.Row="1"
-        Command="{Binding ToggleActivePlayer}">
+        Command="{Binding ToggleActivePlayerCommand}">
       <TextBlock>Change Player</TextBlock>
     </Button>
 
     <Button
         Grid.Column="1"
         Grid.Row="1"
-        Command="{Binding BeginSetup}">
+        Command="{Binding BeginSetupCommand}">
       <TextBlock>New Game</TextBlock>
     </Button>
 

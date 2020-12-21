@@ -53,7 +53,7 @@ namespace Battleship.NET.Avalonia.Game
                 .Select(gameState => gameState.Runtime)
                 .ShareReplayDistinct(1);
 
-            TogglePause = ReactiveCommand.Create(
+            TogglePauseCommand = ReactiveCommand.Create(
                 () => gameStateStore.Dispatch(new TogglePauseAction()),
                 gameStateStore
                     .Select(gameState => (gameState.State == GameState.Paused)
@@ -71,6 +71,6 @@ namespace Battleship.NET.Avalonia.Game
 
         public IObservable<TimeSpan> Runtime { get; }
 
-        public ICommand<Unit> TogglePause { get; }
+        public ICommand<Unit> TogglePauseCommand { get; }
     }
 }

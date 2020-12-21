@@ -39,7 +39,7 @@
         HorizontalAlignment="Center"
         Orientation="Horizontal">
 
-      <Button Command="{Binding TogglePause}">
+      <Button Command="{Binding TogglePauseCommand}">
         <c:VectorSprite Fill="#333377">
           <c:VectorSprite.Styles>
             <Style Selector="c|VectorSprite.PlayButton">  <Setter Property="Definition" Value="{StaticResource Sprite_Icon_Play}" /></Style>
