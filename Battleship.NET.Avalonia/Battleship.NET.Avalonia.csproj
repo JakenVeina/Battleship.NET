@@ -32,8 +32,8 @@
     <Compile Update="Gamespace\Running\RunningGamespaceView.axaml.cs">
       <DependentUpon>RunningGamespaceView.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Gamespace\Running\RunningGamespaceBoardTileView.axaml.cs">
-      <DependentUpon>RunningGamespaceBoardTileView.axaml</DependentUpon>
+    <Compile Update="Gamespace\Running\RunningGamespaceBoardPositionView.axaml.cs">
+      <DependentUpon>RunningGamespaceBoardPositionView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Gamespace\Setup\SetupGamespaceBoardPositionView.axaml.cs">
       <DependentUpon>SetupGamespaceBoardPositionView.axaml</DependentUpon>

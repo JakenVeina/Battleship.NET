@@ -22,15 +22,6 @@ namespace Battleship.NET.Avalonia.Gamespace.Setup
             int shipIndex,
             IStore<ViewStateModel> viewStateStore)
         {
-            Asset = gameStateStore
-                .Select(gameState => gameState.Definition)
-                .DistinctUntilChanged()
-                .Select(definition => new ShipSegmentAssetModel(
-                    shipIndex,
-                    definition.Ships[shipIndex].Name,
-                    segment))
-                .ShareReplayDistinct(1);
-
             var model = Observable.CombineLatest(
                     gameStateStore,
                     viewStateStore,
@@ -59,12 +50,17 @@ namespace Battleship.NET.Avalonia.Gamespace.Setup
                 (
                     activePlayer:       model.activePlayer,
                     boardPositions:     model.boardPositions,
+                    definition:         model.shipDefinitions[shipIndex],
                     state:              model.boardState.Ships[shipIndex]
                 ))
                 .ShareReplayDistinct(1);
 
-            Orientation = segmentModel
-                .Select(segmentModel => segmentModel.state.Orientation)
+            Asset = segmentModel
+                .Select(segmentModel=> new ShipSegmentAssetModel(
+                    index:          shipIndex,
+                    name:           segmentModel.definition.Name,
+                    orientation:    segmentModel.state.Orientation,
+                    segment:        segment))
                 .ShareReplayDistinct(1);
 
             Position = segmentModel
@@ -119,18 +115,16 @@ namespace Battleship.NET.Avalonia.Gamespace.Setup
                         shipSegment:        segment,
                         targetOrientation:  segmentModel.state.Orientation switch
                         {
-                            System.Drawing.Orientation.Rotate0      => System.Drawing.Orientation.Rotate270,
-                            System.Drawing.Orientation.Rotate270    => System.Drawing.Orientation.Rotate180,
-                            System.Drawing.Orientation.Rotate180    => System.Drawing.Orientation.Rotate90,
-                            _                                       => System.Drawing.Orientation.Rotate0
+                            Orientation.Rotate0     => Orientation.Rotate270,
+                            Orientation.Rotate270   => Orientation.Rotate180,
+                            Orientation.Rotate180   => Orientation.Rotate90,
+                            _                       => Orientation.Rotate0
                         })))));
         }
 
         public IObservable<ShipSegmentAssetModel> Asset { get; }
 
         public IObservable<bool> IsValid { get; }
-
-        public IObservable<Orientation> Orientation { get; }
 
         public IObservable<Point?> Position { get; }
 

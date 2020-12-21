@@ -5,7 +5,6 @@
     xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
     xmlns:c="clr-namespace:Battleship.NET.Avalonia.Controls;assembly=Battleship.NET.Avalonia"
     xmlns:u="clr-namespace:Battleship.NET.Avalonia.ViewUtilities;assembly=Battleship.NET.Avalonia"
-    xmlns:ship="clr-namespace:Battleship.NET.Avalonia.Ship;assembly=Battleship.NET.Avalonia"
     x:Class="Battleship.NET.Avalonia.Gamespace.Setup.SetupGamespaceBoardPositionView">
 
   <Rectangle DragDrop.AllowDrop="True">

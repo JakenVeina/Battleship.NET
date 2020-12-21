@@ -1,6 +1,7 @@
 ﻿<UserControl
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:u="clr-namespace:Battleship.NET.Avalonia.ViewUtilities;assembly=Battleship.NET.Avalonia"
     xmlns:running="clr-namespace:Battleship.NET.Avalonia.Gamespace.Running;assembly=Battleship.NET.Avalonia"
     x:Class="Battleship.NET.Avalonia.Gamespace.Running.RunningGamespaceView">
 
@@ -24,28 +25,25 @@
       <RowDefinition Height="Auto"/>
     </Grid.RowDefinitions>
 
-    <Viewbox
+    <u:AspectBox
         Grid.Column="0"
-        Grid.ColumnSpan="2"
         Grid.Row="0"
-        Stretch="Uniform">
-      <ItemsControl
-          Name="BoardTiles"
-          Items="{Binding BoardTiles^}">
+        AspectRatio="1">
+      <ItemsControl Items="{Binding BoardPositions^}">
         <ItemsControl.ItemsPanel>
           <ItemsPanelTemplate>
             <UniformGrid
-              Columns="{Binding BoardSize^.Width}"
-              Rows="{Binding BoardSize^.Height}"/>
+                Columns="{Binding BoardSize^.Width}"
+                Rows="{Binding BoardSize^.Height}"/>
           </ItemsPanelTemplate>
         </ItemsControl.ItemsPanel>
-        <ItemsControl.DataTemplates>
+        <ItemsControl.ItemTemplate>
           <DataTemplate>
-            <running:RunningGamespaceBoardTileView/>
+            <running:RunningGamespaceBoardPositionView/>
           </DataTemplate>
-        </ItemsControl.DataTemplates>
+        </ItemsControl.ItemTemplate>
       </ItemsControl>
-    </Viewbox>
+    </u:AspectBox>
 
     <Button
         Grid.Column="0"

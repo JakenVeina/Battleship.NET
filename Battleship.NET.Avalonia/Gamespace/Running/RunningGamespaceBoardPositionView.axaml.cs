@@ -3,10 +3,10 @@ using Avalonia.Markup.Xaml;
 
 namespace Battleship.NET.Avalonia.Gamespace.Running
 {
-    public class RunningGamespaceBoardTileView
+    public class RunningGamespaceBoardPositionView
         : UserControl
     {
-        public RunningGamespaceBoardTileView()
+        public RunningGamespaceBoardPositionView()
             => InitializeComponent();
 
         private void InitializeComponent()

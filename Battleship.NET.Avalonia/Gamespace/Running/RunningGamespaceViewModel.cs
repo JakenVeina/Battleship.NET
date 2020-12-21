@@ -16,35 +16,35 @@ namespace Battleship.NET.Avalonia.Gamespace.Running
     public class RunningGamespaceViewModel
     {
         public RunningGamespaceViewModel(
-            RunningGamespaceBoardTileViewModelFactory boardTileFactory,
+            RunningGamespaceBoardPositionViewModelFactory boardPositionFactory,
             IStore<GameStateModel> gameStateStore)
         {
             var boardDefinition = gameStateStore
                 .Select(gameState => gameState.Definition.GameBoard)
                 .ShareReplayDistinct(1);
 
+            BoardPositions = boardDefinition
+                .Select(definition => definition.Positions
+                    .OrderBy(position => position.Y)
+                    .ThenBy(position => position.X)
+                    .Select(position => boardPositionFactory.Create(position))
+                    .ToImmutableArray())
+                .ShareReplayDistinct(1);
+
             BoardSize = boardDefinition
                 .Select(definition => definition.Size)
                 .ShareReplayDistinct(1);
 
-            BoardTiles = boardDefinition
-                .Select(definition => definition.Positions
-                    .OrderBy(position => position.Y)
-                        .ThenBy(position => position.X)
-                    .Select(position => boardTileFactory.Create(position))
-                    .ToImmutableArray())
-                .ShareReplayDistinct(1);
-
             EndTurnCommand = ReactiveCommand.Create(
-                () => gameStateStore.Dispatch(new EndTurnAction()),
-                gameStateStore
+                execute:    () => gameStateStore.Dispatch(new EndTurnAction()),
+                canExecute: gameStateStore
                     .Select(gameState => !gameState.CurrentPlayerState.CanFireShot)
                     .DistinctUntilChanged());
         }
 
-        public IObservable<Size> BoardSize { get; }
+        public IObservable<ImmutableArray<RunningGamespaceBoardPositionViewModel>> BoardPositions { get; }
 
-        public IObservable<ImmutableArray<RunningGamespaceBoardTileViewModel>> BoardTiles { get; }
+        public IObservable<Size> BoardSize { get; }
 
         public ICommand<Unit> EndTurnCommand { get; }
     }

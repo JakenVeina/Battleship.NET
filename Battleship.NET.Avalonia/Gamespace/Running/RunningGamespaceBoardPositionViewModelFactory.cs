@@ -6,17 +6,17 @@ using Battleship.NET.Domain.Models;
 
 namespace Battleship.NET.Avalonia.Gamespace.Running
 {
-    public class RunningGamespaceBoardTileViewModelFactory
+    public class RunningGamespaceBoardPositionViewModelFactory
     {
-        public RunningGamespaceBoardTileViewModelFactory(
+        public RunningGamespaceBoardPositionViewModelFactory(
             IStore<GameStateModel> gameStateStore)
         {
             _gameStateStore = gameStateStore;
         }
 
-        public RunningGamespaceBoardTileViewModel Create(
+        public RunningGamespaceBoardPositionViewModel Create(
                 Point position)
-            => new RunningGamespaceBoardTileViewModel(
+            => new RunningGamespaceBoardPositionViewModel(
                 _gameStateStore,
                 position);
 

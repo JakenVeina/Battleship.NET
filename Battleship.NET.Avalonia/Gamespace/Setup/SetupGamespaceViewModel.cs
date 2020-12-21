@@ -38,16 +38,16 @@ namespace Battleship.NET.Avalonia.Gamespace.Setup
                 .Select(activePlayer => activePlayer!.Value)
                 .ShareReplayDistinct(1);
 
-            BoardSize = boardDefinition
-                .Select(definition => definition.Size)
-                .ShareReplayDistinct(1);
-
             BoardPositions = boardDefinition
                 .Select(definition => definition.Positions
                     .OrderBy(position => position.Y)
                     .ThenBy(position => position.X)
                     .Select(position => boardPositionFactory.Create(position))
                     .ToImmutableArray())
+                .ShareReplayDistinct(1);
+
+            BoardSize = boardDefinition
+                .Select(definition => definition.Size)
                 .ShareReplayDistinct(1);
 
             ShipSegments = gameDefinition
@@ -77,13 +77,13 @@ namespace Battleship.NET.Avalonia.Gamespace.Setup
                         random)))));
         }
 
+        public IObservable<ImmutableArray<SetupGamespaceBoardPositionViewModel>> BoardPositions { get; }
+
         public IObservable<Size> BoardSize { get; }
 
         public ICommand<Unit> CompleteSetupCommand { get; }
 
         public ICommand<Unit> RandomizeShipsCommand { get; }
-
-        public IObservable<ImmutableArray<SetupGamespaceBoardPositionViewModel>> BoardPositions { get; }
 
         public IObservable<ImmutableArray<SetupGamespaceShipSegmentViewModel>> ShipSegments { get; }
     }

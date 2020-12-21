@@ -48,7 +48,7 @@
         </c:VectorSprite.Definition>
 
         <c:VectorSprite.RenderTransform>
-          <RotateTransform Angle="{Binding ShipOrientation^, Converter={x:Static u:OrientationConverters.ToAngle}}"/>
+          <RotateTransform Angle="{Binding ShipAsset^.Orientation, Converter={x:Static u:OrientationConverters.ToAngle}}"/>
         </c:VectorSprite.RenderTransform>
 
         <i:Interaction.Behaviors>

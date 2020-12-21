@@ -75,6 +75,7 @@ namespace Battleship.NET.Avalonia.Gamespace.Completed
                     ? new ShipSegmentAssetModel(
                         shipSegmentModel.Value.index,
                         shipSegmentModel.Value.shipDefinition.Name,
+                        shipSegmentModel.Value.orientation,
                         shipSegmentModel.Value.segment)
                     : null)
                 .ShareReplayDistinct(1);
