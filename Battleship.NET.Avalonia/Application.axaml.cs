@@ -49,9 +49,9 @@ namespace Battleship.NET.Avalonia
                     .AddTransient<ReadyGamespaceViewModel>()
                     .AddTransient<RunningGamespaceViewModel>()
                     .AddTransient<RunningGamespaceBoardTileViewModelFactory>()
+                    .AddSingleton<SetupGamespaceBoardPositionViewModelFactory>()
+                    .AddSingleton<SetupGamespaceShipSegmentViewModelFactory>()
                     .AddTransient<SetupGamespaceViewModel>()
-                    .AddSingleton<SetupGamespaceBoardTileViewModelFactory>()
-                    .AddSingleton<SetupGamespaceBoardTileShipSegmentViewModelFactory>()
                     .AddSingleton<PlayerViewModelFactory>()
                     .BuildServiceProvider();
 

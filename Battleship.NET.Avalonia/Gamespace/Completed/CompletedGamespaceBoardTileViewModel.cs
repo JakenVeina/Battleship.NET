@@ -73,8 +73,9 @@ namespace Battleship.NET.Avalonia.Gamespace.Completed
             ShipAsset = shipSegmentModel
                 .Select(shipSegmentModel => shipSegmentModel.HasValue
                     ? new ShipSegmentAssetModel(
-                        shipSegmentModel.Value.segment,
-                        shipSegmentModel.Value.shipDefinition.Name)
+                        shipSegmentModel.Value.index,
+                        shipSegmentModel.Value.shipDefinition.Name,
+                        shipSegmentModel.Value.segment)
                     : null)
                 .ShareReplayDistinct(1);
 

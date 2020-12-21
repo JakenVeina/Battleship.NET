@@ -9,9 +9,9 @@ namespace Battleship.NET.Avalonia.ViewUtilities
     public static class GridPositionConverters
     {
         public static readonly IValueConverter IsEven
-            = new GridPositionToIsEvenValueConverter();
+            = new IsEvenValueConverter();
 
-        private class GridPositionToIsEvenValueConverter
+        private class IsEvenValueConverter
             : IValueConverter
         {
             public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)

@@ -7,14 +7,6 @@ namespace Battleship.NET.Avalonia.ViewUtilities
     public class ClickAndDragBehavior
         : Behavior<InputElement>
     {
-        public bool AllowDrag
-        {
-            get => GetValue(AllowDragProperty);
-            set => SetValue(AllowDragProperty, value);
-        }
-        public static readonly StyledProperty<bool> AllowDragProperty
-            = AvaloniaProperty.Register<ClickAndDragBehavior, bool>(nameof(AllowDrag));
-
         public string? DataFormat
         {
             get => GetValue(DataFormatProperty);
@@ -56,7 +48,6 @@ namespace Battleship.NET.Avalonia.ViewUtilities
         private void OnPointerMoved(object sender, PointerEventArgs e)
         {
             if ((e.Pointer.Captured is null)
-                    || !AllowDrag
                     || (DataFormat is null)
                     || (DataValue is null))
                 return;

@@ -19,7 +19,7 @@ namespace Battleship.NET.Avalonia.Ship
                 => (values[0] is IResourceHost resourceHost)
                         && (values[1] is ShipSegmentAssetModel model)
                         && resourceHost.TryFindResource(
-                            $"Sprite_Ship_Standard_{model.ShipName.Replace(" ", "")}_{model.Segment.X}_{model.Segment.Y}",
+                            $"Sprite_Ship_Standard_{model.Name.Replace(" ", "")}_{model.Segment.X}_{model.Segment.Y}",
                             out var resource)
                     ? resource
                     : null;

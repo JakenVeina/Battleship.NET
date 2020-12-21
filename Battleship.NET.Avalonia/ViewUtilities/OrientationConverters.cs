@@ -9,9 +9,9 @@ namespace Battleship.NET.Avalonia.ViewUtilities
     public static class OrientationConverters
     {
         public static readonly IValueConverter ToAngle
-            = new NegateValueConverter();
+            = new ToAngleValueConverter();
 
-        private class NegateValueConverter
+        private class ToAngleValueConverter
             : IValueConverter
         {
             public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)

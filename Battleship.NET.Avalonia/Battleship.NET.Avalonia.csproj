@@ -35,6 +35,12 @@
     <Compile Update="Gamespace\Running\RunningGamespaceBoardTileView.axaml.cs">
       <DependentUpon>RunningGamespaceBoardTileView.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Gamespace\Setup\SetupGamespaceBoardPositionView.axaml.cs">
+      <DependentUpon>SetupGamespaceBoardPositionView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Gamespace\Setup\SetupGamespaceShipSegmentView.axaml.cs">
+      <DependentUpon>SetupGamespaceShipSegmentView.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Gamespace\Setup\SetupGamespaceView.axaml.cs">
       <DependentUpon>SetupGamespaceView.axaml</DependentUpon>
     </Compile>

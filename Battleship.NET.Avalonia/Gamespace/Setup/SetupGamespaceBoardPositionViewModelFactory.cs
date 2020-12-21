@@ -7,27 +7,23 @@ using Battleship.NET.Domain.Models;
 
 namespace Battleship.NET.Avalonia.Gamespace.Setup
 {
-    public class SetupGamespaceBoardTileViewModelFactory
+    public class SetupGamespaceBoardPositionViewModelFactory
     {
-        public SetupGamespaceBoardTileViewModelFactory(
-            SetupGamespaceBoardTileShipSegmentViewModelFactory gameBoardTileShipSegmentViewModelFactory,
+        public SetupGamespaceBoardPositionViewModelFactory(
             IStore<GameStateModel> gameStateStore,
             IStore<ViewStateModel> viewStateStore)
         {
-            _gameBoardTileShipSegmentViewModelFactory = gameBoardTileShipSegmentViewModelFactory;
             _gameStateStore = gameStateStore;
             _viewStateStore = viewStateStore;
         }
 
-        public SetupGamespaceBoardTileViewModel Create(
+        public SetupGamespaceBoardPositionViewModel Create(
                 Point position)
-            => new SetupGamespaceBoardTileViewModel(
-                _gameBoardTileShipSegmentViewModelFactory,
+            => new SetupGamespaceBoardPositionViewModel(
                 _gameStateStore,
                 position,
                 _viewStateStore);
 
-        private readonly SetupGamespaceBoardTileShipSegmentViewModelFactory _gameBoardTileShipSegmentViewModelFactory;
         private readonly IStore<GameStateModel> _gameStateStore;
         private readonly IStore<ViewStateModel> _viewStateStore;
     }

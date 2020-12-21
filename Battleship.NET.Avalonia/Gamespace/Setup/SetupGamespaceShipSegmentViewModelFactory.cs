@@ -7,9 +7,9 @@ using Battleship.NET.Domain.Models;
 
 namespace Battleship.NET.Avalonia.Gamespace.Setup
 {
-    public class SetupGamespaceBoardTileShipSegmentViewModelFactory
+    public class SetupGamespaceShipSegmentViewModelFactory
     {
-        public SetupGamespaceBoardTileShipSegmentViewModelFactory(
+        public SetupGamespaceShipSegmentViewModelFactory(
             IStore<GameStateModel> gameStateStore,
             IStore<ViewStateModel> viewStateStore)
         {
@@ -17,12 +17,12 @@ namespace Battleship.NET.Avalonia.Gamespace.Setup
             _viewStateStore = viewStateStore;
         }
 
-        public SetupGamespaceBoardTileShipSegmentViewModel Create(
-                Point position,
+        public SetupGamespaceShipSegmentViewModel Create(
+                Point segment,
                 int shipIndex)
-            => new SetupGamespaceBoardTileShipSegmentViewModel(
+            => new SetupGamespaceShipSegmentViewModel(
                 _gameStateStore,
-                position,
+                segment,
                 shipIndex,
                 _viewStateStore);
 

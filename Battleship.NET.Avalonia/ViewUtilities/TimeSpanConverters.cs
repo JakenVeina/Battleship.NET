@@ -8,9 +8,9 @@ namespace Battleship.NET.Avalonia.ViewUtilities
     public static class TimeSpanConverters
     {
         public static readonly IValueConverter Format
-            = new NegateValueConverter();
+            = new FormatValueConverter();
 
-        private class NegateValueConverter
+        private class FormatValueConverter
             : IValueConverter
         {
             public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)

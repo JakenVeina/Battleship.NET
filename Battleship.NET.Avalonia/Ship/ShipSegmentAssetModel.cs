@@ -5,15 +5,19 @@ namespace Battleship.NET.Avalonia.Ship
     public class ShipSegmentAssetModel
     {
         public ShipSegmentAssetModel(
-            Point segment,
-            string shipName)
+            int index,
+            string name,
+            Point segment)
         {
+            Index = index;
+            Name = name;
             Segment = segment;
-            ShipName = shipName;
         }
 
-        public Point Segment { get; }
+        public int Index { get; }
+        
+        public string Name { get; }
 
-        public string ShipName { get; }
+        public Point Segment { get; }
     }
 }

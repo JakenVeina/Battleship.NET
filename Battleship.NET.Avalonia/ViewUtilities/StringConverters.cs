@@ -9,9 +9,9 @@ namespace Battleship.NET.Avalonia.ViewUtilities
     public static class StringConverters
     {
         public static readonly IMultiValueConverter Concat
-            = new StringConcatValueConverter();
+            = new ConcatValueConverter();
 
-        private class StringConcatValueConverter
+        private class ConcatValueConverter
             : IMultiValueConverter
         {
             public object? Convert(IList<object?> values, Type targetType, object? parameter, CultureInfo culture)
