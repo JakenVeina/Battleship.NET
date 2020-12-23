@@ -1,4 +1,5 @@
-﻿using System.Reactive.Linq;
+﻿using System;
+using System.Reactive.Linq;
 using System.Windows;
 
 using ReduxSharp;
@@ -36,6 +37,10 @@ namespace Battleship.NET.WPF.Player
                 .Select(model => model.definition.Name)
                 .ToReactiveProperty();
 
+            PlayTime = model
+                .Select(model => model.state.PlayTime)
+                .ToReactiveProperty();
+
             Wins = model
                 .Select(model => model.state.Wins)
                 .ToReactiveProperty();
@@ -44,6 +49,8 @@ namespace Battleship.NET.WPF.Player
         public IReadOnlyObservableProperty<bool> IsActive { get; }
 
         public IReadOnlyObservableProperty<string> Name { get; }
+
+        public IReadOnlyObservableProperty<TimeSpan> PlayTime { get; }
 
         public IReadOnlyObservableProperty<int> Wins { get; }
     }

@@ -16,6 +16,7 @@ using Battleship.NET.Domain.Models;
 using Battleship.NET.WPF.Game;
 using Battleship.NET.WPF.Gamespace.Completed;
 using Battleship.NET.WPF.Gamespace.Idle;
+using Battleship.NET.WPF.Gamespace.Paused;
 using Battleship.NET.WPF.Gamespace.Ready;
 using Battleship.NET.WPF.Gamespace.Running;
 using Battleship.NET.WPF.Gamespace.Setup;
@@ -45,6 +46,7 @@ namespace Battleship.NET.WPF
                     .AddTransient<CompletedGamespaceBoardPositionViewModelFactory>()
                     .AddTransient<CompletedGamespaceViewModel>()
                     .AddTransient<IdleGamespaceViewModel>()
+                    .AddTransient<PausedGamespaceViewModel>()
                     .AddTransient<ReadyGamespaceViewModel>()
                     .AddTransient<RunningGamespaceBoardPositionViewModelFactory>()
                     .AddTransient<RunningGamespaceViewModel>()

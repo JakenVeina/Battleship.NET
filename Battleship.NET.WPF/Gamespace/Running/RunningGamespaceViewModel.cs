@@ -39,6 +39,9 @@ namespace Battleship.NET.WPF.Gamespace.Running
                 canExecute: gameStateStore
                     .Select(gameState => !gameState.CurrentPlayerState.CanFireShot)
                     .DistinctUntilChanged());
+
+            TogglePauseCommand = ReactiveCommand.Create(
+                () => gameStateStore.Dispatch(new TogglePauseAction()));
         }
 
         public IReadOnlyObservableProperty<ImmutableArray<RunningGamespaceBoardPositionViewModel>> BoardPositions { get; }
@@ -46,5 +49,7 @@ namespace Battleship.NET.WPF.Gamespace.Running
         public IReadOnlyObservableProperty<System.Drawing.Size> BoardSize { get; }
 
         public ICommand<Unit> EndTurnCommand { get; }
+
+        public ICommand<Unit> TogglePauseCommand { get; }
     }
 }

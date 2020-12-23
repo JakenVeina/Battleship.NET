@@ -12,17 +12,20 @@ namespace Battleship.NET.Domain.Models
                 false,
                 GameBoardStateModel.CreateIdle(ships),
                 false,
+                TimeSpan.Zero,
                 0);
 
         public PlayerStateModel(
             bool canFireShot,
             GameBoardStateModel gameBoard,
             bool isSetupComplete,
+            TimeSpan playTime,
             int wins)
         {
             CanFireShot = canFireShot;
             GameBoard = gameBoard;
             IsSetupComplete = isSetupComplete;
+            PlayTime = playTime;
             Wins = wins;
         }
 
@@ -32,6 +35,8 @@ namespace Battleship.NET.Domain.Models
         public GameBoardStateModel GameBoard { get; }
 
         public bool IsSetupComplete { get; }
+
+        public TimeSpan PlayTime { get; }
 
         public int Wins { get; }
 
@@ -52,6 +57,7 @@ namespace Battleship.NET.Domain.Models
                 CanFireShot,
                 GameBoard.ClearShots(),
                 false,
+                PlayTime,
                 Wins);
 
         public PlayerStateModel CompleteSetup()
@@ -59,6 +65,7 @@ namespace Battleship.NET.Domain.Models
                 CanFireShot,
                 GameBoard,
                 true,
+                PlayTime,
                 Wins);
 
         public PlayerStateModel FireShot(bool isHit)
@@ -66,6 +73,16 @@ namespace Battleship.NET.Domain.Models
                 isHit,
                 GameBoard,
                 IsSetupComplete,
+                PlayTime,
+                Wins);
+
+        public PlayerStateModel IncrementPlayTime(
+                TimeSpan increment)
+            => new PlayerStateModel(
+                CanFireShot,
+                GameBoard,
+                IsSetupComplete,
+                PlayTime + increment,
                 Wins);
 
         public PlayerStateModel IncrementWins()
@@ -73,6 +90,7 @@ namespace Battleship.NET.Domain.Models
                 CanFireShot,
                 GameBoard,
                 IsSetupComplete,
+                PlayTime,
                 Wins + 1);
 
         public PlayerStateModel MoveShip(
@@ -83,6 +101,7 @@ namespace Battleship.NET.Domain.Models
                 CanFireShot,
                 GameBoard.MoveShip(shipIndex, shipSegment, targetPosition),
                 IsSetupComplete,
+                PlayTime,
                 Wins);
 
         public PlayerStateModel RandomizeShips(
@@ -93,6 +112,7 @@ namespace Battleship.NET.Domain.Models
                 CanFireShot,
                 GameBoard.RandomzieShips(gameBoardDefinition, shipDefinitions, random),
                 IsSetupComplete,
+                PlayTime,
                 Wins);
 
         public PlayerStateModel ReceiveShot(
@@ -102,6 +122,7 @@ namespace Battleship.NET.Domain.Models
                 CanFireShot,
                 GameBoard.ReceiveShot(position, ships),
                 IsSetupComplete,
+                PlayTime,
                 Wins);
 
         public PlayerStateModel RotateShip(
@@ -112,6 +133,7 @@ namespace Battleship.NET.Domain.Models
                 CanFireShot,
                 GameBoard.RotateShip(shipIndex, shipSegment, targetOrientation),
                 IsSetupComplete,
+                PlayTime,
                 Wins);
 
         public PlayerStateModel StartTurn()
@@ -119,6 +141,7 @@ namespace Battleship.NET.Domain.Models
                 true,
                 GameBoard,
                 IsSetupComplete,
+                PlayTime,
                 Wins);
     }
 }

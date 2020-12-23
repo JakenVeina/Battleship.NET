@@ -3,11 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-        xmlns:c="clr-namespace:Battleship.NET.WPF.Controls"
-        xmlns:u="clr-namespace:Battleship.NET.WPF.ViewUtilities"
         xmlns:completed="clr-namespace:Battleship.NET.WPF.Gamespace.Completed"
         xmlns:game="clr-namespace:Battleship.NET.WPF.Game"
         xmlns:idle="clr-namespace:Battleship.NET.WPF.Gamespace.Idle"
+        xmlns:paused="clr-namespace:Battleship.NET.WPF.Gamespace.Paused"
         xmlns:ready="clr-namespace:Battleship.NET.WPF.Gamespace.Ready"
         xmlns:running="clr-namespace:Battleship.NET.WPF.Gamespace.Running"
         xmlns:setup="clr-namespace:Battleship.NET.WPF.Gamespace.Setup"
@@ -19,6 +18,7 @@
     <UserControl.Resources>
         <DataTemplate DataType="{x:Type completed:CompletedGamespaceViewModel}">    <completed:CompletedGamespaceView/> </DataTemplate>
         <DataTemplate DataType="{x:Type idle:IdleGamespaceViewModel}">              <idle:IdleGamespaceView/>           </DataTemplate>
+        <DataTemplate DataType="{x:Type paused:PausedGamespaceViewModel}">          <paused:PausedGamespaceView/>       </DataTemplate>
         <DataTemplate DataType="{x:Type ready:ReadyGamespaceViewModel}">            <ready:ReadyGamespaceView/>         </DataTemplate>
         <DataTemplate DataType="{x:Type running:RunningGamespaceViewModel}">        <running:RunningGamespaceView/>     </DataTemplate>
         <DataTemplate DataType="{x:Type setup:SetupGamespaceViewModel}">            <setup:SetupGamespaceView/>         </DataTemplate>
@@ -30,41 +30,10 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
 
-        <StackPanel
-                Grid.Column="0"
-                Grid.Row="0"
-                Grid.ColumnSpan="3"
-                HorizontalAlignment="Center"
-                Orientation="Horizontal">
-
-            <Button Command="{Binding TogglePauseCommand}">
-                <c:VectorSprite Fill="#333377">
-                    <c:VectorSprite.Style>
-                        <Style TargetType="c:VectorSprite">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsPaused.Value}" Value="True">   <Setter Property="Definition" Value="{StaticResource Sprite_Icon_Play}"/>   </DataTrigger>
-                                <DataTrigger Binding="{Binding IsPaused.Value}" Value="False">  <Setter Property="Definition" Value="{StaticResource Sprite_Icon_Pause}"/>  </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </c:VectorSprite.Style>
-                </c:VectorSprite>
-            </Button>
-
-            <TextBlock
-                VerticalAlignment="Center"
-                FontSize="20"
-                Text="{Binding Runtime.Value, StringFormat=hh\\:mm\\:ss}"/>
-
-        </StackPanel>
-
-        <player:PlayerView  Grid.Column="0" Grid.Row="1" DataContext="{Binding Player1}"/>
-        <ContentControl     Grid.Column="1" Grid.Row="1" Content="{Binding Gamespace.Value}" />
-        <player:PlayerView  Grid.Column="2" Grid.Row="1" DataContext="{Binding Player2}"/>
+        <player:PlayerView  Grid.Column="0" DataContext="{Binding Player1}"/>
+        <ContentControl     Grid.Column="1" Content="{Binding Gamespace.Value}" />
+        <player:PlayerView  Grid.Column="2" DataContext="{Binding Player2}"/>
 
     </Grid>
         

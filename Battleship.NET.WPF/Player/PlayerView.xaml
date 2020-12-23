@@ -32,16 +32,21 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
         
             <TextBlock
                 Grid.Row="0"
                 Text="{Binding Name.Value}"/>
-        
+
             <TextBlock
                 Grid.Row="1"
                 Text="{Binding Wins.Value, StringFormat=Wins: {0}}"/>
+        
+            <TextBlock
+                Grid.Row="2"
+                Text="{Binding PlayTime.Value, StringFormat=hh\\:mm\\:ss}"/>
         </Grid>
     </Border>
 </UserControl>

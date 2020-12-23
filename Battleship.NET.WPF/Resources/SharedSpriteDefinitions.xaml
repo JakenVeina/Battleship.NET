@@ -7,14 +7,4 @@
         CanvasHeight="10"
         CanvasWidth="10"
         Geometry="M0,0Z"/>
-    <c:VectorSpriteDefinition
-        x:Key="Sprite_Icon_Play"
-        CanvasHeight="24"
-        CanvasWidth="24"
-        Geometry="M8,5.14V19.14L19,12.14L8,5.14Z"/>
-    <c:VectorSpriteDefinition
-        x:Key="Sprite_Icon_Pause"
-        CanvasHeight="24"
-        CanvasWidth="24"
-        Geometry="M14,19H18V5H14M6,19H10V5H6V19Z"/>
 </ResourceDictionary>

@@ -14,7 +14,6 @@ namespace Battleship.NET.Domain.Models
                 default,
                 PlayerStateModel.CreateIdle(definition.Ships),
                 PlayerStateModel.CreateIdle(definition.Ships),
-                TimeSpan.Zero,
                 GamePhase.Idle);
 
         public GameStateModel(
@@ -24,7 +23,6 @@ namespace Battleship.NET.Domain.Models
             DateTime lastUpdate,
             PlayerStateModel player1,
             PlayerStateModel player2,
-            TimeSpan runtime,
             GamePhase phase)
         {
             CurrentPlayer = currentPlayer;
@@ -33,7 +31,6 @@ namespace Battleship.NET.Domain.Models
             LastUpdate = lastUpdate;
             Player1 = player1;
             Player2 = player2;
-            Runtime = runtime;
             Phase = phase;
         }
 
@@ -50,8 +47,6 @@ namespace Battleship.NET.Domain.Models
 
         public PlayerStateModel Player2 { get; }
 
-        public TimeSpan Runtime { get; }
-
         public GamePhase Phase { get; }
 
 
@@ -64,17 +59,6 @@ namespace Battleship.NET.Domain.Models
             => (CurrentPlayer == GamePlayer.Player2)
                 ? Player1
                 : Player2;
-
-        public GameStateModel BeginSetup()
-            => new GameStateModel(
-                CurrentPlayer,
-                Definition,
-                GamesPlayed,
-                LastUpdate,
-                Player1.BeginSetup(),
-                Player2.BeginSetup(),
-                TimeSpan.Zero,
-                GamePhase.Setup);
 
         public bool CanFireShot(
                 Point position)
@@ -93,6 +77,16 @@ namespace Battleship.NET.Domain.Models
                     || ((player == GamePlayer.Player2) && !Player2.CanCompleteSetup(Definition.GameBoard, Definition.Ships)));
 
 
+        public GameStateModel BeginSetup()
+            => new GameStateModel(
+                CurrentPlayer,
+                Definition,
+                GamesPlayed,
+                LastUpdate,
+                Player1.BeginSetup(),
+                Player2.BeginSetup(),
+                GamePhase.Setup);
+
         public GameStateModel CompleteGame(
             GamePlayer winner)
         {
@@ -107,7 +101,6 @@ namespace Battleship.NET.Domain.Models
                 LastUpdate,
                 player1,
                 player2,
-                Runtime,
                 GamePhase.Complete);
         }
 
@@ -125,7 +118,6 @@ namespace Battleship.NET.Domain.Models
                 LastUpdate,
                 player1,
                 player2,
-                Runtime,
                 (player1.IsSetupComplete && player2.IsSetupComplete)
                     ? GamePhase.Ready
                     : Phase);
@@ -144,7 +136,6 @@ namespace Battleship.NET.Domain.Models
                 LastUpdate,
                 player1,
                 player2,
-                Runtime,
                 Phase);
         }
 
@@ -170,7 +161,6 @@ namespace Battleship.NET.Domain.Models
                 LastUpdate,
                 player1,
                 player2,
-                Runtime,
                 Phase);
         }
 
@@ -191,7 +181,6 @@ namespace Battleship.NET.Domain.Models
                 LastUpdate,
                 player1,
                 player2,
-                Runtime,
                 Phase);
         }
 
@@ -210,7 +199,6 @@ namespace Battleship.NET.Domain.Models
                 LastUpdate,
                 player1,
                 player2,
-                Runtime,
                 Phase);
         }
 
@@ -231,7 +219,6 @@ namespace Battleship.NET.Domain.Models
                 LastUpdate,
                 player1,
                 player2,
-                Runtime,
                 Phase);
         }
 
@@ -249,7 +236,6 @@ namespace Battleship.NET.Domain.Models
                 LastUpdate,
                 player1,
                 player2,
-                Runtime,
                 GamePhase.Running);
         }
 
@@ -261,23 +247,27 @@ namespace Battleship.NET.Domain.Models
                 LastUpdate,
                 Player1,
                 Player2,
-                Runtime,
                 (Phase == GamePhase.Paused)
                     ? GamePhase.Running
                     : GamePhase.Paused);
 
         public GameStateModel UpdateRuntime(
                 DateTime now)
-            => new GameStateModel(
+        {
+            var (player1, player2) = (Phase == GamePhase.Running)
+                ? (CurrentPlayer == GamePlayer.Player1)
+                    ? (Player1.IncrementPlayTime(now - LastUpdate), Player2)
+                    : (Player1, Player2.IncrementPlayTime(now - LastUpdate))
+                : (Player1, Player2);
+
+            return new GameStateModel(
                 CurrentPlayer,
                 Definition,
                 GamesPlayed,
                 now,
-                Player1,
-                Player2,
-                (Phase == GamePhase.Running)
-                    ? (Runtime + (now - LastUpdate))
-                    : Runtime,
+                player1,
+                player2,
                 Phase);
+        }
     }
 }

@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Reactive;
 using System.Reactive.Linq;
 using System.Windows;
-using System.Windows.Input;
 
 using ReduxSharp;
 
-using Battleship.NET.Domain.Actions;
 using Battleship.NET.Domain.Models;
 using Battleship.NET.WPF.Gamespace.Completed;
 using Battleship.NET.WPF.Gamespace.Idle;
+using Battleship.NET.WPF.Gamespace.Paused;
 using Battleship.NET.WPF.Gamespace.Ready;
 using Battleship.NET.WPF.Gamespace.Running;
 using Battleship.NET.WPF.Gamespace.Setup;
@@ -23,6 +21,7 @@ namespace Battleship.NET.WPF.Game
             CompletedGamespaceViewModel completedGamespace,
             IStore<GameStateModel> gameStateStore,
             IdleGamespaceViewModel idleGamespace,
+            PausedGamespaceViewModel pausedGamespace,
             PlayerViewModelFactory playerViewModelFactory,
             ReadyGamespaceViewModel readyGamespace,
             RunningGamespaceViewModel runningGamespace,
@@ -35,7 +34,7 @@ namespace Battleship.NET.WPF.Game
                 {
                     GamePhase.Complete  => completedGamespace,
                     GamePhase.Idle      => idleGamespace,
-                    GamePhase.Paused    => null,
+                    GamePhase.Paused    => pausedGamespace,
                     GamePhase.Ready     => readyGamespace,
                     GamePhase.Running   => runningGamespace,
                     GamePhase.Setup     => setupGamespace,
@@ -43,35 +42,14 @@ namespace Battleship.NET.WPF.Game
                 }))
                 .ToReactiveProperty();
 
-            IsPaused = gameStateStore
-                .Select(gameState => gameState.Phase == GamePhase.Paused)
-                .ToReactiveProperty();
-
             Player1 = playerViewModelFactory.CreatePlayerViewModel(GamePlayer.Player1);
             Player2 = playerViewModelFactory.CreatePlayerViewModel(GamePlayer.Player2);
-
-            Runtime = gameStateStore
-                .Select(gameState => gameState.Runtime)
-                .ToReactiveProperty();
-
-            TogglePauseCommand = ReactiveCommand.Create(
-                () => gameStateStore.Dispatch(new TogglePauseAction()),
-                gameStateStore
-                    .Select(gameState => (gameState.Phase == GamePhase.Paused)
-                        || (gameState.Phase == GamePhase.Running))
-                    .DistinctUntilChanged());
         }
 
-        public IReadOnlyObservableProperty<object?> Gamespace { get; }
-
-        public IReadOnlyObservableProperty<bool> IsPaused { get; }
+        public IReadOnlyObservableProperty<object> Gamespace { get; }
 
         public PlayerViewModel Player1 { get; }
 
         public PlayerViewModel Player2 { get; }
-
-        public IReadOnlyObservableProperty<TimeSpan> Runtime { get; }
-
-        public ICommand<Unit> TogglePauseCommand { get; }
     }
 }
