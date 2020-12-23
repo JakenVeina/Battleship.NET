@@ -26,15 +26,15 @@ namespace Battleship.NET.WPF.State.Behaviors
             => _gameStateStore
                 .Select(gameState =>
                 (
-                    currentPlayer: gameState.CurrentPlayer,
-                    state: gameState.State
+                    currentPlayer:  gameState.CurrentPlayer,
+                    phase:          gameState.Phase
                 ))
                 .DistinctUntilChanged()
-                .Where(model => (model.state != GameState.Setup)
-                    && (model.state != GameState.Complete))
-                .Do(model => _viewStateStore.Dispatch(new SetActivePlayerAction(model.state switch
+                .Where(model => (model.phase != GamePhase.Setup)
+                    && (model.phase != GamePhase.Complete))
+                .Do(model => _viewStateStore.Dispatch(new SetActivePlayerAction(model.phase switch
                     {
-                        GameState.Running   => model.currentPlayer,
+                        GamePhase.Running   => model.currentPlayer,
                         _                   => null
                     })))
                 .Subscribe();

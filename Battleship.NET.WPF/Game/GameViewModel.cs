@@ -29,22 +29,22 @@ namespace Battleship.NET.WPF.Game
             SetupGamespaceViewModel setupGamespace)
         {
             Gamespace = gameStateStore
-                .Select(gameState => gameState.State)
+                .Select(gameState => gameState.Phase)
                 .DistinctUntilChanged()
-                .Select(state => (object)(state switch
+                .Select(phase => (object)(phase switch
                 {
-                    GameState.Complete  => completedGamespace,
-                    GameState.Idle      => idleGamespace,
-                    GameState.Paused    => null,
-                    GameState.Ready     => readyGamespace,
-                    GameState.Running   => runningGamespace,
-                    GameState.Setup     => setupGamespace,
+                    GamePhase.Complete  => completedGamespace,
+                    GamePhase.Idle      => idleGamespace,
+                    GamePhase.Paused    => null,
+                    GamePhase.Ready     => readyGamespace,
+                    GamePhase.Running   => runningGamespace,
+                    GamePhase.Setup     => setupGamespace,
                     _                   => throw new InvalidOperationException("Dafuq did you do to the game state?"),
                 }))
                 .ToReactiveProperty();
 
             IsPaused = gameStateStore
-                .Select(gameState => gameState.State == GameState.Paused)
+                .Select(gameState => gameState.Phase == GamePhase.Paused)
                 .ToReactiveProperty();
 
             Player1 = playerViewModelFactory.CreatePlayerViewModel(GamePlayer.Player1);
@@ -57,8 +57,8 @@ namespace Battleship.NET.WPF.Game
             TogglePauseCommand = ReactiveCommand.Create(
                 () => gameStateStore.Dispatch(new TogglePauseAction()),
                 gameStateStore
-                    .Select(gameState => (gameState.State == GameState.Paused)
-                        || (gameState.State == GameState.Running))
+                    .Select(gameState => (gameState.Phase == GamePhase.Paused)
+                        || (gameState.Phase == GamePhase.Running))
                     .DistinctUntilChanged());
         }
 

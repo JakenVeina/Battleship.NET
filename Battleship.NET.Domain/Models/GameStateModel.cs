@@ -15,7 +15,7 @@ namespace Battleship.NET.Domain.Models
                 PlayerStateModel.CreateIdle(definition.Ships),
                 PlayerStateModel.CreateIdle(definition.Ships),
                 TimeSpan.Zero,
-                GameState.Idle);
+                GamePhase.Idle);
 
         public GameStateModel(
             GamePlayer currentPlayer,
@@ -25,7 +25,7 @@ namespace Battleship.NET.Domain.Models
             PlayerStateModel player1,
             PlayerStateModel player2,
             TimeSpan runtime,
-            GameState state)
+            GamePhase phase)
         {
             CurrentPlayer = currentPlayer;
             Definition = definition;
@@ -34,7 +34,7 @@ namespace Battleship.NET.Domain.Models
             Player1 = player1;
             Player2 = player2;
             Runtime = runtime;
-            State = state;
+            Phase = phase;
         }
 
 
@@ -52,7 +52,7 @@ namespace Battleship.NET.Domain.Models
 
         public TimeSpan Runtime { get; }
 
-        public GameState State { get; }
+        public GamePhase Phase { get; }
 
 
         public PlayerStateModel CurrentPlayerState
@@ -74,11 +74,11 @@ namespace Battleship.NET.Domain.Models
                 Player1.BeginSetup(),
                 Player2.BeginSetup(),
                 TimeSpan.Zero,
-                GameState.Setup);
+                GamePhase.Setup);
 
         public bool CanFireShot(
                 Point position)
-            => (State == GameState.Running)
+            => (Phase == GamePhase.Running)
                 && (((CurrentPlayer == GamePlayer.Player1)
                         && Player1.CanFireShot
                         && Player2.CanReceiveShot(position))
@@ -88,7 +88,7 @@ namespace Battleship.NET.Domain.Models
 
         public bool CanCompleteSetup(
                 GamePlayer player)
-            => (State == GameState.Setup)
+            => (Phase == GamePhase.Setup)
                 && !(((player == GamePlayer.Player1) && !Player1.CanCompleteSetup(Definition.GameBoard, Definition.Ships))
                     || ((player == GamePlayer.Player2) && !Player2.CanCompleteSetup(Definition.GameBoard, Definition.Ships)));
 
@@ -108,7 +108,7 @@ namespace Battleship.NET.Domain.Models
                 player1,
                 player2,
                 Runtime,
-                GameState.Complete);
+                GamePhase.Complete);
         }
 
         public GameStateModel CompleteSetup(
@@ -127,8 +127,8 @@ namespace Battleship.NET.Domain.Models
                 player2,
                 Runtime,
                 (player1.IsSetupComplete && player2.IsSetupComplete)
-                    ? GameState.Ready
-                    : State);
+                    ? GamePhase.Ready
+                    : Phase);
         }
 
         public GameStateModel EndTurn()
@@ -145,7 +145,7 @@ namespace Battleship.NET.Domain.Models
                 player1,
                 player2,
                 Runtime,
-                State);
+                Phase);
         }
 
         public GameStateModel FireShot(
@@ -171,7 +171,7 @@ namespace Battleship.NET.Domain.Models
                 player1,
                 player2,
                 Runtime,
-                State);
+                Phase);
         }
 
         public GameStateModel MoveShip(
@@ -192,7 +192,7 @@ namespace Battleship.NET.Domain.Models
                 player1,
                 player2,
                 Runtime,
-                State);
+                Phase);
         }
 
         public GameStateModel RandomizeShips(
@@ -211,7 +211,7 @@ namespace Battleship.NET.Domain.Models
                 player1,
                 player2,
                 Runtime,
-                State);
+                Phase);
         }
 
         public GameStateModel RotateShip(
@@ -232,7 +232,7 @@ namespace Battleship.NET.Domain.Models
                 player1,
                 player2,
                 Runtime,
-                State);
+                Phase);
         }
 
         public GameStateModel StartGame(
@@ -250,7 +250,7 @@ namespace Battleship.NET.Domain.Models
                 player1,
                 player2,
                 Runtime,
-                GameState.Running);
+                GamePhase.Running);
         }
 
         public GameStateModel TogglePause()
@@ -262,9 +262,9 @@ namespace Battleship.NET.Domain.Models
                 Player1,
                 Player2,
                 Runtime,
-                (State == GameState.Paused)
-                    ? GameState.Running
-                    : GameState.Paused);
+                (Phase == GamePhase.Paused)
+                    ? GamePhase.Running
+                    : GamePhase.Paused);
 
         public GameStateModel UpdateRuntime(
                 DateTime now)
@@ -275,9 +275,9 @@ namespace Battleship.NET.Domain.Models
                 now,
                 Player1,
                 Player2,
-                (State == GameState.Running)
+                (Phase == GamePhase.Running)
                     ? (Runtime + (now - LastUpdate))
                     : Runtime,
-                State);
+                Phase);
     }
 }

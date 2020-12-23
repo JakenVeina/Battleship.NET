@@ -1,6 +1,6 @@
 ﻿namespace Battleship.NET.Domain.Models
 {
-    public enum GameState
+    public enum GamePhase
     {
         Idle,
         Setup,
