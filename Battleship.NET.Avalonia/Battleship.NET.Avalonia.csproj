@@ -1,54 +1,25 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
-    <LanguageVersion>9</LanguageVersion>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
     <Nullable>Enable</Nullable>
   </PropertyGroup>
+
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.10.0-rc1" />
-    <PackageReference Include="Avalonia.Desktop" Version="0.10.0-rc1" />
-    <PackageReference Include="Avalonia.Xaml.Behaviors" Version="0.10.0-rc1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
+    <Page Remove="Application.axaml" />
+    <ApplicationDefinition Include="Application.axaml" />
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.19" />
+    <PackageReference Include="System.Reactive" Version="5.0.0" />
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Battleship.NET.Domain\Battleship.NET.Domain.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <AvaloniaXaml Update="Resources\StandardGameSpriteDefinitions.axaml">
-      <CopyToOutputDirectory></CopyToOutputDirectory>
-    </AvaloniaXaml>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Update="Application.axaml.cs">
-      <DependentUpon>Application.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Gamespace\Completed\CompletedGamespaceView.axaml.cs">
-      <DependentUpon>CompletedGamespaceView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Gamespace\Completed\CompletedGamespaceBoardPositionView.axaml.cs">
-      <DependentUpon>CompletedGamespaceBoardPositionView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Gamespace\Running\RunningGamespaceView.axaml.cs">
-      <DependentUpon>RunningGamespaceView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Gamespace\Running\RunningGamespaceBoardPositionView.axaml.cs">
-      <DependentUpon>RunningGamespaceBoardPositionView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Gamespace\Setup\SetupGamespaceBoardPositionView.axaml.cs">
-      <DependentUpon>SetupGamespaceBoardPositionView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Gamespace\Setup\SetupGamespaceShipSegmentView.axaml.cs">
-      <DependentUpon>SetupGamespaceShipSegmentView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Gamespace\Setup\SetupGamespaceView.axaml.cs">
-      <DependentUpon>SetupGamespaceView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="GameWindow.axaml.cs">
-      <DependentUpon>GameWindow.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\SharedSpriteDefinitions.axaml.cs">
-      <DependentUpon>SharedSpriteDefinitions.axaml</DependentUpon>
-    </Compile>
-  </ItemGroup>
+
 </Project>

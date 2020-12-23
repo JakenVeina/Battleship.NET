@@ -1,15 +1,11 @@
-﻿using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
+﻿using System.Windows.Controls;
 
-namespace Battleship.NET.Avalonia.Gamespace.Idle
+namespace Battleship.NET.WPF.Gamespace.Idle
 {
-    public class IdleGamespaceView
+    public partial class IdleGamespaceView
         : UserControl
     {
         public IdleGamespaceView()
             => InitializeComponent();
-
-        private void InitializeComponent()
-            => AvaloniaXamlLoader.Load(this);
     }
 }

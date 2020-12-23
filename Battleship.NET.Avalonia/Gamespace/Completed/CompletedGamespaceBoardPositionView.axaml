@@ -1,86 +1,70 @@
 ﻿<UserControl
-    xmlns="https://github.com/avaloniaui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
-    xmlns:c="clr-namespace:Battleship.NET.Avalonia.Controls;assembly=Battleship.NET.Avalonia"
-    xmlns:u="clr-namespace:Battleship.NET.Avalonia.ViewUtilities;assembly=Battleship.NET.Avalonia"
-    xmlns:gamespace="clr-namespace:Battleship.NET.Avalonia.Gamespace;assembly=Battleship.NET.Avalonia"
-    xmlns:running="clr-namespace:Battleship.NET.Avalonia.Gamespace.Running;assembly=Battleship.NET.Avalonia"
-    xmlns:ship="clr-namespace:Battleship.NET.Avalonia.Ship;assembly=Battleship.NET.Avalonia"
-    xmlns:system="clr-namespace:System;assembly=mscorlib"
-    x:Class="Battleship.NET.Avalonia.Gamespace.Completed.CompletedGamespaceBoardPositionView">
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:c="clr-namespace:Battleship.NET.WPF.Controls"
+        xmlns:u="clr-namespace:Battleship.NET.WPF.ViewUtilities"
+        xmlns:completed="clr-namespace:Battleship.NET.WPF.Gamespace.Completed"
+        xmlns:gamespace="clr-namespace:Battleship.NET.WPF.Gamespace"
+        xmlns:ship="clr-namespace:Battleship.NET.WPF.Ship"
+        x:Class="Battleship.NET.WPF.Gamespace.Completed.CompletedGamespaceBoardPositionView"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance Type=completed:CompletedGamespaceBoardPositionViewModel}">
+    <Border>
+        <Border.Style>
+            <Style TargetType="Border">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Position, Converter={x:Static u:GridPositionConverters.IsEven}}" Value="True">   <Setter Property="Background" Value="#DDDDFF"/></DataTrigger>
+                    <DataTrigger Binding="{Binding Position, Converter={x:Static u:GridPositionConverters.IsEven}}" Value="False">  <Setter Property="Background" Value="#EEEEFF"/></DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Border.Style>
 
-  <Border DragDrop.AllowDrop="True">
+        <Grid>
+            <c:VectorSprite RenderTransformOrigin="0.5,0.5">
+                <c:VectorSprite.Style>
+                    <Style TargetType="c:VectorSprite">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsShipSunk.Value}" Value="True"> <Setter Property="Fill" Value="#770000"/></DataTrigger>
+                            <DataTrigger Binding="{Binding IsShipSunk.Value}" Value="False"><Setter Property="Fill" Value="#007700"/></DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </c:VectorSprite.Style>
+                
+                <c:VectorSprite.Definition>
+                    <MultiBinding
+                            Converter="{x:Static ship:ShipSegmentAssetModelConverters.LookupSpriteResource}"
+                            TargetNullValue="{StaticResource Sprite_Empty}">
+                        <Binding RelativeSource="{RelativeSource Self}" />
+                        <Binding Path="ShipAsset.Value" />
+                    </MultiBinding>
+                </c:VectorSprite.Definition>
 
-    <Border.Styles>
-      <Style Selector="Border.EvenGridPosition">  <Setter Property="Background" Value="#DDDDFF" /></Style>
-      <Style Selector="Border.OddGridPosition">   <Setter Property="Background" Value="#EEEEFF" /></Style>
-    </Border.Styles>
+                <c:VectorSprite.RenderTransform>
+                    <RotateTransform Angle="{Binding ShipAsset.Value.Orientation, Converter={x:Static u:OrientationConverters.ToAngle}}"/>
+                </c:VectorSprite.RenderTransform>
+            </c:VectorSprite>
 
-    <i:Interaction.Behaviors>
-      <u:ClassSelectorBehavior
-          Data="{Binding Position, Converter={x:Static u:GridPositionConverters.IsEven}}">
-        <u:ClassMapping Value="True"  Class="EvenGridPosition"/>
-        <u:ClassMapping Value="False" Class="OddGridPosition"/>
-      </u:ClassSelectorBehavior>
-    </i:Interaction.Behaviors>
-
-    <Grid>
-
-      <c:VectorSprite>
-        <c:VectorSprite.Styles>
-          <Style Selector="c|VectorSprite.SunkShip">      <Setter Property="Fill" Value="#770000" /></Style>
-          <Style Selector="c|VectorSprite.FloatingShip">  <Setter Property="Fill" Value="#007700" /></Style>
-        </c:VectorSprite.Styles>
-
-        <c:VectorSprite.Definition>
-          <MultiBinding
-              Converter="{x:Static ship:ShipSegmentAssetModelConverters.LookupSpriteResource}"
-              TargetNullValue="{StaticResource Sprite_Empty}">
-            <Binding Path="$self" />
-            <Binding Path="ShipAsset^" />
-          </MultiBinding>
-        </c:VectorSprite.Definition>
-
-        <c:VectorSprite.RenderTransform>
-          <RotateTransform Angle="{Binding ShipAsset^.Orientation, Converter={x:Static u:OrientationConverters.ToAngle}}"/>
-        </c:VectorSprite.RenderTransform>
-
-        <i:Interaction.Behaviors>
-          <u:ClassSelectorBehavior
-              Data="{Binding IsShipSunk^}">
-            <u:ClassMapping Value="True"  Class="SunkShip"/>
-            <u:ClassMapping Value="False" Class="FloatingShip"/>
-          </u:ClassSelectorBehavior>
-        </i:Interaction.Behaviors>
-      </c:VectorSprite>
-
-      <c:VectorSprite>
-        <c:VectorSprite.Styles>
-          <Style Selector="c|VectorSprite.Hit">   <Setter Property="Fill" Value="#FF7733" /></Style>
-          <Style Selector="c|VectorSprite.Miss">  <Setter Property="Fill" Value="#7777FF" /></Style>
-        </c:VectorSprite.Styles>
-
-        <c:VectorSprite.Definition>
-          <MultiBinding
-              Converter="{x:Static gamespace:ShotAssetModelConverters.LookupSpriteResource}"
-              TargetNullValue="{StaticResource Sprite_Empty}">
-            <Binding Path="$self" />
-            <Binding Path="ShotAsset^" />
-          </MultiBinding>
-        </c:VectorSprite.Definition>
-
-        <i:Interaction.Behaviors>
-          <u:ClassSelectorBehavior
-              Data="{Binding ShotAsset^.IsHit}">
-            <u:ClassMapping Value="True"  Class="Hit"/>
-            <u:ClassMapping Value="False" Class="Miss"/>
-          </u:ClassSelectorBehavior>
-        </i:Interaction.Behaviors>
-      </c:VectorSprite>
-
-    </Grid>
-
-  </Border>
-
+            <c:VectorSprite>
+                <c:VectorSprite.Style>
+                    <Style TargetType="c:VectorSprite">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ShotAsset.Value.IsHit}" Value="True">    <Setter Property="Fill" Value="#FF7733"/></DataTrigger>
+                            <DataTrigger Binding="{Binding ShotAsset.Value.IsHit}" Value="False">   <Setter Property="Fill" Value="#7777FF"/></DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </c:VectorSprite.Style>
+                
+                <c:VectorSprite.Definition>
+                    <MultiBinding
+                            Converter="{x:Static gamespace:ShotAssetModelConverters.LookupSpriteResource}"
+                            TargetNullValue="{StaticResource Sprite_Empty}">
+                        <Binding RelativeSource="{RelativeSource Self}" />
+                        <Binding Path="ShotAsset.Value" />
+                    </MultiBinding>
+                </c:VectorSprite.Definition>
+            </c:VectorSprite>
+        </Grid>
+    </Border>
 </UserControl>

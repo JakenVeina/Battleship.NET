@@ -1,6 +1,6 @@
 ﻿using Battleship.NET.Domain.Models;
 
-namespace Battleship.NET.Avalonia.State.Models
+namespace Battleship.NET.WPF.State.Models
 {
     public class ViewStateModel
     {

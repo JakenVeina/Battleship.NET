@@ -2,10 +2,10 @@
 
 using ReduxSharp;
 
-using Battleship.NET.Avalonia.State.Models;
 using Battleship.NET.Domain.Models;
+using Battleship.NET.WPF.State.Models;
 
-namespace Battleship.NET.Avalonia.Gamespace.Completed
+namespace Battleship.NET.WPF.Gamespace.Completed
 {
     public class CompletedGamespaceBoardPositionViewModelFactory
     {

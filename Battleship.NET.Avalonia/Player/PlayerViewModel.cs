@@ -1,12 +1,12 @@
-﻿using System;
-using System.Reactive.Linq;
+﻿using System.Reactive.Linq;
+using System.Windows;
 
 using ReduxSharp;
 
-using Battleship.NET.Avalonia.State.Models;
 using Battleship.NET.Domain.Models;
+using Battleship.NET.WPF.State.Models;
 
-namespace Battleship.NET.Avalonia.Player
+namespace Battleship.NET.WPF.Player
 {
     public class PlayerViewModel
     {
@@ -26,25 +26,25 @@ namespace Battleship.NET.Avalonia.Player
                         definition: gameState.Definition.Player2,
                         state:      gameState.Player2
                     )))
-                .ShareReplayDistinct(1);
+                .ToReactiveProperty();
 
             IsActive = viewStateStore
                 .Select(viewState => (viewState.ActivePlayer == player))
-                .ShareReplayDistinct(1);
+                .ToReactiveProperty();
 
             Name = model
                 .Select(model => model.definition.Name)
-                .ShareReplayDistinct(1);
+                .ToReactiveProperty();
 
             Wins = model
                 .Select(model => model.state.Wins)
-                .ShareReplayDistinct(1);
+                .ToReactiveProperty();
         }
 
-        public IObservable<bool> IsActive { get; }
+        public IReadOnlyObservableProperty<bool> IsActive { get; }
 
-        public IObservable<string> Name { get; }
+        public IReadOnlyObservableProperty<string> Name { get; }
 
-        public IObservable<int> Wins { get; }
+        public IReadOnlyObservableProperty<int> Wins { get; }
     }
 }

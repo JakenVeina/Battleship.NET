@@ -1,4 +1,4 @@
-﻿namespace Battleship.NET.Avalonia.State.Actions
+﻿namespace Battleship.NET.WPF.State.Actions
 {
     public class ToggleActivePlayerAction
     { }

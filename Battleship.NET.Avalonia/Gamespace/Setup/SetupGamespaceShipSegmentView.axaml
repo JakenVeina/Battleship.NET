@@ -1,60 +1,61 @@
 ﻿<UserControl
-    xmlns="https://github.com/avaloniaui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
-    xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
-    xmlns:c="clr-namespace:Battleship.NET.Avalonia.Controls;assembly=Battleship.NET.Avalonia"
-    xmlns:u="clr-namespace:Battleship.NET.Avalonia.ViewUtilities;assembly=Battleship.NET.Avalonia"
-    xmlns:ship="clr-namespace:Battleship.NET.Avalonia.Ship;assembly=Battleship.NET.Avalonia"
-    x:Class="Battleship.NET.Avalonia.Gamespace.Setup.SetupGamespaceShipSegmentView">
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:c="clr-namespace:Battleship.NET.WPF.Controls"
+        xmlns:u="clr-namespace:Battleship.NET.WPF.ViewUtilities"
+        xmlns:setup="clr-namespace:Battleship.NET.WPF.Gamespace.Setup"
+        xmlns:ship="clr-namespace:Battleship.NET.WPF.Ship"
+        x:Class="Battleship.NET.WPF.Gamespace.Setup.SetupGamespaceShipSegmentView"
+        mc:Ignorable="d" 
+        d:DataContext="{d:DesignInstance Type=setup:SetupGamespaceShipSegmentViewModel}">
 
-  <c:VectorSprite DragDrop.AllowDrop="True">
-    <c:VectorSprite.Styles>
-      <Style Selector="c|VectorSprite.ValidShip">       <Setter Property="Fill" Value="#007700"   /></Style>
-      <Style Selector="c|VectorSprite.InvalidShip">     <Setter Property="Fill" Value="#770000"   /></Style>
-      <Style Selector="c|VectorSprite.OutOfBoundsShip"> <Setter Property="Fill" Value="{x:Null}"  /></Style>
-    </c:VectorSprite.Styles>
+    <c:VectorSprite
+            AllowDrop="True"
+            RenderTransformOrigin="0.5,0.5">
+        <c:VectorSprite.Style>
+            <Style TargetType="c:VectorSprite">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsValid.Value}"  Value="True">       <Setter Property="Fill" Value="#007700"/></DataTrigger>
+                    <DataTrigger Binding="{Binding IsValid.Value}"  Value="False">      <Setter Property="Fill" Value="#770000"/></DataTrigger>
+                    <DataTrigger Binding="{Binding Position.Value}" Value="{x:Null}">   <Setter Property="Fill" Value="{x:Null}"/></DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </c:VectorSprite.Style>
+        
+        <c:VectorSprite.Definition>
+            <MultiBinding
+                    Converter="{x:Static ship:ShipSegmentAssetModelConverters.LookupSpriteResource}"
+                    TargetNullValue="{StaticResource Sprite_Empty}">
+                <Binding RelativeSource="{RelativeSource Self}" />
+                <Binding Path="Asset.Value" />
+            </MultiBinding>
+        </c:VectorSprite.Definition>
 
-    <c:VectorSprite.Definition>
-      <MultiBinding
-          Converter="{x:Static ship:ShipSegmentAssetModelConverters.LookupSpriteResource}"
-          TargetNullValue="{StaticResource Sprite_Empty}">
-        <Binding Path="$self" />
-        <Binding Path="Asset^" />
-      </MultiBinding>
-    </c:VectorSprite.Definition>
+        <c:VectorSprite.RenderTransform>
+            <RotateTransform Angle="{Binding Asset.Value.Orientation, Converter={x:Static u:OrientationConverters.ToAngle}}"/>
+        </c:VectorSprite.RenderTransform>
 
-    <c:VectorSprite.RenderTransform>
-      <RotateTransform Angle="{Binding Asset^.Orientation, Converter={x:Static u:OrientationConverters.ToAngle}}"/>
-    </c:VectorSprite.RenderTransform>
+        <b:Interaction.Behaviors>
+            <u:ClickAndDragBehavior
+                DataFormat="Battleship.NET.ShipSegmentAssetModel"
+                DataValue="{Binding Asset.Value}"
+                Effects="Move"/>
+        </b:Interaction.Behaviors>
 
-    <i:Interaction.Behaviors>
-      <u:ClassSelectorBehavior
-          Data="{Binding IsValid^}">
-        <u:ClassMapping Value="True"  Class="ValidShip"/>
-        <u:ClassMapping Value="False" Class="InvalidShip"/>
-      </u:ClassSelectorBehavior>
-
-      <u:ClassSelectorBehavior
-          Data="{Binding Position^}">
-        <u:ClassMapping Value="{x:Null}"  Class="OutOfBoundsShip"/>
-      </u:ClassSelectorBehavior>
-
-      <u:DragEnterTriggerBehavior
-          DataFormat="Battleship.NET.ShipSegmentAssetModel"
-          Effects="Move">
-        <ia:InvokeCommandAction Command="{Binding ReceiveShipSegmentCommand}"/>
-      </u:DragEnterTriggerBehavior>
-
-      <ia:EventTriggerBehavior EventName="DoubleTapped">
-        <ia:InvokeCommandAction Command="{Binding RotateCommand}"/>
-      </ia:EventTriggerBehavior>
-
-      <u:ClickAndDragBehavior
-        DataFormat="Battleship.NET.ShipSegmentAssetModel"
-        DataValue="{Binding Asset^}"
-        Effects="Move"/>
-    </i:Interaction.Behaviors>
-  </c:VectorSprite>
+        <b:Interaction.Triggers>
+            <u:DragEnterTrigger
+                    DataFormat="Battleship.NET.ShipSegmentAssetModel"
+                    Effects="Move">
+                <b:InvokeCommandAction Command="{Binding ReceiveShipSegmentCommand}" PassEventArgsToCommand="True"/>
+            </u:DragEnterTrigger>
+            
+            <b:EventTrigger EventName="MouseDoubleClick">
+                <b:InvokeCommandAction Command="{Binding RotateCommand}"/>
+            </b:EventTrigger>
+        </b:Interaction.Triggers>
+    </c:VectorSprite>
 
 </UserControl>

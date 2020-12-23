@@ -1,66 +1,63 @@
 ﻿<UserControl
-    xmlns="https://github.com/avaloniaui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:completed="clr-namespace:Battleship.NET.Avalonia.Gamespace.Completed;assembly=Battleship.NET.Avalonia"
-    x:Class="Battleship.NET.Avalonia.Gamespace.Completed.CompletedGamespaceView">
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:u="clr-namespace:Battleship.NET.WPF.ViewUtilities"
+        xmlns:completed="clr-namespace:Battleship.NET.WPF.Gamespace.Completed"
+        x:Class="Battleship.NET.WPF.Gamespace.Completed.CompletedGamespaceView"
+        mc:Ignorable="d" 
+        d:DataContext="{d:DesignInstance Type=completed:CompletedGamespaceViewModel}">
+    <UserControl.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="Margin"   Value="5"/>
+            <Setter Property="FontSize" Value="24"/>
+        </Style>
+    </UserControl.Resources>
 
-  <UserControl.Styles>
-    <Style Selector="Button:mouseover">
-      <Setter Property="Background" Value="LightYellow"/>
-    </Style>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
-    <Style Selector="Button > TextBlock">
-      <Setter Property="Margin"   Value="5"/>
-      <Setter Property="FontSize" Value="24"/>
-    </Style>
-  </UserControl.Styles>
+        <u:AspectBox
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Grid.Row="0"
+                AspectRatio="1">
+            <ItemsControl ItemsSource="{Binding BoardPositions.Value}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid
+                            Columns="{Binding BoardSize.Value.Width}"
+                            Rows="{Binding BoardSize.Value.Height}"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <completed:CompletedGamespaceBoardPositionView/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </u:AspectBox>
 
-  <Grid>
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="*" />
-      <ColumnDefinition Width="*" />
-    </Grid.ColumnDefinitions>
-    <Grid.RowDefinitions>
-      <RowDefinition Height="*"/>
-      <RowDefinition Height="Auto"/>
-    </Grid.RowDefinitions>
+        <Button
+                Grid.Column="0"
+                Grid.Row="1"
+                Command="{Binding ToggleActivePlayerCommand}">
+            <TextBlock>Change Player</TextBlock>
+        </Button>
 
-    <Viewbox
-        Grid.Column="0"
-        Grid.ColumnSpan="2"
-        Grid.Row="0"
-        Stretch="Uniform">
-      <ItemsControl
-          Items="{Binding BoardPositions^}">
-        <ItemsControl.ItemsPanel>
-          <ItemsPanelTemplate>
-            <UniformGrid
-              Columns="{Binding BoardSize^.Width}"
-              Rows="{Binding BoardSize^.Height}"/>
-          </ItemsPanelTemplate>
-        </ItemsControl.ItemsPanel>
-        <ItemsControl.DataTemplates>
-          <DataTemplate>
-            <completed:CompletedGamespaceBoardPositionView/>
-          </DataTemplate>
-        </ItemsControl.DataTemplates>
-      </ItemsControl>
-    </Viewbox>
-
-    <Button
-        Grid.Column="0"
-        Grid.Row="1"
-        Command="{Binding ToggleActivePlayerCommand}">
-      <TextBlock>Change Player</TextBlock>
-    </Button>
-
-    <Button
-        Grid.Column="1"
-        Grid.Row="1"
-        Command="{Binding BeginSetupCommand}">
-      <TextBlock>New Game</TextBlock>
-    </Button>
-
+        <Button
+                Grid.Column="1"
+                Grid.Row="1"
+                Command="{Binding BeginSetupCommand}">
+            <TextBlock>New Game</TextBlock>
+        </Button>
   </Grid>
-
 </UserControl>

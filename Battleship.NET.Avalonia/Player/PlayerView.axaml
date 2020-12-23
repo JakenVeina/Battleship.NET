@@ -1,52 +1,47 @@
-﻿<UserControl
-    xmlns="https://github.com/avaloniaui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
-    xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
-    xmlns:u="clr-namespace:Battleship.NET.Avalonia.ViewUtilities;assembly=Battleship.NET.Avalonia"
-    x:Class="Battleship.NET.Avalonia.Player.PlayerView">
-  <UserControl.Styles>
-    <Style Selector="Border">
-      <Setter Property="Padding" Value="5"/>
-    </Style>
-    <Style Selector="Border.ActivePlayer">  <Setter Property="Background" Value="LightYellow"/> </Style>
-    <Style Selector="Border.InactivePlayer"><Setter Property="Background" Value="LightGray"/>   </Style>
+﻿<UserControl 
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:player="clr-namespace:Battleship.NET.WPF.Player"
+        x:Class="Battleship.NET.WPF.Player.PlayerView"
+        mc:Ignorable="d" 
+        d:DataContext="{d:DesignInstance Type=player:PlayerViewModel}">
+    <UserControl.Resources>
+        <Style TargetType="TextBlock">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsActive.Value}" Value="True">   <Setter Property="Foreground" Value="Black"/>   </DataTrigger>
+                <DataTrigger Binding="{Binding IsActive.Value}" Value="False">  <Setter Property="Foreground" Value="Gray"/>    </DataTrigger>
+            </Style.Triggers>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Padding"  Value="2"/>
+        </Style>
+    </UserControl.Resources>
 
-    <Style Selector="TextBlock">
-      <Setter Property="FontSize" Value="20"/>
-      <Setter Property="Padding"  Value="2"/>
-    </Style>
-    <Style Selector="Border.ActivePlayer    TextBlock"><Setter Property="Foreground" Value="Black"/>  </Style>
-    <Style Selector="Border.InactivePlayer  TextBlock"><Setter Property="Foreground" Value="Gray"/>    </Style>
-  </UserControl.Styles>
+    <Border Padding="5">
+        <Border.Style>
+            <Style TargetType="Border">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsActive.Value}" Value="True">   <Setter Property="Background" Value="LightYellow"/> </DataTrigger>
+                    <DataTrigger Binding="{Binding IsActive.Value}" Value="False">  <Setter Property="Background" Value="LightGray"/>   </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Border.Style>
 
-  <Border>
-    <i:Interaction.Behaviors>
-      <u:ClassSelectorBehavior
-          Data="{Binding IsActive^}">
-        <u:ClassMapping Value="True"  Class="ActivePlayer"/>
-        <u:ClassMapping Value="False" Class="InactivePlayer"/>
-      </u:ClassSelectorBehavior>
-    </i:Interaction.Behaviors>
-
-    <Grid>
-      <Grid.RowDefinitions>
-        <RowDefinition Height="Auto" />
-        <RowDefinition Height="Auto" />
-        <RowDefinition Height="*" />
-      </Grid.RowDefinitions>
-
-      <TextBlock
-        Grid.Row="0"
-        Text="{Binding Name^}"/>
-
-      <StackPanel
-          Grid.Row="1"
-          Orientation="Horizontal">
-        <TextBlock Text="{Binding Wins^, StringFormat=Wins: {0}}"/>
-      </StackPanel>
-    </Grid>
-
-  </Border>
-
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+        
+            <TextBlock
+                Grid.Row="0"
+                Text="{Binding Name.Value}"/>
+        
+            <TextBlock
+                Grid.Row="1"
+                Text="{Binding Wins.Value, StringFormat=Wins: {0}}"/>
+        </Grid>
+    </Border>
 </UserControl>

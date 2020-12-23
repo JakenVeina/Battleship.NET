@@ -1,9 +1,9 @@
 ﻿using ReduxSharp;
 
-using Battleship.NET.Avalonia.State.Models;
 using Battleship.NET.Domain.Models;
+using Battleship.NET.WPF.State.Models;
 
-namespace Battleship.NET.Avalonia.Player
+namespace Battleship.NET.WPF.Player
 {
     public class PlayerViewModelFactory
     {

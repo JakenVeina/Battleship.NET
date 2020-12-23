@@ -1,6 +1,6 @@
 ﻿using Battleship.NET.Domain.Models;
 
-namespace Battleship.NET.Avalonia.State.Actions
+namespace Battleship.NET.WPF.State.Actions
 {
     public class SetActivePlayerAction
     {

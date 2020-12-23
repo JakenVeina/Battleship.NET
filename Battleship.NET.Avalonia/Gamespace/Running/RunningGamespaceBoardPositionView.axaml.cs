@@ -1,15 +1,11 @@
-﻿using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
+﻿using System.Windows.Controls;
 
-namespace Battleship.NET.Avalonia.Gamespace.Running
+namespace Battleship.NET.WPF.Gamespace.Running
 {
-    public class RunningGamespaceBoardPositionView
+    public partial class RunningGamespaceBoardPositionView
         : UserControl
     {
         public RunningGamespaceBoardPositionView()
             => InitializeComponent();
-
-        private void InitializeComponent()
-            => AvaloniaXamlLoader.Load(this);
     }
 }

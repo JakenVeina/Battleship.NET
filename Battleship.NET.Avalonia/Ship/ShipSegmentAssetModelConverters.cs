@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
+using System.Windows;
+using System.Windows.Data;
 
-using Avalonia.Controls;
-using Avalonia.Data.Converters;
-
-namespace Battleship.NET.Avalonia.Ship
+namespace Battleship.NET.WPF.Ship
 {
     public static class ShipSegmentAssetModelConverters
     {
@@ -15,14 +13,15 @@ namespace Battleship.NET.Avalonia.Ship
         private class ShipAssetModelLookupResourceKeyValueConverter
             : IMultiValueConverter
         {
-            public object? Convert(IList<object?> values, Type targetType, object? parameter, CultureInfo culture)
-                => (values[0] is IResourceHost resourceHost)
+            public object? Convert(object?[] values, Type targetType, object? parameter, CultureInfo culture)
+                => (values[0] is FrameworkElement frameworkElement)
                         && (values[1] is ShipSegmentAssetModel model)
-                        && resourceHost.TryFindResource(
-                            $"Sprite_Ship_Standard_{model.Name.Replace(" ", "")}_{model.Segment.X}_{model.Segment.Y}",
-                            out var resource)
-                    ? resource
+                    ? frameworkElement.TryFindResource(
+                        $"Sprite_Ship_Standard_{model.Name.Replace(" ", "")}_{model.Segment.X}_{model.Segment.Y}")
                     : null;
+
+            public object?[] ConvertBack(object? value, Type[] targetTypes, object? parameter, CultureInfo culture)
+                => throw new NotSupportedException();
         }
     }
 }

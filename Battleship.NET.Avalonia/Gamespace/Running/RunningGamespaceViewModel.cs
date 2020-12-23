@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Immutable;
-using System.Drawing;
+﻿using System.Collections.Immutable;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive;
+using System.Windows;
 using System.Windows.Input;
 
 using ReduxSharp;
 
-using Battleship.NET.Domain.Models;
 using Battleship.NET.Domain.Actions;
+using Battleship.NET.Domain.Models;
 
-namespace Battleship.NET.Avalonia.Gamespace.Running
+namespace Battleship.NET.WPF.Gamespace.Running
 {
     public class RunningGamespaceViewModel
     {
@@ -21,7 +20,7 @@ namespace Battleship.NET.Avalonia.Gamespace.Running
         {
             var boardDefinition = gameStateStore
                 .Select(gameState => gameState.Definition.GameBoard)
-                .ShareReplayDistinct(1);
+                .ToReactiveProperty();
 
             BoardPositions = boardDefinition
                 .Select(definition => definition.Positions
@@ -29,11 +28,11 @@ namespace Battleship.NET.Avalonia.Gamespace.Running
                     .ThenBy(position => position.X)
                     .Select(position => boardPositionFactory.Create(position))
                     .ToImmutableArray())
-                .ShareReplayDistinct(1);
+                .ToReactiveProperty();
 
             BoardSize = boardDefinition
                 .Select(definition => definition.Size)
-                .ShareReplayDistinct(1);
+                .ToReactiveProperty();
 
             EndTurnCommand = ReactiveCommand.Create(
                 execute:    () => gameStateStore.Dispatch(new EndTurnAction()),
@@ -42,9 +41,9 @@ namespace Battleship.NET.Avalonia.Gamespace.Running
                     .DistinctUntilChanged());
         }
 
-        public IObservable<ImmutableArray<RunningGamespaceBoardPositionViewModel>> BoardPositions { get; }
+        public IReadOnlyObservableProperty<ImmutableArray<RunningGamespaceBoardPositionViewModel>> BoardPositions { get; }
 
-        public IObservable<Size> BoardSize { get; }
+        public IReadOnlyObservableProperty<System.Drawing.Size> BoardSize { get; }
 
         public ICommand<Unit> EndTurnCommand { get; }
     }

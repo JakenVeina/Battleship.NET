@@ -1,35 +1,37 @@
 ﻿using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
 
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Xaml.Interactivity;
+using Microsoft.Xaml.Behaviors;
 
-namespace Battleship.NET.Avalonia.ViewUtilities
+namespace Battleship.NET.WPF.ViewUtilities
 {
     public class UniformGridBehavior
         : Behavior<Grid>
     {
-        static UniformGridBehavior()
-        {
-            ColumnCountProperty.Changed.AddClassHandler<UniformGridBehavior>((@this, _) => @this.SynchronizeDefinitions());
-            RowCountProperty.Changed.AddClassHandler<UniformGridBehavior>((@this, _) => @this.SynchronizeDefinitions());
-        }
-
         public int ColumnCount
         {
-            get => GetValue(ColumnCountProperty);
+            get => (int)GetValue(ColumnCountProperty);
             set => SetValue(ColumnCountProperty, value);
         }
-        public static readonly StyledProperty<int> ColumnCountProperty
-            = AvaloniaProperty.Register<UniformGridBehavior, int>(nameof(ColumnCount));
+        public static readonly DependencyProperty ColumnCountProperty
+            = DependencyProperty.Register(
+                nameof(ColumnCount),
+                typeof(int),
+                typeof(UniformGridBehavior),
+                new PropertyMetadata((@this, _) => ((UniformGridBehavior)@this).SynchronizeDefinitions()));
 
         public int RowCount
         {
-            get => GetValue(RowCountProperty);
+            get => (int)GetValue(RowCountProperty);
             set => SetValue(RowCountProperty, value);
         }
-        public static readonly StyledProperty<int> RowCountProperty
-            = AvaloniaProperty.Register<UniformGridBehavior, int>(nameof(RowCount));
+        public static readonly DependencyProperty RowCountProperty
+            = DependencyProperty.Register(
+                nameof(RowCount),
+                typeof(int),
+                typeof(UniformGridBehavior),
+                new PropertyMetadata((@this, _) => ((UniformGridBehavior)@this).SynchronizeDefinitions()));
 
         protected override void OnAttached()
         {
@@ -58,21 +60,21 @@ namespace Battleship.NET.Avalonia.ViewUtilities
             if (columnDifference > 0)
                 grid.ColumnDefinitions.RemoveRange(0, columnDifference);
             else if (columnDifference < 0)
-                grid.ColumnDefinitions.AddRange(Enumerable.Range(0, -columnDifference)
-                    .Select(_ => new ColumnDefinition()
+                foreach(var _ in Enumerable.Range(0, -columnDifference))
+                    grid.ColumnDefinitions.Add(new ColumnDefinition()
                     {
                         Width = new GridLength(1, GridUnitType.Star)
-                    }));
+                    });
 
             var rowDifference = grid.RowDefinitions.Count - RowCount;
             if (rowDifference > 0)
                 grid.RowDefinitions.RemoveRange(0, rowDifference);
             else if (rowDifference < 0)
-                grid.RowDefinitions.AddRange(Enumerable.Range(0, -rowDifference)
-                    .Select(_ => new RowDefinition()
+                foreach(var _ in Enumerable.Range(0, -rowDifference))
+                    grid.RowDefinitions.Add(new RowDefinition()
                     {
                         Height = new GridLength(1, GridUnitType.Star)
-                    }));
+                    });
         }
     }
 }

@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Immutable;
-using System.Drawing;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Windows;
 using System.Windows.Input;
 
 using ReduxSharp;
 
-using Battleship.NET.Avalonia.State.Actions;
-using Battleship.NET.Avalonia.State.Models;
 using Battleship.NET.Domain.Actions;
 using Battleship.NET.Domain.Models;
+using Battleship.NET.WPF.State.Actions;
+using Battleship.NET.WPF.State.Models;
 
-namespace Battleship.NET.Avalonia.Gamespace.Setup
+namespace Battleship.NET.WPF.Gamespace.Setup
 {
     public class SetupGamespaceViewModel
     {
@@ -26,17 +26,17 @@ namespace Battleship.NET.Avalonia.Gamespace.Setup
         {
             var gameDefinition = gameStateStore
                 .Select(gameState => gameState.Definition)
-                .ShareReplayDistinct(1);
+                .ToReactiveProperty();
 
             var boardDefinition = gameDefinition
                 .Select(gameDefinition => gameDefinition.GameBoard)
-                .ShareReplayDistinct(1);
+                .ToReactiveProperty();
 
             var activePlayer = viewStateStore
                 .Select(viewState => viewState.ActivePlayer)
                 .Where(activePlayer => activePlayer.HasValue)
                 .Select(activePlayer => activePlayer!.Value)
-                .ShareReplayDistinct(1);
+                .ToReactiveProperty();
 
             BoardPositions = boardDefinition
                 .Select(definition => definition.Positions
@@ -44,18 +44,18 @@ namespace Battleship.NET.Avalonia.Gamespace.Setup
                     .ThenBy(position => position.X)
                     .Select(position => boardPositionFactory.Create(position))
                     .ToImmutableArray())
-                .ShareReplayDistinct(1);
+                .ToReactiveProperty();
 
             BoardSize = boardDefinition
                 .Select(definition => definition.Size)
-                .ShareReplayDistinct(1);
+                .ToReactiveProperty();
 
             ShipSegments = gameDefinition
                 .Select(definition => definition.Ships
                     .SelectMany((ship, shipIndex) => ship.Segments
                         .Select(segment => shipSegmentFactory.Create(segment, shipIndex)))
                     .ToImmutableArray())
-                .ShareReplayDistinct(1);
+                .ToReactiveProperty();
 
             CompleteSetupCommand = ReactiveCommand.Create(
                 activePlayer
@@ -77,14 +77,14 @@ namespace Battleship.NET.Avalonia.Gamespace.Setup
                         random)))));
         }
 
-        public IObservable<ImmutableArray<SetupGamespaceBoardPositionViewModel>> BoardPositions { get; }
+        public IReadOnlyObservableProperty<ImmutableArray<SetupGamespaceBoardPositionViewModel>> BoardPositions { get; }
 
-        public IObservable<Size> BoardSize { get; }
+        public IReadOnlyObservableProperty<System.Drawing.Size> BoardSize { get; }
 
         public ICommand<Unit> CompleteSetupCommand { get; }
 
         public ICommand<Unit> RandomizeShipsCommand { get; }
 
-        public IObservable<ImmutableArray<SetupGamespaceShipSegmentViewModel>> ShipSegments { get; }
+        public IReadOnlyObservableProperty<ImmutableArray<SetupGamespaceShipSegmentViewModel>> ShipSegments { get; }
     }
 }

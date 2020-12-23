@@ -5,12 +5,12 @@ using System.Windows.Input;
 
 using ReduxSharp;
 
-using Battleship.NET.Avalonia.Ship;
-using Battleship.NET.Avalonia.State.Models;
 using Battleship.NET.Domain.Actions;
 using Battleship.NET.Domain.Models;
+using Battleship.NET.WPF.Ship;
+using Battleship.NET.WPF.State.Models;
 
-namespace Battleship.NET.Avalonia.Gamespace.Setup
+namespace Battleship.NET.WPF.Gamespace.Setup
 {
     public class SetupGamespaceBoardPositionViewModel
     {

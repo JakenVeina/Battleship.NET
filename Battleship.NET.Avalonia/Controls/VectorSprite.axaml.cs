@@ -1,33 +1,38 @@
-﻿using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
-using Avalonia.Media;
+﻿using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
 
-namespace Battleship.NET.Avalonia.Controls
+namespace Battleship.NET.WPF.Controls
 {
-    public class VectorSprite
+    public partial class VectorSprite
         : UserControl
     {
         public VectorSprite()
             => InitializeComponent();
 
-        public VectorSpriteDefinition Definition
+        public VectorSpriteDefinition? Definition
         {
-            get => GetValue(DefinitionProperty);
+            get => (VectorSpriteDefinition?)GetValue(DefinitionProperty);
             set => SetValue(DefinitionProperty, value);
         }
-        public static readonly StyledProperty<VectorSpriteDefinition> DefinitionProperty
-            = AvaloniaProperty.Register<VectorSprite, VectorSpriteDefinition>(nameof(Definition));
+        public static readonly DependencyProperty DefinitionProperty
+            = DependencyProperty.Register(
+                nameof(Definition),
+                typeof(VectorSpriteDefinition),
+                typeof(VectorSprite),
+                new FrameworkPropertyMetadata(
+                    defaultValue:   null,
+                    flags:          FrameworkPropertyMetadataOptions.AffectsRender));
 
-        public IBrush? Fill
+        public Brush? Fill
         {
-            get => GetValue(FillProperty);
+            get => (Brush?)GetValue(FillProperty);
             set => SetValue(FillProperty, value);
         }
-        public static readonly StyledProperty<IBrush?> FillProperty
-            = AvaloniaProperty.Register<VectorSprite, IBrush?>(nameof(Fill));
-
-        private void InitializeComponent()
-            => AvaloniaXamlLoader.Load(this);
+        public static readonly DependencyProperty FillProperty
+            = DependencyProperty.Register(
+                nameof(Fill),
+                typeof(Brush),
+                typeof(VectorSprite));
     }
 }

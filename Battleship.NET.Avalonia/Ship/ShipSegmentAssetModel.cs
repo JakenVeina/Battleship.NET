@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace Battleship.NET.Avalonia.Ship
+namespace Battleship.NET.WPF.Ship
 {
     public class ShipSegmentAssetModel
     {

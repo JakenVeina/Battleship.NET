@@ -1,15 +1,11 @@
-﻿using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
+﻿using System.Windows.Controls;
 
-namespace Battleship.NET.Avalonia.Gamespace.Setup
+namespace Battleship.NET.WPF.Gamespace.Setup
 {
-    public class SetupGamespaceView
+    public partial class SetupGamespaceView
         : UserControl
     {
         public SetupGamespaceView()
             => InitializeComponent();
-
-        private void InitializeComponent()
-            => AvaloniaXamlLoader.Load(this);
     }
 }

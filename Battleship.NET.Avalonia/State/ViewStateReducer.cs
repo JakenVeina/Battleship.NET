@@ -1,9 +1,9 @@
 ﻿using ReduxSharp;
 
-using Battleship.NET.Avalonia.State.Actions;
-using Battleship.NET.Avalonia.State.Models;
+using Battleship.NET.WPF.State.Actions;
+using Battleship.NET.WPF.State.Models;
 
-namespace Battleship.NET.Avalonia.State
+namespace Battleship.NET.WPF.State
 {
     public class ViewStateReducer
         : IReducer<ViewStateModel>

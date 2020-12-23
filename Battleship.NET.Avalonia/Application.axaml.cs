@@ -1,40 +1,39 @@
 ﻿using System;
+using System.Collections.Immutable;
+using System.Linq;
+using System.Reactive.Concurrency;
 using System.Reactive.PlatformServices;
+using System.Threading;
+using System.Windows;
 
 using Microsoft.Extensions.DependencyInjection;
 
-using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Markup.Xaml;
-
 using ReduxSharp;
 
-using Battleship.NET.Avalonia.Game;
-using Battleship.NET.Avalonia.Gamespace.Completed;
-using Battleship.NET.Avalonia.Gamespace.Idle;
-using Battleship.NET.Avalonia.Gamespace.Ready;
-using Battleship.NET.Avalonia.Gamespace.Running;
-using Battleship.NET.Avalonia.Gamespace.Setup;
-using Battleship.NET.Avalonia.Player;
-using Battleship.NET.Avalonia.State;
-using Battleship.NET.Avalonia.State.Behaviors;
-using Battleship.NET.Avalonia.State.Models;
 using Battleship.NET.Domain;
-using Battleship.NET.Domain.Models;
 using Battleship.NET.Domain.Behaviors;
+using Battleship.NET.Domain.Models;
+using Battleship.NET.WPF.Game;
+using Battleship.NET.WPF.Gamespace.Completed;
+using Battleship.NET.WPF.Gamespace.Idle;
+using Battleship.NET.WPF.Gamespace.Ready;
+using Battleship.NET.WPF.Gamespace.Running;
+using Battleship.NET.WPF.Gamespace.Setup;
+using Battleship.NET.WPF.Player;
+using Battleship.NET.WPF.State;
+using Battleship.NET.WPF.State.Behaviors;
+using Battleship.NET.WPF.State.Models;
 
-namespace Battleship.NET.Avalonia
+namespace Battleship.NET.WPF
 {
-    public class Application
-        : global::Avalonia.Application
+    public partial class Application
+        : System.Windows.Application
     {
-        public override void Initialize()
-            => AvaloniaXamlLoader.Load(this);
-
-        public override void OnFrameworkInitializationCompleted()
+        protected override void OnStartup(StartupEventArgs e)
         {
-            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
-            {
-                var serviceProvider = new ServiceCollection()
+            base.OnStartup(e);
+
+            _serviceProvider = new ServiceCollection()
                     .AddSingleton<ISystemClock, DefaultSystemClock>()
                     .AddSingleton<Random>()
                     .AddSingleton<IStore<GameStateModel>, Store<GameStateModel>>(_ => new Store<GameStateModel>(new GameStateReducer(), StandardGame.CreateIdle()))
@@ -55,12 +54,33 @@ namespace Battleship.NET.Avalonia
                     .AddSingleton<PlayerViewModelFactory>()
                     .BuildServiceProvider();
 
-                desktopLifetime.Exit += (_, _) => serviceProvider.Dispose();
+            _behaviorStopTokens = _serviceProvider.GetServices<IBehavior>()
+                .Select(behavior => behavior.Start(new SynchronizationContextScheduler(SynchronizationContext.Current!)))
+                .ToImmutableArray();
 
-                desktopLifetime.MainWindow = new GameWindow(serviceProvider);
-            }
+            _gameWindow = new GameWindow()
+            {
+                DataContext = _serviceProvider.GetRequiredService<GameViewModel>()
+            };
 
-            base.OnFrameworkInitializationCompleted();
+            _gameWindow.Show();
         }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            base.OnExit(e);
+
+            _gameWindow?.Close();
+
+            if (_behaviorStopTokens is not null)
+                foreach (var token in _behaviorStopTokens)
+                    token.Dispose();
+
+            _serviceProvider?.Dispose();
+        }
+
+        private ImmutableArray<IDisposable>? _behaviorStopTokens;
+        private GameWindow? _gameWindow;
+        private ServiceProvider? _serviceProvider;
     }
 }

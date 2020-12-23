@@ -1,18 +1,26 @@
-﻿using Avalonia;
-using Avalonia.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
 
-namespace Battleship.NET.Avalonia.ViewUtilities
+namespace Battleship.NET.WPF.ViewUtilities
 {
     public class AspectBox
         : Decorator
     {
         public double? AspectRatio
         {
-            get => GetValue(AspectRatioProperty);
+            get => (double?)GetValue(AspectRatioProperty);
             set => SetValue(AspectRatioProperty, value);
         }
-        public static readonly StyledProperty<double?> AspectRatioProperty
-            = AvaloniaProperty.Register<AspectBox, double?>(nameof(AspectRatio));
+        public static readonly DependencyProperty AspectRatioProperty
+            = DependencyProperty.Register(
+                nameof(AspectRatio),
+                typeof(double?),
+                typeof(AspectBox),
+                new FrameworkPropertyMetadata(
+                    defaultValue:   null,
+                    flags:          FrameworkPropertyMetadataOptions.AffectsArrange
+                                        | FrameworkPropertyMetadataOptions.AffectsMeasure
+                                        | FrameworkPropertyMetadataOptions.AffectsRender));
 
         protected override Size ArrangeOverride(Size finalSize)
             => base.ArrangeOverride(ResolveToAspectRatio(finalSize));

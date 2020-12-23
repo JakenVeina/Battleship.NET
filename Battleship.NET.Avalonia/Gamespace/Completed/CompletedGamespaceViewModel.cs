@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Immutable;
-using System.Drawing;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Windows;
 using System.Windows.Input;
 
 using ReduxSharp;
 
-using Battleship.NET.Avalonia.State.Actions;
-using Battleship.NET.Avalonia.State.Models;
 using Battleship.NET.Domain.Actions;
 using Battleship.NET.Domain.Models;
+using Battleship.NET.WPF.State.Actions;
+using Battleship.NET.WPF.State.Models;
 
-namespace Battleship.NET.Avalonia.Gamespace.Completed
+namespace Battleship.NET.WPF.Gamespace.Completed
 {
     public class CompletedGamespaceViewModel
     {
@@ -25,7 +25,7 @@ namespace Battleship.NET.Avalonia.Gamespace.Completed
         {
             var boardDefinition = gameStateStore
                 .Select(gameState => gameState.Definition.GameBoard)
-                .ShareReplayDistinct(1);
+                .ToReactiveProperty();
 
             BeginSetupCommand = ReactiveCommand.Create(() =>
             {
@@ -41,20 +41,20 @@ namespace Battleship.NET.Avalonia.Gamespace.Completed
                         .ThenBy(position => position.X)
                     .Select(position => boardPositionFactory.Create(position))
                     .ToImmutableArray())
-                .ShareReplayDistinct(1);
+                .ToReactiveProperty();
 
             BoardSize = boardDefinition
                 .Select(definition => definition.Size)
-                .ShareReplayDistinct(1);
+                .ToReactiveProperty();
 
             ToggleActivePlayerCommand = ReactiveCommand.Create(() => viewStateStore.Dispatch(new ToggleActivePlayerAction()));
         }
 
         public ICommand<Unit> BeginSetupCommand { get; }
 
-        public IObservable<ImmutableArray<CompletedGamespaceBoardPositionViewModel>> BoardPositions { get; }
+        public IReadOnlyObservableProperty<ImmutableArray<CompletedGamespaceBoardPositionViewModel>> BoardPositions { get; }
 
-        public IObservable<Size> BoardSize { get; }
+        public IReadOnlyObservableProperty<System.Drawing.Size> BoardSize { get; }
 
         public ICommand<Unit> ToggleActivePlayerCommand { get; }
     }

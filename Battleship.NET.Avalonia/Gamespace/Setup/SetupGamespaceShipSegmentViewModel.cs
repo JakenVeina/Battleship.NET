@@ -3,22 +3,23 @@ using System.Drawing;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive;
+using System.Windows;
 using System.Windows.Input;
 
 using ReduxSharp;
 
-using Battleship.NET.Avalonia.Ship;
-using Battleship.NET.Avalonia.State.Models;
 using Battleship.NET.Domain.Actions;
 using Battleship.NET.Domain.Models;
+using Battleship.NET.WPF.Ship;
+using Battleship.NET.WPF.State.Models;
 
-namespace Battleship.NET.Avalonia.Gamespace.Setup
+namespace Battleship.NET.WPF.Gamespace.Setup
 {
     public class SetupGamespaceShipSegmentViewModel
     {
         public SetupGamespaceShipSegmentViewModel(
             IStore<GameStateModel> gameStateStore,
-            Point segment,
+            System.Drawing.Point segment,
             int shipIndex,
             IStore<ViewStateModel> viewStateStore)
         {
@@ -43,7 +44,7 @@ namespace Battleship.NET.Avalonia.Gamespace.Setup
                                             : model.player2BoardState,
                     shipDefinitions:    model.shipDefinitions
                 ))
-                .ShareReplayDistinct(1);
+                .ToReactiveProperty();
 
             var segmentModel = model
                 .Select(model => 
@@ -53,7 +54,7 @@ namespace Battleship.NET.Avalonia.Gamespace.Setup
                     definition:         model.shipDefinitions[shipIndex],
                     state:              model.boardState.Ships[shipIndex]
                 ))
-                .ShareReplayDistinct(1);
+                .ToReactiveProperty();
 
             Asset = segmentModel
                 .Select(segmentModel=> new ShipSegmentAssetModel(
@@ -61,7 +62,7 @@ namespace Battleship.NET.Avalonia.Gamespace.Setup
                     name:           segmentModel.definition.Name,
                     orientation:    segmentModel.state.Orientation,
                     segment:        segment))
-                .ShareReplayDistinct(1);
+                .ToReactiveProperty();
 
             Position = segmentModel
                 .Select(segmentModel => 
@@ -74,7 +75,7 @@ namespace Battleship.NET.Avalonia.Gamespace.Setup
                 .Select(model => model.boardPositions.Contains(model.position)
                     ? model.position.ToNullable()
                     : null)
-                .ShareReplayDistinct(1);
+                .ToReactiveProperty();
 
             IsValid = model
                 .DistinctUntilChanged()
@@ -89,7 +90,7 @@ namespace Battleship.NET.Avalonia.Gamespace.Setup
                             .SelectMany(ship => ship.state
                                 .EnumerateSegmentPositions(ship.definition))
                             .All(position => position != shipPosition)))
-                .ShareReplayDistinct(1);
+                .ToReactiveProperty();
 
             ReceiveShipSegmentCommand = ReactiveCommand.Create(
                 execute:    Observable.CombineLatest(
@@ -122,11 +123,11 @@ namespace Battleship.NET.Avalonia.Gamespace.Setup
                         })))));
         }
 
-        public IObservable<ShipSegmentAssetModel> Asset { get; }
+        public IReadOnlyObservableProperty<ShipSegmentAssetModel> Asset { get; }
 
-        public IObservable<bool> IsValid { get; }
+        public IReadOnlyObservableProperty<bool> IsValid { get; }
 
-        public IObservable<Point?> Position { get; }
+        public IReadOnlyObservableProperty<System.Drawing.Point?> Position { get; }
 
         public ICommand<ShipSegmentAssetModel> ReceiveShipSegmentCommand { get; }
         

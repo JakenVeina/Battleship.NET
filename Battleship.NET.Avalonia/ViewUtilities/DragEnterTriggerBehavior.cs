@@ -1,52 +1,57 @@
-﻿using Avalonia;
-using Avalonia.Input;
-using Avalonia.Xaml.Interactivity;
+﻿using System.Windows;
 
-namespace Battleship.NET.Avalonia.ViewUtilities
+using Microsoft.Xaml.Behaviors;
+
+namespace Battleship.NET.WPF.ViewUtilities
 {
-    public class DragEnterTriggerBehavior
-        : Trigger<InputElement>
+    public class DragEnterTrigger
+        : TriggerBase<UIElement>
     {
         public string? DataFormat
         {
-            get => GetValue(DataFormatProperty);
+            get => (string?)GetValue(DataFormatProperty);
             set => SetValue(DataFormatProperty, value);
         }
-        public static readonly StyledProperty<string?> DataFormatProperty
-            = AvaloniaProperty.Register<ClickAndDragBehavior, string?>(nameof(DataFormat));
+        public static readonly DependencyProperty DataFormatProperty
+            = DependencyProperty.Register(
+                nameof(DataFormat),
+                typeof(string),
+                typeof(DragEnterTrigger));
 
         public DragDropEffects Effects
         {
-            get => GetValue(EffectsProperty);
+            get => (DragDropEffects)GetValue(EffectsProperty);
             set => SetValue(EffectsProperty, value);
         }
-        public static readonly StyledProperty<DragDropEffects> EffectsProperty
-            = AvaloniaProperty.Register<ClickAndDragBehavior, DragDropEffects>(nameof(Effects));
+        public static readonly DependencyProperty EffectsProperty
+            = DependencyProperty.Register(
+                nameof(Effects),
+                typeof(DragDropEffects),
+                typeof(DragEnterTrigger));
 
         protected override void OnAttached()
         {
             base.OnAttached();
 
-            AssociatedObject!.AddHandler(DragDrop.DragEnterEvent, OnDragEnter!);
+            DragDrop.AddDragEnterHandler(AssociatedObject, OnDragEnter);
         }
 
         protected override void OnDetaching()
         {
             base.OnDetaching();
 
-            AssociatedObject!.RemoveHandler(DragDrop.DragEnterEvent, OnDragEnter!);
+            DragDrop.RemoveDragEnterHandler(AssociatedObject, OnDragEnter);
         }
 
         private void OnDragEnter(object sender, DragEventArgs e)
         {
-            if (((e.DragEffects & Effects) == DragDropEffects.None)
+            if (((e.Effects & Effects) == DragDropEffects.None)
                     || (DataFormat is null))
                 return;
 
-            var dataValue = e.Data.Get(DataFormat);
+            var data = e.Data.GetData(DataFormat);
 
-            foreach (var action in Actions!)
-                (action as IAction)?.Execute(sender, dataValue);
+            InvokeActions(data);
         }
     }
 }

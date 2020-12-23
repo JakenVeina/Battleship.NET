@@ -4,12 +4,12 @@ using System.Reactive.Linq;
 
 using ReduxSharp;
 
-using Battleship.NET.Avalonia.State.Actions;
-using Battleship.NET.Avalonia.State.Models;
 using Battleship.NET.Domain.Behaviors;
 using Battleship.NET.Domain.Models;
+using Battleship.NET.WPF.State.Actions;
+using Battleship.NET.WPF.State.Models;
 
-namespace Battleship.NET.Avalonia.State.Behaviors
+namespace Battleship.NET.WPF.State.Behaviors
 {
     public class ActivePlayerSynchronizationBehavior
         : IBehavior

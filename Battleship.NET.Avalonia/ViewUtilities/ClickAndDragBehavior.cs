@@ -1,61 +1,72 @@
-﻿using Avalonia;
-using Avalonia.Input;
-using Avalonia.Xaml.Interactivity;
+﻿using System.Windows;
+using System.Windows.Input;
 
-namespace Battleship.NET.Avalonia.ViewUtilities
+using Microsoft.Xaml.Behaviors;
+
+namespace Battleship.NET.WPF.ViewUtilities
 {
     public class ClickAndDragBehavior
-        : Behavior<InputElement>
+        : Behavior<UIElement>
     {
         public string? DataFormat
         {
-            get => GetValue(DataFormatProperty);
+            get => (string?)GetValue(DataFormatProperty);
             set => SetValue(DataFormatProperty, value);
         }
-        public static readonly StyledProperty<string?> DataFormatProperty
-            = AvaloniaProperty.Register<ClickAndDragBehavior, string?>(nameof(DataFormat));
+        public static readonly DependencyProperty DataFormatProperty
+            = DependencyProperty.Register(
+                nameof(DataFormat),
+                typeof(string),
+                typeof(ClickAndDragBehavior));
 
         public object? DataValue
         {
             get => GetValue(DataValueProperty);
             set => SetValue(DataValueProperty, value);
         }
-        public static readonly StyledProperty<object?> DataValueProperty
-            = AvaloniaProperty.Register<ClickAndDragBehavior, object?>(nameof(DataValue));
+        public static readonly DependencyProperty DataValueProperty
+            = DependencyProperty.Register(
+                nameof(DataValue),
+                typeof(object),
+                typeof(ClickAndDragBehavior));
 
         public DragDropEffects Effects
         {
-            get => GetValue(EffectsProperty);
+            get => (DragDropEffects)GetValue(EffectsProperty);
             set => SetValue(EffectsProperty, value);
         }
-        public static readonly StyledProperty<DragDropEffects> EffectsProperty
-            = AvaloniaProperty.Register<ClickAndDragBehavior, DragDropEffects>(nameof(Effects));
+        public static readonly DependencyProperty EffectsProperty
+            = DependencyProperty.Register(
+                nameof(Effects),
+                typeof(DragDropEffects),
+                typeof(ClickAndDragBehavior));
 
         protected override void OnAttached()
         {
             base.OnAttached();
 
-            AssociatedObject!.PointerMoved += OnPointerMoved!;
+            AssociatedObject.MouseMove += OnMouseMove;
         }
 
         protected override void OnDetaching()
         {
             base.OnDetaching();
 
-            AssociatedObject!.PointerMoved -= OnPointerMoved!;
+            AssociatedObject.MouseMove -= OnMouseMove;
         }
 
-        private void OnPointerMoved(object sender, PointerEventArgs e)
+        private void OnMouseMove(object sender, MouseEventArgs e)
         {
-            if ((e.Pointer.Captured is null)
+            //if ((e.MouseDevice.Captured is null)
+            if ((e.LeftButton != MouseButtonState.Pressed)
                     || (DataFormat is null)
                     || (DataValue is null))
                 return;
 
             var dataObject = new DataObject();
-            dataObject.Set(DataFormat, DataValue);
+            dataObject.SetData(DataFormat, DataValue);
 
-            DragDrop.DoDragDrop(e, dataObject, Effects);
+            DragDrop.DoDragDrop(AssociatedObject, dataObject, Effects);
         }
     }
 }

@@ -1,15 +1,11 @@
-﻿using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
+﻿using System.Windows.Controls;
 
-namespace Battleship.NET.Avalonia.Gamespace.Ready
+namespace Battleship.NET.WPF.Gamespace.Ready
 {
-    public class ReadyGamespaceView
+    public partial class ReadyGamespaceView
         : UserControl
     {
         public ReadyGamespaceView()
             => InitializeComponent();
-
-        private void InitializeComponent()
-            => AvaloniaXamlLoader.Load(this);
     }
 }

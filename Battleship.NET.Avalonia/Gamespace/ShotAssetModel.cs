@@ -1,4 +1,4 @@
-﻿namespace Battleship.NET.Avalonia.Gamespace
+﻿namespace Battleship.NET.WPF.Gamespace
 {
     public class ShotAssetModel
     {

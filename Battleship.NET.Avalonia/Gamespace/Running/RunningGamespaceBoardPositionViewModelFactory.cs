@@ -4,7 +4,7 @@ using ReduxSharp;
 
 using Battleship.NET.Domain.Models;
 
-namespace Battleship.NET.Avalonia.Gamespace.Running
+namespace Battleship.NET.WPF.Gamespace.Running
 {
     public class RunningGamespaceBoardPositionViewModelFactory
     {

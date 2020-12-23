@@ -1,30 +1,32 @@
-﻿<UserControl
-    xmlns="https://github.com/avaloniaui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
-    xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
-    xmlns:c="clr-namespace:Battleship.NET.Avalonia.Controls;assembly=Battleship.NET.Avalonia"
-    xmlns:u="clr-namespace:Battleship.NET.Avalonia.ViewUtilities;assembly=Battleship.NET.Avalonia"
-    x:Class="Battleship.NET.Avalonia.Gamespace.Setup.SetupGamespaceBoardPositionView">
-
-  <Rectangle DragDrop.AllowDrop="True">
-    <Rectangle.Styles>
-      <Style Selector="Rectangle.EvenGridPosition"> <Setter Property="Fill" Value="#DDDDFF"/> </Style>
-      <Style Selector="Rectangle.OddGridPosition">  <Setter Property="Fill" Value="#EEEEFF"/> </Style>
-    </Rectangle.Styles>
+﻿<UserControl 
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:u="clr-namespace:Battleship.NET.WPF.ViewUtilities"
+        xmlns:setup="clr-namespace:Battleship.NET.WPF.Gamespace.Setup"
+        x:Class="Battleship.NET.WPF.Gamespace.Setup.SetupGamespaceBoardPositionView"
+        mc:Ignorable="d" 
+        d:DataContext="{d:DesignInstance Type=setup:SetupGamespaceBoardPositionViewModel}">
     
-    <i:Interaction.Behaviors>
-      <u:DragEnterTriggerBehavior
-          DataFormat="Battleship.NET.ShipSegmentAssetModel"
-          Effects="Move">
-        <ia:InvokeCommandAction Command="{Binding ReceiveShipSegmentCommand}"/>
-      </u:DragEnterTriggerBehavior>
-
-      <u:ClassSelectorBehavior Data="{Binding Position, Converter={x:Static u:GridPositionConverters.IsEven}}">
-        <u:ClassMapping Value="True"  Class="EvenGridPosition"/>
-        <u:ClassMapping Value="False" Class="OddGridPosition"/>
-      </u:ClassSelectorBehavior>
-    </i:Interaction.Behaviors>
-  </Rectangle>
+    <Border AllowDrop="True">
+        <Border.Style>
+            <Style TargetType="Border">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Position, Converter={x:Static u:GridPositionConverters.IsEven}}" Value="True">   <Setter Property="Background" Value="#DDDDFF"/></DataTrigger>
+                    <DataTrigger Binding="{Binding Position, Converter={x:Static u:GridPositionConverters.IsEven}}" Value="False">  <Setter Property="Background" Value="#EEEEFF"/></DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Border.Style>
+    
+        <b:Interaction.Triggers>
+            <u:DragEnterTrigger
+                    DataFormat="Battleship.NET.ShipSegmentAssetModel"
+                    Effects="Move">
+                <b:InvokeCommandAction Command="{Binding ReceiveShipSegmentCommand}" PassEventArgsToCommand="True" />
+            </u:DragEnterTrigger>
+        </b:Interaction.Triggers>
+    </Border>
 
 </UserControl>
