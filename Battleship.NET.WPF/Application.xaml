@@ -5,8 +5,8 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Resources/SharedSpriteDefinitions.axaml"/>
-                <ResourceDictionary Source="Resources/StandardGameSpriteDefinitions.axaml"/>
+                <ResourceDictionary Source="Resources/SharedSpriteDefinitions.xaml"/>
+                <ResourceDictionary Source="Resources/StandardGameSpriteDefinitions.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

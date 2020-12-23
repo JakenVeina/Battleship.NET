@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30128.36
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Battleship.NET.Domain", "Battleship.NET.Domain\Battleship.NET.Domain.csproj", "{30C6DD2D-7B5B-44A3-9628-29C69131DA15}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Battleship.NET.Avalonia", "Battleship.NET.Avalonia\Battleship.NET.Avalonia.csproj", "{3D0A88E7-A5E1-4847-8CA4-2AFF050DFBF9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Battleship.NET.WPF", "Battleship.NET.WPF\Battleship.NET.WPF.csproj", "{3D0A88E7-A5E1-4847-8CA4-2AFF050DFBF9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

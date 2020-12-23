@@ -8,8 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Page Remove="Application.axaml" />
-    <ApplicationDefinition Include="Application.axaml" />
+    <Page Remove="Application.xaml" />
+    <ApplicationDefinition Include="Application.xaml" />
   </ItemGroup>
 
   <ItemGroup>
