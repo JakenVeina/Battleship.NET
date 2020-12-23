@@ -58,7 +58,7 @@
             <TextBlock
                 VerticalAlignment="Center"
                 FontSize="20"
-                Text="{Binding Runtime.Value, Converter={x:Static u:TimeSpanConverters.Format}}"/>
+                Text="{Binding Runtime.Value, StringFormat=hh\\:mm\\:ss}"/>
 
         </StackPanel>
 
