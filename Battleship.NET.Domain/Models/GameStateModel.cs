@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Immutable;
 using System.Drawing;
+using System.Linq;
 
 namespace Battleship.NET.Domain.Models
 {
@@ -8,84 +10,65 @@ namespace Battleship.NET.Domain.Models
         public static GameStateModel CreateIdle(
                 GameDefinitionModel definition)
             => new GameStateModel(
-                default,
-                definition,
-                0,
-                default,
-                PlayerStateModel.CreateIdle(definition.Ships),
-                PlayerStateModel.CreateIdle(definition.Ships),
-                GamePhase.Idle);
+                currentPlayer:  default,
+                definition:     definition,
+                gamesPlayed:    0,
+                lastUpdate:     default,
+                phase:          GamePhase.Idle,
+                player1:        PlayerStateModel.CreateIdle(definition.Ships),
+                player2:        PlayerStateModel.CreateIdle(definition.Ships));
 
-        public GameStateModel(
+        private GameStateModel(
             GamePlayer currentPlayer,
             GameDefinitionModel definition,
             int gamesPlayed,
             DateTime lastUpdate,
+            GamePhase phase,
             PlayerStateModel player1,
-            PlayerStateModel player2,
-            GamePhase phase)
+            PlayerStateModel player2)
         {
-            CurrentPlayer = currentPlayer;
-            Definition = definition;
-            GamesPlayed = gamesPlayed;
-            LastUpdate = lastUpdate;
-            Player1 = player1;
-            Player2 = player2;
-            Phase = phase;
+            CurrentPlayer   = currentPlayer;
+            Definition      = definition;
+            GamesPlayed     = gamesPlayed;
+            LastUpdate      = lastUpdate;
+            Phase           = phase;
+            Player1         = player1;
+            Player2         = player2;
         }
 
+        private GameStateModel(GameStateModel original)
+        {
+            CurrentPlayer   = original.CurrentPlayer;
+            Definition      = original.Definition;
+            GamesPlayed     = original.GamesPlayed;
+            LastUpdate      = original.LastUpdate;
+            Phase           = original.Phase;
+            Player1         = original.Player1;
+            Player2         = original.Player2;
+        }
 
-        public GamePlayer CurrentPlayer { get; }
+        public GamePlayer CurrentPlayer { get; private init; }
 
-        public GameDefinitionModel Definition { get; }
+        public GameDefinitionModel Definition { get; private init; }
 
-        public int GamesPlayed { get; }
+        public int GamesPlayed { get; private init; }
 
-        public DateTime LastUpdate { get; }
+        public DateTime LastUpdate { get; private init; }
 
-        public PlayerStateModel Player1 { get; }
+        public GamePhase Phase { get; private init; }
 
-        public PlayerStateModel Player2 { get; }
+        public PlayerStateModel Player1 { get; private init; }
 
-        public GamePhase Phase { get; }
-
-
-        public PlayerStateModel CurrentPlayerState
-            => (CurrentPlayer == GamePlayer.Player1)
-                ? Player1
-                : Player2;
-
-        public PlayerStateModel OpponentPlayerState
-            => (CurrentPlayer == GamePlayer.Player2)
-                ? Player1
-                : Player2;
-
-        public bool CanFireShot(
-                Point position)
-            => (Phase == GamePhase.Running)
-                && (((CurrentPlayer == GamePlayer.Player1)
-                        && Player1.CanFireShot
-                        && Player2.CanReceiveShot(position))
-                    || ((CurrentPlayer == GamePlayer.Player2)
-                        && Player2.CanFireShot
-                        && Player1.CanReceiveShot(position)));
-
-        public bool CanCompleteSetup(
-                GamePlayer player)
-            => (Phase == GamePhase.Setup)
-                && !(((player == GamePlayer.Player1) && !Player1.CanCompleteSetup(Definition.GameBoard, Definition.Ships))
-                    || ((player == GamePlayer.Player2) && !Player2.CanCompleteSetup(Definition.GameBoard, Definition.Ships)));
+        public PlayerStateModel Player2 { get; private init; }
 
 
         public GameStateModel BeginSetup()
-            => new GameStateModel(
-                CurrentPlayer,
-                Definition,
-                GamesPlayed,
-                LastUpdate,
-                Player1.BeginSetup(),
-                Player2.BeginSetup(),
-                GamePhase.Setup);
+            => new(this)
+            {
+                Phase   = GamePhase.Setup,
+                Player1 = Player1.BeginSetup(),
+                Player2 = Player1.BeginSetup()
+            };
 
         public GameStateModel CompleteGame(
             GamePlayer winner)
@@ -94,14 +77,13 @@ namespace Battleship.NET.Domain.Models
                 ? (Player1.IncrementWins(), Player2)
                 : (Player1, Player2.IncrementWins());
 
-            return new GameStateModel(
-                CurrentPlayer,
-                Definition,
-                GamesPlayed + 1,
-                LastUpdate,
-                player1,
-                player2,
-                GamePhase.Complete);
+            return new(this)
+            {
+                GamesPlayed = GamesPlayed + 1,
+                Phase       = GamePhase.Complete,
+                Player1     = player1,
+                Player2     = player2
+            };
         }
 
         public GameStateModel CompleteSetup(
@@ -111,16 +93,14 @@ namespace Battleship.NET.Domain.Models
                 ? (Player1.CompleteSetup(), Player2)
                 : (Player1, Player2.CompleteSetup());
 
-            return new GameStateModel(
-                CurrentPlayer,
-                Definition,
-                GamesPlayed,
-                LastUpdate,
-                player1,
-                player2,
-                (player1.IsSetupComplete && player2.IsSetupComplete)
+            return new(this)
+            {
+                Phase   = (player1.IsSetupComplete && player2.IsSetupComplete)
                     ? GamePhase.Ready
-                    : Phase);
+                    : Phase,
+                Player1 = player1,
+                Player2 = player2
+            };
         }
 
         public GameStateModel EndTurn()
@@ -129,14 +109,12 @@ namespace Battleship.NET.Domain.Models
                 ? (Player1, Player2.StartTurn(), GamePlayer.Player2)
                 : (Player1.StartTurn(), Player2, GamePlayer.Player1);
 
-            return new GameStateModel(
-                nextPlayer,
-                Definition,
-                GamesPlayed,
-                LastUpdate,
-                player1,
-                player2,
-                Phase);
+            return new(this)
+            {
+                CurrentPlayer   = nextPlayer,
+                Player1         = player1,
+                Player2         = player2
+            };
         }
 
         public GameStateModel FireShot(
@@ -145,28 +123,42 @@ namespace Battleship.NET.Domain.Models
             PlayerStateModel player1, player2;
             if (CurrentPlayer == GamePlayer.Player1)
             {
-                player2 = Player2.ReceiveShot(position, Definition.Ships);
-                player1 = Player1.FireShot(player2.GameBoard.Hits.Contains(position));
+                var shotOutcome = GetShotOutcome(Player2.GameBoard.Ships);
+
+                player1 = Player1.FireShot(shotOutcome);
+                player2 = Player2.ReceiveShot(position, shotOutcome);
             }
             else
             {
-                player1 = Player1.ReceiveShot(position, Definition.Ships);
-                player2 = Player2.FireShot(player1.GameBoard.Hits.Contains(position));
+                var shotOutcome = GetShotOutcome(Player1.GameBoard.Ships);
+
+                player2 = Player2.FireShot(shotOutcome);
+                player1 = Player1.ReceiveShot(position, shotOutcome);
             }
 
-            return new GameStateModel(
-                CurrentPlayer,
-                Definition,
-                GamesPlayed,
-                LastUpdate,
-                player1,
-                player2,
-                Phase);
+            return new(this)
+            {
+                Player1 = player1,
+                Player2 = player2
+            };
+
+            ShotOutcome GetShotOutcome(ImmutableList<ShipStateModel> shipStates)
+                => Enumerable.Zip(
+                            Definition.Ships,
+                            shipStates,
+                            (definition, state) => definition.Segments
+                                .Select(segment => segment
+                                    .RotateOrigin(state.Orientation)
+                                    .Translate(state.Position)))
+                        .SelectMany(positions => positions)
+                        .Contains(position)
+                    ? ShotOutcome.Hit
+                    : ShotOutcome.Miss;
         }
 
         public GameStateModel MoveShip(
             GamePlayer player,
-            int shipIndex, 
+            int shipIndex,
             Point shipSegment,
             Point targetPosition)
         {
@@ -174,32 +166,43 @@ namespace Battleship.NET.Domain.Models
                 ? (Player1.MoveShip(shipIndex, shipSegment, targetPosition), Player2)
                 : (Player1, Player2.MoveShip(shipIndex, shipSegment, targetPosition));
 
-            return new GameStateModel(
-                CurrentPlayer,
-                Definition,
-                GamesPlayed,
-                LastUpdate,
-                player1,
-                player2,
-                Phase);
+            return new(this)
+            {
+                Player1 = player1,
+                Player2 = player2,
+            };
         }
 
         public GameStateModel RandomizeShips(
             GamePlayer player,
             Random random)
         {
-            var (player1, player2) = (player == GamePlayer.Player1)
-                ? (Player1.RandomizeShips(Definition.GameBoard, Definition.Ships, random), Player2)
-                : (Player1, Player2.RandomizeShips(Definition.GameBoard, Definition.Ships, random));
+            var boardSize = Selectors.BoardSelectors.Size.Invoke(this);
 
-            return new GameStateModel(
-                CurrentPlayer,
-                Definition,
-                GamesPlayed,
-                LastUpdate,
-                player1,
-                player2,
-                Phase);
+            GameStateModel state;
+            do
+            {
+                var (player1, player2) = (player == GamePlayer.Player1)
+                    ? (RandomizeShips(Player1), Player2)
+                    : (Player1, RandomizeShips(Player2));
+
+                state = new(this)
+                {
+                    Player1 = player1,
+                    Player2 = player2
+                };
+            } while (!Selectors.BoardSelectors.IsValid[player].Invoke(state));
+
+            return state;
+
+            PlayerStateModel RandomizeShips(PlayerStateModel player)
+                => player.PlaceShips(Enumerable.Range(0, Definition.Ships.Length)
+                    .Select(_ => ShipStateModel.Place(
+                        orientation:    (Orientation)(random.Next(0, 4) * 90),
+                        position:       new Point(
+                            random.Next(0, boardSize.Width),
+                            random.Next(0, boardSize.Height))))
+                    .ToImmutableList());
         }
 
         public GameStateModel RotateShip(
@@ -212,14 +215,11 @@ namespace Battleship.NET.Domain.Models
                 ? (Player1.RotateShip(shipIndex, shipSegment, targetOrientation), Player2)
                 : (Player1, Player2.RotateShip(shipIndex, shipSegment, targetOrientation));
 
-            return new GameStateModel(
-                CurrentPlayer,
-                Definition,
-                GamesPlayed,
-                LastUpdate,
-                player1,
-                player2,
-                Phase);
+            return new(this)
+            {
+                Player1 = player1,
+                Player2 = player2,
+            };
         }
 
         public GameStateModel StartGame(
@@ -229,30 +229,25 @@ namespace Battleship.NET.Domain.Models
                 ? (Player1.StartTurn(), Player2)
                 : (Player1, Player2.StartTurn());
 
-            return new GameStateModel(
-                firstPlayer,
-                Definition,
-                GamesPlayed,
-                LastUpdate,
-                player1,
-                player2,
-                GamePhase.Running);
+            return new(this)
+            {
+                CurrentPlayer   = firstPlayer,
+                Phase           = GamePhase.Running,
+                Player1         = player1,
+                Player2         = player2
+            };
         }
 
         public GameStateModel TogglePause()
-            => new GameStateModel(
-                CurrentPlayer,
-                Definition,
-                GamesPlayed,
-                LastUpdate,
-                Player1,
-                Player2,
-                (Phase == GamePhase.Paused)
+            => new(this)
+            {
+                Phase = (Phase == GamePhase.Paused)
                     ? GamePhase.Running
-                    : GamePhase.Paused);
+                    : GamePhase.Paused
+            };
 
         public GameStateModel UpdateRuntime(
-                DateTime now)
+            DateTime now)
         {
             var (player1, player2) = (Phase == GamePhase.Running)
                 ? (CurrentPlayer == GamePlayer.Player1)
@@ -260,14 +255,12 @@ namespace Battleship.NET.Domain.Models
                     : (Player1, Player2.IncrementPlayTime(now - LastUpdate))
                 : (Player1, Player2);
 
-            return new GameStateModel(
-                CurrentPlayer,
-                Definition,
-                GamesPlayed,
-                now,
-                player1,
-                player2,
-                Phase);
+            return new(this)
+            {
+                LastUpdate  = now,
+                Player1     = player1,
+                Player2     = player2
+            };
         }
     }
 }

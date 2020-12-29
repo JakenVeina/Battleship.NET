@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:u="clr-namespace:Battleship.NET.WPF.ViewUtilities"
         xmlns:completed="clr-namespace:Battleship.NET.WPF.Gamespace.Completed"
         x:Class="Battleship.NET.WPF.Gamespace.Completed.CompletedGamespaceView"
@@ -33,11 +34,23 @@
             <ItemsControl ItemsSource="{Binding BoardPositions.Value}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <UniformGrid
-                            Columns="{Binding BoardSize.Value.Width}"
-                            Rows="{Binding BoardSize.Value.Height}"/>
+                        <Grid>
+                            <b:Interaction.Behaviors>
+                                <u:UniformGridBehavior
+                                    ColumnCount="{Binding BoardSize.Value.Width}"
+                                    RowCount="{Binding BoardSize.Value.Height}"/>
+                            </b:Interaction.Behaviors>
+                        </Grid>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemContainerStyle>
+                    <Style TargetType="ContentPresenter">
+                        <Setter Property="Grid.Column"  Value="{Binding Position.X}"/>
+                        <Setter Property="Grid.Row"     Value="{Binding Position.Y}"/>
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <completed:CompletedGamespaceBoardPositionView/>

@@ -10,6 +10,7 @@ using ReduxSharp;
 
 using Battleship.NET.Domain.Actions;
 using Battleship.NET.Domain.Models;
+using Battleship.NET.Domain.Selectors;
 using Battleship.NET.WPF.State.Actions;
 using Battleship.NET.WPF.State.Models;
 
@@ -24,50 +25,35 @@ namespace Battleship.NET.WPF.Gamespace.Setup
             SetupGamespaceShipSegmentViewModelFactory shipSegmentFactory,
             IStore<ViewStateModel> viewStateStore)
         {
-            var gameDefinition = gameStateStore
-                .Select(gameState => gameState.Definition)
-                .ToReactiveProperty();
-
-            var boardDefinition = gameDefinition
-                .Select(gameDefinition => gameDefinition.GameBoard)
-                .ToReactiveProperty();
-
             var activePlayer = viewStateStore
                 .Select(viewState => viewState.ActivePlayer)
-                .Where(activePlayer => activePlayer.HasValue)
-                .Select(activePlayer => activePlayer!.Value)
-                .ToReactiveProperty();
+                .WhereNotNull()
+                .DistinctUntilChanged()
+                .ShareReplay(1);
 
-            BoardPositions = boardDefinition
-                .Select(definition => definition.Positions
-                    .OrderBy(position => position.Y)
-                    .ThenBy(position => position.X)
+            BoardPositions = gameStateStore
+                .Select(gameState => gameState.Definition)
+                .DistinctUntilChanged()
+                .Select(definition => definition.GameBoard.Positions
                     .Select(position => boardPositionFactory.Create(position))
                     .ToImmutableArray())
                 .ToReactiveProperty();
 
-            BoardSize = boardDefinition
-                .Select(definition => definition.Size)
-                .ToReactiveProperty();
-
-            ShipSegments = gameDefinition
-                .Select(definition => definition.Ships
-                    .SelectMany((ship, shipIndex) => ship.Segments
-                        .Select(segment => shipSegmentFactory.Create(segment, shipIndex)))
-                    .ToImmutableArray())
+            BoardSize = gameStateStore
+                .Select(BoardSelectors.Size)
                 .ToReactiveProperty();
 
             CompleteSetupCommand = ReactiveCommand.Create(
-                activePlayer
+                execute: activePlayer
                     .Select(activePlayer => new Action(() =>
                     {
                         gameStateStore.Dispatch(new CompleteSetupAction(activePlayer));
                         viewStateStore.Dispatch(new ToggleActivePlayerAction());
                     })),
-                Observable.CombineLatest(
-                        gameStateStore,
-                        activePlayer,
-                        (gameState, activePlayer) => gameState.CanCompleteSetup(activePlayer))
+                canExecute: activePlayer
+                    .Select(activePlayer => gameStateStore
+                        .Select(BoardSelectors.IsValid[activePlayer]))
+                    .Switch()
                     .DistinctUntilChanged());
 
             RandomizeShipsCommand = ReactiveCommand.Create(
@@ -75,6 +61,15 @@ namespace Battleship.NET.WPF.Gamespace.Setup
                     .Select(activePlayer => new Action(() => gameStateStore.Dispatch(new RandomizeShipsAction(
                         activePlayer,
                         random)))));
+
+            ShipSegments = gameStateStore
+                .Select(gameState => gameState.Definition.Ships)
+                .DistinctUntilChanged()
+                .Select(definitions => definitions
+                    .SelectMany((ship, shipIndex) => ship.Segments
+                        .Select(segment => shipSegmentFactory.Create(segment, shipIndex)))
+                    .ToImmutableArray())
+                .ToReactiveProperty();
         }
 
         public IReadOnlyObservableProperty<ImmutableArray<SetupGamespaceBoardPositionViewModel>> BoardPositions { get; }

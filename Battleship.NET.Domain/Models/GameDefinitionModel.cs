@@ -11,12 +11,12 @@ namespace Battleship.NET.Domain.Models
                 PlayerDefinitionModel player1,
                 PlayerDefinitionModel player2)
             => new GameDefinitionModel(
-                gameBoard,
-                player1,
-                player2,
-                ships.ToImmutableArray());
+                gameBoard:  gameBoard,
+                player1:    player1,
+                player2:    player2,
+                ships:      ships.ToImmutableArray());
 
-        public GameDefinitionModel(
+        private GameDefinitionModel(
             GameBoardDefinitionModel gameBoard,
             PlayerDefinitionModel player1,
             PlayerDefinitionModel player2,

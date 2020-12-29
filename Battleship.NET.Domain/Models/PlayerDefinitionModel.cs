@@ -5,9 +5,9 @@
         public static PlayerDefinitionModel Create(
                 string name)
             => new PlayerDefinitionModel(
-                name);
+                name:   name);
 
-        public PlayerDefinitionModel(
+        private PlayerDefinitionModel(
             string name)
         {
             Name = name;

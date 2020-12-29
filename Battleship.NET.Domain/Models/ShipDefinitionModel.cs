@@ -10,15 +10,15 @@ namespace Battleship.NET.Domain.Models
                 string name,
                 IEnumerable<Point> segments)
             => new ShipDefinitionModel(
-                name,
-                segments.ToImmutableHashSet());
+                name:       name,
+                segments:   segments.ToImmutableHashSet());
 
-        public ShipDefinitionModel(
+        private ShipDefinitionModel(
             string name,
             ImmutableHashSet<Point> segments)
         {
-            Name = name;
-            Segments = segments;
+            Name        = name;
+            Segments    = segments;
         }
 
         public string Name { get; }

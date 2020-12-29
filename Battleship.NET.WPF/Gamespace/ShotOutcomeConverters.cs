@@ -3,9 +3,11 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
+using Battleship.NET.Domain.Models;
+
 namespace Battleship.NET.WPF.Gamespace
 {
-    public static class ShotAssetModelConverters
+    public static class ShotOutcomeConverters
     {
         public static readonly IMultiValueConverter LookupSpriteResource
             = new ShotAssetModelLookupResourceKeyValueConverter();
@@ -15,9 +17,9 @@ namespace Battleship.NET.WPF.Gamespace
         {
             public object? Convert(object?[] values, Type targetType, object? parameter, CultureInfo culture)
                 => (values[0] is FrameworkElement frameworkElement)
-                        && (values[1] is ShotAssetModel model)
+                        && (values[1] is ShotOutcome outcome)
                     ? frameworkElement.TryFindResource(
-                        $"Sprite_Shot_{(model.IsHit ? "Hit" : "Miss")}")
+                        $"Sprite_Shot_{outcome}")
                     : null;
 
             public object?[] ConvertBack(object? value, Type[] targetTypes, object? parameter, CultureInfo culture)

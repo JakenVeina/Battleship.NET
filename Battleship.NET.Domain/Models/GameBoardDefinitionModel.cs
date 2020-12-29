@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Drawing;
-using System.Linq;
 
 namespace Battleship.NET.Domain.Models
 {
@@ -11,25 +10,19 @@ namespace Battleship.NET.Domain.Models
                 string name,
                 IEnumerable<Point> positions)
             => new GameBoardDefinitionModel(
-                name,
-                positions.ToImmutableHashSet());
+                name:       name,
+                positions:  positions.ToImmutableHashSet());
 
-        public GameBoardDefinitionModel(
+        private GameBoardDefinitionModel(
             string name,
             ImmutableHashSet<Point> positions)
         {
-            Name = name;
-            Positions = positions;
+            Name        = name;
+            Positions   = positions;
         }
 
-        public string Name { get; }
+        public string Name { get; private init; }
 
-        public ImmutableHashSet<Point> Positions { get; }
-
-
-        public Size Size
-            => new Size(
-                width:  (Positions.Max(position => position.X) + 1),
-                height: (Positions.Max(position => position.Y) + 1));
+        public ImmutableHashSet<Point> Positions { get; private init; }
     }
 }

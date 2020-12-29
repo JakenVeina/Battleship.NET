@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Drawing;
 using System.Linq;
@@ -11,118 +10,82 @@ namespace Battleship.NET.Domain.Models
         public static GameBoardStateModel CreateIdle(
                 IEnumerable<ShipDefinitionModel> ships)
             => new GameBoardStateModel(
-                ImmutableHashSet<Point>.Empty,
-                ImmutableHashSet<Point>.Empty,
-                ships
+                hits:   ImmutableHashSet<Point>.Empty,
+                misses: ImmutableHashSet<Point>.Empty,
+                ships:  ships
                     .Select(ship => ShipStateModel.Idle)
                     .ToImmutableList());
 
-        public GameBoardStateModel(
+        private GameBoardStateModel(
             ImmutableHashSet<Point> hits,
             ImmutableHashSet<Point> misses,
             ImmutableList<ShipStateModel> ships)
         {
-            Hits = hits;
+            Hits   = hits;
             Misses = misses;
-            Ships = ships;
+            Ships  = ships;
         }
 
-
-        public ImmutableHashSet<Point> Hits { get; }
-
-        public ImmutableHashSet<Point> Misses { get; }
-
-        public ImmutableList<ShipStateModel> Ships { get; }
-
-
-        public bool CanReceiveShot(
-                Point position)
-            => !Hits.Contains(position) && !Misses.Contains(position);
-
-        public bool IsValid(
-            GameBoardDefinitionModel definition,
-            IEnumerable<ShipDefinitionModel> shipDefinitions)
+        private GameBoardStateModel(GameBoardStateModel original)
         {
-            var visitedPoints = new HashSet<Point>();
-
-            var occupiedPositionsSequence = Ships
-                .Zip(shipDefinitions, (ship, definition) => (ship, definition))
-                .SelectMany(x => x.ship.EnumerateSegmentPositions(x.definition));
-
-            foreach (var occupiedPosition in occupiedPositionsSequence)
-            {
-                if (visitedPoints.Contains(occupiedPosition) || !definition.Positions.Contains(occupiedPosition))
-                    return false;
-                visitedPoints.Add(occupiedPosition);
-            }
-
-            return true;
+            Hits   = original.Hits;
+            Misses = original.Misses;
+            Ships  = original.Ships;
         }
+
+
+        public ImmutableHashSet<Point> Hits { get; private init; }
+
+        public ImmutableHashSet<Point> Misses { get; private init; }
+
+        public ImmutableList<ShipStateModel> Ships { get; private init; }
 
 
         public GameBoardStateModel ClearShots()
-            => new GameBoardStateModel(
-                ImmutableHashSet<Point>.Empty,
-                ImmutableHashSet<Point>.Empty,
-                Ships);
+            => new(this)
+            {
+                Hits    = Hits.Clear(),
+                Misses  = Misses.Clear()
+            };
 
         public GameBoardStateModel MoveShip(
                 int shipIndex,
                 Point shipSegment,
                 Point targetPosition)
-            => new GameBoardStateModel(
-                Hits,
-                Misses,
-                Ships.SetItem(shipIndex, Ships[shipIndex].Move(shipSegment, targetPosition)));
-
-        public GameBoardStateModel RandomzieShips(
-            GameBoardDefinitionModel definition,
-            IReadOnlyCollection<ShipDefinitionModel> shipDefinitions,
-            Random random)
-        {
-            var size = definition.Size;
-
-            GameBoardStateModel state;
-            do
+            => new(this)
             {
-                state = new GameBoardStateModel(
-                    Hits,
-                    Misses,
-                    Enumerable.Range(0, shipDefinitions.Count)
-                        .Select(shipIndex => new ShipStateModel(
-                            orientation: (Orientation)(random.Next(0, 4) * 90),
-                            position: new Point(
-                                random.Next(0, size.Width),
-                                random.Next(0, size.Height))))
-                        .ToImmutableList());
-            }
-            while (!state.IsValid(definition, shipDefinitions));
+                Ships = Ships.SetItem(shipIndex, Ships[shipIndex].Move(shipSegment, targetPosition))
+            };
 
-            return state;
-        }
+        public GameBoardStateModel PlaceShips(
+                ImmutableList<ShipStateModel> ships)
+            => new(this)
+            {
+                Ships = ships
+            };
 
         public GameBoardStateModel ReceiveShot(
-                Point position,
-                IEnumerable<ShipDefinitionModel> shipDefinitions)
-            => Ships.Zip(shipDefinitions, (ship, definition) => (ship, definition))
-                    .SelectMany(x => x.ship.EnumerateSegmentPositions(x.definition))
-                    .Contains(position)
-                ? new GameBoardStateModel(
-                    Hits.Add(position),
-                    Misses,
-                    Ships)
-                : new GameBoardStateModel(
-                    Hits,
-                    Misses.Add(position),
-                    Ships);
+            Point position,
+            ShotOutcome outcome)
+        {
+            var (hits, misses) = (outcome == ShotOutcome.Hit)
+                ? (Hits.Add(position), Misses)
+                : (Hits, Misses.Add(position));
+
+            return new(this)
+            {
+                Hits    = hits,
+                Misses  = misses
+            };
+        }
 
         public GameBoardStateModel RotateShip(
                 int shipIndex,
                 Point shipSegment,
                 Orientation targetOrientation)
-            => new GameBoardStateModel(
-                Hits,
-                Misses,
-                Ships.SetItem(shipIndex, Ships[shipIndex].Rotate(shipSegment, targetOrientation)));
+            => new(this)
+            {
+                Ships = Ships.SetItem(shipIndex, Ships[shipIndex].Rotate(shipSegment, targetOrientation))
+            };
     }
 }

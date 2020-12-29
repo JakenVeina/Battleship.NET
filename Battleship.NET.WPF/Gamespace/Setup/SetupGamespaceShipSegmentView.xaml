@@ -20,7 +20,7 @@
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding IsValid.Value}"  Value="True">       <Setter Property="Fill" Value="#007700"/></DataTrigger>
                     <DataTrigger Binding="{Binding IsValid.Value}"  Value="False">      <Setter Property="Fill" Value="#770000"/></DataTrigger>
-                    <DataTrigger Binding="{Binding Position.Value}" Value="{x:Null}">   <Setter Property="Fill" Value="{x:Null}"/></DataTrigger>
+                    <DataTrigger Binding="{Binding Position.Value}" Value="{x:Null}">   <Setter Property="Visibility" Value="Hidden"/></DataTrigger>
                 </Style.Triggers>
             </Style>
         </c:VectorSprite.Style>

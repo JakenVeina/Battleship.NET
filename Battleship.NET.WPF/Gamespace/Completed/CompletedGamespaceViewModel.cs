@@ -10,6 +10,7 @@ using ReduxSharp;
 
 using Battleship.NET.Domain.Actions;
 using Battleship.NET.Domain.Models;
+using Battleship.NET.Domain.Selectors;
 using Battleship.NET.WPF.State.Actions;
 using Battleship.NET.WPF.State.Models;
 
@@ -23,10 +24,6 @@ namespace Battleship.NET.WPF.Gamespace.Completed
             Random random,
             IStore<ViewStateModel> viewStateStore)
         {
-            var boardDefinition = gameStateStore
-                .Select(gameState => gameState.Definition.GameBoard)
-                .ToReactiveProperty();
-
             BeginSetupCommand = ReactiveCommand.Create(() =>
             {
                 gameStateStore.Dispatch(new BeginSetupAction());
@@ -35,16 +32,16 @@ namespace Battleship.NET.WPF.Gamespace.Completed
                 viewStateStore.Dispatch(new SetActivePlayerAction(GamePlayer.Player1));
             });
 
-            BoardPositions = boardDefinition
-                .Select(definition => definition.Positions
-                    .OrderBy(position => position.Y)
-                        .ThenBy(position => position.X)
+            BoardPositions = gameStateStore
+                .Select(gameState => gameState.Definition)
+                .DistinctUntilChanged()
+                .Select(definition => definition.GameBoard.Positions
                     .Select(position => boardPositionFactory.Create(position))
                     .ToImmutableArray())
                 .ToReactiveProperty();
 
-            BoardSize = boardDefinition
-                .Select(definition => definition.Size)
+            BoardSize = gameStateStore
+                .Select(BoardSelectors.Size)
                 .ToReactiveProperty();
 
             ToggleActivePlayerCommand = ReactiveCommand.Create(() => viewStateStore.Dispatch(new ToggleActivePlayerAction()));

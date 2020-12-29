@@ -48,18 +48,18 @@
                             <c:VectorSprite.Style>
                                 <Style TargetType="c:VectorSprite">
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding ShotAsset.Value.IsHit}" Value="True">    <Setter Property="Fill" Value="#FF7733"/></DataTrigger>
-                                        <DataTrigger Binding="{Binding ShotAsset.Value.IsHit}" Value="False">   <Setter Property="Fill" Value="#7777FF"/></DataTrigger>
+                                        <DataTrigger Binding="{Binding ShotOutcome.Value}" Value="Hit">     <Setter Property="Fill" Value="#FF7733"/></DataTrigger>
+                                        <DataTrigger Binding="{Binding ShotOutcome.Value}" Value="Miss">    <Setter Property="Fill" Value="#7777FF"/></DataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </c:VectorSprite.Style>
 
                             <c:VectorSprite.Definition>
                                 <MultiBinding
-                                        Converter="{x:Static gamespace:ShotAssetModelConverters.LookupSpriteResource}"
+                                        Converter="{x:Static gamespace:ShotOutcomeConverters.LookupSpriteResource}"
                                         TargetNullValue="{StaticResource Sprite_Empty}">
                                     <Binding RelativeSource="{RelativeSource Self}" />
-                                    <Binding Path="ShotAsset.Value" />
+                                    <Binding Path="ShotOutcome.Value" />
                                 </MultiBinding>
                             </c:VectorSprite.Definition>
                         </c:VectorSprite>

@@ -28,10 +28,10 @@ namespace Battleship.NET.WPF.Gamespace.Setup
                     .Select(activePlayer => activePlayer!.Value)
                     .DistinctUntilChanged()
                     .Select(activePlayer => new Action<ShipSegmentAssetModel>(asset => gameStateStore.Dispatch(new MoveShipAction(
-                        activePlayer,
-                        asset.Index,
-                        asset.Segment,
-                        position)))));
+                        player:         activePlayer,
+                        shipIndex:      asset.ShipIndex,
+                        shipSegment:    asset.Segment,
+                        targetPosition: position)))));
         }
 
         public Point Position { get; }

@@ -10,6 +10,7 @@ using ReduxSharp;
 
 using Battleship.NET.Domain.Actions;
 using Battleship.NET.Domain.Models;
+using Battleship.NET.Domain.Selectors;
 using Battleship.NET.WPF.Ship;
 using Battleship.NET.WPF.State.Models;
 
@@ -23,98 +24,79 @@ namespace Battleship.NET.WPF.Gamespace.Setup
             int shipIndex,
             IStore<ViewStateModel> viewStateStore)
         {
-            var model = Observable.CombineLatest(
-                    gameStateStore,
-                    viewStateStore,
-                    (gameState, viewState) =>
-                    (
-                        activePlayer:       viewState.ActivePlayer,
-                        boardPositions:     gameState.Definition.GameBoard.Positions,
-                        player1BoardState:  gameState.Player1.GameBoard,
-                        player2BoardState:  gameState.Player2.GameBoard,
-                        shipDefinitions:    gameState.Definition.Ships
-                    ))
-                .Where(model => model.activePlayer.HasValue)
-                .Select(model =>
-                (
-                    activePlayer:       model.activePlayer!.Value,
-                    boardPositions:     model.boardPositions,
-                    boardState:         (model.activePlayer == GamePlayer.Player1)
-                                            ? model.player1BoardState
-                                            : model.player2BoardState,
-                    shipDefinitions:    model.shipDefinitions
-                ))
-                .ToReactiveProperty();
-
-            var segmentModel = model
-                .Select(model => 
-                (
-                    activePlayer:       model.activePlayer,
-                    boardPositions:     model.boardPositions,
-                    definition:         model.shipDefinitions[shipIndex],
-                    state:              model.boardState.Ships[shipIndex]
-                ))
-                .ToReactiveProperty();
-
-            Asset = segmentModel
-                .Select(segmentModel=> new ShipSegmentAssetModel(
-                    index:          shipIndex,
-                    name:           segmentModel.definition.Name,
-                    orientation:    segmentModel.state.Orientation,
-                    segment:        segment))
-                .ToReactiveProperty();
-
-            Position = segmentModel
-                .Select(segmentModel => 
-                (
-                    boardPositions: segmentModel.boardPositions,
-                    position:       segment
-                                .RotateOrigin(segmentModel.state.Orientation)
-                                .Translate(segmentModel.state.Position)
-                ))
-                .Select(model => model.boardPositions.Contains(model.position)
-                    ? model.position.ToNullable()
-                    : null)
-                .ToReactiveProperty();
-
-            IsValid = model
+            var activePlayer = viewStateStore
+                .Select(viewState => viewState.ActivePlayer)
+                .WhereNotNull()
                 .DistinctUntilChanged()
-                .Select(model => model.boardState.Ships[shipIndex]
-                    .EnumerateSegmentPositions(model.shipDefinitions[shipIndex])
-                    .All(shipPosition => model.boardPositions.Contains(shipPosition)
-                        && Enumerable.Zip(
-                                model.shipDefinitions,
-                                model.boardState.Ships,
-                                (definition, state) => (definition, state))
-                            .Where((_, index) => index != shipIndex)
-                            .SelectMany(ship => ship.state
-                                .EnumerateSegmentPositions(ship.definition))
-                            .All(position => position != shipPosition)))
+                .ShareReplay(1);
+
+            Asset = Observable.CombineLatest(
+                    gameStateStore
+                        .Select(gameState => gameState.Definition.Ships[shipIndex].Name)
+                        .DistinctUntilChanged(),
+                    activePlayer
+                        .Select(activePlayer => (activePlayer == GamePlayer.Player1)
+                            ? gameStateStore.Select(gameState => gameState.Player1.GameBoard.Ships[shipIndex].Orientation)
+                            : gameStateStore.Select(gameState => gameState.Player2.GameBoard.Ships[shipIndex].Orientation))
+                        .Switch()
+                        .DistinctUntilChanged(),
+                    (name, orientation) => new ShipSegmentAssetModel(
+                        shipIndex:          shipIndex,
+                        shipName:           name,
+                        orientation:    orientation,
+                        segment:        segment))
+                .ToReactiveProperty();
+
+            IsValid = activePlayer
+                .Select(activePlayer => gameStateStore
+                    .Select(ShipSelectors.IsValid[(activePlayer, shipIndex)]))
+                .Switch()
+                .ToReactiveProperty();
+
+            Position = Observable.CombineLatest(
+                    gameStateStore
+                        .Select(BoardSelectors.Size)
+                        .DistinctUntilChanged(),
+                    activePlayer
+                        .Select(activePlayer => gameStateStore
+                            .Select(ShipSelectors.SegmentPlacement[(activePlayer, shipIndex, segment)])
+                            .Select(segmentPlacement => segmentPlacement.Position))
+                        .Switch(),
+                    (size, position) => (new Rectangle(System.Drawing.Point.Empty, size).Contains(position))
+                        ? position.ToNullable()
+                        : null)
                 .ToReactiveProperty();
 
             ReceiveShipSegmentCommand = ReactiveCommand.Create(
                 execute:    Observable.CombineLatest(
-                    viewStateStore
-                        .Select(viewState => viewState.ActivePlayer)
-                        .Where(activePlayer => activePlayer.HasValue)
-                        .Select(activePlayer => activePlayer!.Value)
-                        .DistinctUntilChanged(),
+                    activePlayer,
                     Position,
                     (activePlayer, position) => new Action<ShipSegmentAssetModel>(asset => gameStateStore.Dispatch(new MoveShipAction(
-                        activePlayer,
-                        asset.Index,
-                        asset.Segment,
-                        position!.Value)))),
+                        player:         activePlayer,
+                        shipIndex:      asset.ShipIndex,
+                        shipSegment:    asset.Segment,
+                        targetPosition: position!.Value)))), // Null-check is performed within canExecute below
                 canExecute: Position
-                    .Select(position => position.HasValue));
+                    .Select(Position => Position.HasValue)
+                    .DistinctUntilChanged());
 
             RotateCommand = ReactiveCommand.Create(
-                segmentModel
-                    .Select(segmentModel => new Action(() => gameStateStore.Dispatch(new RotateShipAction(
-                        player:             segmentModel.activePlayer,
+                activePlayer
+                    .Select(activePlayer => gameStateStore
+                        .Select<GameStateModel, Orientation>((activePlayer == GamePlayer.Player1)
+                            ? gameState => gameState.Player1.GameBoard.Ships[shipIndex].Orientation
+                            : gameState => gameState.Player2.GameBoard.Ships[shipIndex].Orientation)
+                        .Select(orientation => 
+                        (
+                            activePlayer:   activePlayer,
+                            orientation:    orientation
+                        )))
+                    .Switch()
+                    .Select(@params => new Action(() => gameStateStore.Dispatch(new RotateShipAction(
+                        player:             @params.activePlayer,
                         shipIndex:          shipIndex,
                         shipSegment:        segment,
-                        targetOrientation:  segmentModel.state.Orientation switch
+                        targetOrientation:  @params.orientation switch
                         {
                             Orientation.Rotate0     => Orientation.Rotate270,
                             Orientation.Rotate270   => Orientation.Rotate180,

@@ -1,27 +1,27 @@
 ﻿using System.Drawing;
 
-namespace Battleship.NET.WPF.Ship
+namespace Battleship.NET.Domain.Models
 {
-    public class ShipSegmentAssetModel
+    public class ShipSegmentPlacementModel
     {
-        public ShipSegmentAssetModel(
+        public ShipSegmentPlacementModel(
             Orientation orientation,
+            Point position,
             Point segment,
-            int shipIndex,
-            string shipName)
+            int shipIndex)
         {
             Orientation = orientation;
+            Position    = position;
             Segment     = segment;
             ShipIndex   = shipIndex;
-            ShipName    = shipName;
         }
 
         public Orientation Orientation { get; }
 
+        public Point Position { get; }
+
         public Point Segment { get; }
 
         public int ShipIndex { get; }
-
-        public string ShipName { get; }
     }
 }
