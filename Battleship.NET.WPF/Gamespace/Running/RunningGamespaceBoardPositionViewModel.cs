@@ -14,10 +14,12 @@ using Battleship.NET.Domain.Selectors;
 namespace Battleship.NET.WPF.Gamespace.Running
 {
     public class RunningGamespaceBoardPositionViewModel
+        : GameBoardPositionViewModelBase
     {
         public RunningGamespaceBoardPositionViewModel(
-            IStore<GameStateModel> gameStateStore,
-            System.Drawing.Point position)
+                IStore<GameStateModel> gameStateStore,
+                System.Drawing.Point position)
+            : base(position)
         {
             var opponentPlayer = gameStateStore
                 .Select(gameState => (gameState.CurrentPlayer == GamePlayer.Player1)
@@ -33,8 +35,6 @@ namespace Battleship.NET.WPF.Gamespace.Running
                         .Select(BoardSelectors.CanReceiveShot[(opponentPlayer, position)]))
                     .Switch()
                     .DistinctUntilChanged());
-
-            Position = position;
 
             ShipAsset = opponentPlayer
                 .Select(opponentPlayer => gameStateStore
@@ -67,8 +67,6 @@ namespace Battleship.NET.WPF.Gamespace.Running
         }
 
         public ICommand<Unit> FireShotCommand { get; }
-
-        public System.Drawing.Point Position { get; }
 
         public IReadOnlyObservableProperty<ShipSegmentAssetModel?> ShipAsset { get; }
 

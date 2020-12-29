@@ -12,11 +12,13 @@ using Battleship.NET.WPF.State.Models;
 namespace Battleship.NET.WPF.Gamespace.Completed
 {
     public class CompletedGamespaceBoardPositionViewModel
+        : GameBoardPositionViewModelBase
     {
         public CompletedGamespaceBoardPositionViewModel(
-            IStore<GameStateModel> gameStateStore,
-            System.Drawing.Point position,
-            IStore<ViewStateModel> viewStateStore)
+                IStore<GameStateModel> gameStateStore,
+                System.Drawing.Point position,
+                IStore<ViewStateModel> viewStateStore)
+            : base(position)
         {
             var activePlayer = viewStateStore
                 .Select(viewState => viewState.ActivePlayer)
@@ -41,8 +43,6 @@ namespace Battleship.NET.WPF.Gamespace.Completed
                 .Switch()
                 .ToReactiveProperty();
 
-            Position = position;
-
             ShipAsset = Observable.CombineLatest(
                     gameStateStore
                         .Select(gameState => gameState.Definition),
@@ -65,8 +65,6 @@ namespace Battleship.NET.WPF.Gamespace.Completed
 
         public IReadOnlyObservableProperty<bool> IsShipSunk { get; }
         
-        public System.Drawing.Point Position { get; }
-
         public IReadOnlyObservableProperty<ShipSegmentAssetModel?> ShipAsset { get; }
 
         public IReadOnlyObservableProperty<ShotOutcome?> ShotOutcome { get; }

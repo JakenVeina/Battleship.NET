@@ -17,31 +17,23 @@ using Battleship.NET.WPF.State.Models;
 namespace Battleship.NET.WPF.Gamespace.Setup
 {
     public class SetupGamespaceViewModel
+        : GameBoardViewModelBase<SetupGamespaceBoardPositionViewModel>
     {
         public SetupGamespaceViewModel(
-            SetupGamespaceBoardPositionViewModelFactory boardPositionFactory,
-            IStore<GameStateModel> gameStateStore,
-            Random random,
-            SetupGamespaceShipSegmentViewModelFactory shipSegmentFactory,
-            IStore<ViewStateModel> viewStateStore)
+                SetupGamespaceBoardPositionViewModelFactory boardPositionFactory,
+                IStore<GameStateModel> gameStateStore,
+                Random random,
+                SetupGamespaceShipSegmentViewModelFactory shipSegmentFactory,
+                IStore<ViewStateModel> viewStateStore)
+            : base(
+                boardPositionFactory.Create,
+                gameStateStore)
         {
             var activePlayer = viewStateStore
                 .Select(viewState => viewState.ActivePlayer)
                 .WhereNotNull()
                 .DistinctUntilChanged()
                 .ShareReplay(1);
-
-            BoardPositions = gameStateStore
-                .Select(gameState => gameState.Definition)
-                .DistinctUntilChanged()
-                .Select(definition => definition.GameBoard.Positions
-                    .Select(position => boardPositionFactory.Create(position))
-                    .ToImmutableArray())
-                .ToReactiveProperty();
-
-            BoardSize = gameStateStore
-                .Select(BoardSelectors.Size)
-                .ToReactiveProperty();
 
             CompleteSetupCommand = ReactiveCommand.Create(
                 execute: activePlayer
@@ -71,10 +63,6 @@ namespace Battleship.NET.WPF.Gamespace.Setup
                     .ToImmutableArray())
                 .ToReactiveProperty();
         }
-
-        public IReadOnlyObservableProperty<ImmutableArray<SetupGamespaceBoardPositionViewModel>> BoardPositions { get; }
-
-        public IReadOnlyObservableProperty<System.Drawing.Size> BoardSize { get; }
 
         public ICommand<Unit> CompleteSetupCommand { get; }
 

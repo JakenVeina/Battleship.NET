@@ -17,12 +17,16 @@ using Battleship.NET.WPF.State.Models;
 namespace Battleship.NET.WPF.Gamespace.Completed
 {
     public class CompletedGamespaceViewModel
+        : GameBoardViewModelBase<CompletedGamespaceBoardPositionViewModel>
     {
         public CompletedGamespaceViewModel(
-            CompletedGamespaceBoardPositionViewModelFactory boardPositionFactory,
-            IStore<GameStateModel> gameStateStore,
-            Random random,
-            IStore<ViewStateModel> viewStateStore)
+                CompletedGamespaceBoardPositionViewModelFactory boardPositionFactory,
+                IStore<GameStateModel> gameStateStore,
+                Random random,
+                IStore<ViewStateModel> viewStateStore)
+            : base(
+                boardPositionFactory.Create,
+                gameStateStore)
         {
             BeginSetupCommand = ReactiveCommand.Create(() =>
             {
@@ -32,26 +36,10 @@ namespace Battleship.NET.WPF.Gamespace.Completed
                 viewStateStore.Dispatch(new SetActivePlayerAction(GamePlayer.Player1));
             });
 
-            BoardPositions = gameStateStore
-                .Select(gameState => gameState.Definition)
-                .DistinctUntilChanged()
-                .Select(definition => definition.GameBoard.Positions
-                    .Select(position => boardPositionFactory.Create(position))
-                    .ToImmutableArray())
-                .ToReactiveProperty();
-
-            BoardSize = gameStateStore
-                .Select(BoardSelectors.Size)
-                .ToReactiveProperty();
-
             ToggleActivePlayerCommand = ReactiveCommand.Create(() => viewStateStore.Dispatch(new ToggleActivePlayerAction()));
         }
 
         public ICommand<Unit> BeginSetupCommand { get; }
-
-        public IReadOnlyObservableProperty<ImmutableArray<CompletedGamespaceBoardPositionViewModel>> BoardPositions { get; }
-
-        public IReadOnlyObservableProperty<System.Drawing.Size> BoardSize { get; }
 
         public ICommand<Unit> ToggleActivePlayerCommand { get; }
     }

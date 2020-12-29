@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:u="clr-namespace:Battleship.NET.WPF.ViewUtilities"
+        xmlns:gamespace="clr-namespace:Battleship.NET.WPF.Gamespace"
         xmlns:setup="clr-namespace:Battleship.NET.WPF.Gamespace.Setup"
         x:Class="Battleship.NET.WPF.Gamespace.Setup.SetupGamespaceView"
         mc:Ignorable="d" 
@@ -26,38 +27,10 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <u:AspectBox
-                Grid.Column="0"
-                Grid.ColumnSpan="2"
-                Grid.Row="0"
-                AspectRatio="1">
-            <ItemsControl ItemsSource="{Binding BoardPositions.Value}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <Grid>
-                            <b:Interaction.Behaviors>
-                                <u:UniformGridBehavior
-                                    ColumnCount="{Binding BoardSize.Value.Width}"
-                                    RowCount="{Binding BoardSize.Value.Height}"/>
-                            </b:Interaction.Behaviors>
-                        </Grid>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-
-                <ItemsControl.ItemContainerStyle>
-                    <Style TargetType="ContentPresenter">
-                        <Setter Property="Grid.Column"  Value="{Binding Position.X}"/>
-                        <Setter Property="Grid.Row"     Value="{Binding Position.Y}"/>
-                    </Style>
-                </ItemsControl.ItemContainerStyle>
-                
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <setup:SetupGamespaceBoardPositionView/>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </u:AspectBox>
+        <gamespace:GameBoardView
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Grid.Row="0"/>
 
         <u:AspectBox
                 Grid.Column="0"

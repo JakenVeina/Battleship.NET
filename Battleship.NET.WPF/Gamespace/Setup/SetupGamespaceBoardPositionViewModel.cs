@@ -13,14 +13,14 @@ using Battleship.NET.WPF.State.Models;
 namespace Battleship.NET.WPF.Gamespace.Setup
 {
     public class SetupGamespaceBoardPositionViewModel
+        : GameBoardPositionViewModelBase
     {
         public SetupGamespaceBoardPositionViewModel(
-            IStore<GameStateModel> gameStateStore,
-            Point position,
-            IStore<ViewStateModel> viewStateStore)
+                IStore<GameStateModel> gameStateStore,
+                Point position,
+                IStore<ViewStateModel> viewStateStore)
+            : base(position)
         {
-            Position = position;
-
             ReceiveShipSegmentCommand = ReactiveCommand.Create(
                 viewStateStore
                     .Select(viewState => viewState.ActivePlayer)
@@ -33,8 +33,6 @@ namespace Battleship.NET.WPF.Gamespace.Setup
                         shipSegment:    asset.Segment,
                         targetPosition: position)))));
         }
-
-        public Point Position { get; }
 
         public ICommand<ShipSegmentAssetModel> ReceiveShipSegmentCommand { get; }
     }

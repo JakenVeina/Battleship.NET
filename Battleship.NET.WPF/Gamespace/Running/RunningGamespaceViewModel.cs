@@ -14,23 +14,15 @@ using Battleship.NET.Domain.Selectors;
 namespace Battleship.NET.WPF.Gamespace.Running
 {
     public class RunningGamespaceViewModel
+        : GameBoardViewModelBase<RunningGamespaceBoardPositionViewModel>
     {
         public RunningGamespaceViewModel(
-            RunningGamespaceBoardPositionViewModelFactory boardPositionFactory,
-            IStore<GameStateModel> gameStateStore)
+                RunningGamespaceBoardPositionViewModelFactory boardPositionFactory,
+                IStore<GameStateModel> gameStateStore)
+            : base(
+                boardPositionFactory.Create,
+                gameStateStore)
         {
-            BoardPositions = gameStateStore
-                .Select(gameState => gameState.Definition)
-                .DistinctUntilChanged()
-                .Select(definition => definition.GameBoard.Positions
-                    .Select(position => boardPositionFactory.Create(position))
-                    .ToImmutableArray())
-                .ToReactiveProperty();
-
-            BoardSize = gameStateStore
-                .Select(BoardSelectors.Size)
-                .ToReactiveProperty();
-
             EndTurnCommand = ReactiveCommand.Create(
                 execute:    () => gameStateStore.Dispatch(new EndTurnAction()),
                 canExecute: gameStateStore
@@ -42,10 +34,6 @@ namespace Battleship.NET.WPF.Gamespace.Running
             TogglePauseCommand = ReactiveCommand.Create(
                 () => gameStateStore.Dispatch(new TogglePauseAction()));
         }
-
-        public IReadOnlyObservableProperty<ImmutableArray<RunningGamespaceBoardPositionViewModel>> BoardPositions { get; }
-
-        public IReadOnlyObservableProperty<System.Drawing.Size> BoardSize { get; }
 
         public ICommand<Unit> EndTurnCommand { get; }
 

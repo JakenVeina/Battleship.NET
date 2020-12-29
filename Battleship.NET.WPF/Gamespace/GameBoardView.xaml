@@ -1,0 +1,50 @@
+﻿<UserControl
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:u="clr-namespace:Battleship.NET.WPF.ViewUtilities"
+        xmlns:completed="clr-namespace:Battleship.NET.WPF.Gamespace.Completed"
+        xmlns:running="clr-namespace:Battleship.NET.WPF.Gamespace.Running"
+        xmlns:setup="clr-namespace:Battleship.NET.WPF.Gamespace.Setup"
+        x:Class="Battleship.NET.WPF.Gamespace.GameBoardView"
+        mc:Ignorable="d">
+
+    <u:AspectBox AspectRatio="1">
+        <ItemsControl ItemsSource="{Binding BoardPositions.Value}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid>
+                        <b:Interaction.Behaviors>
+                            <u:UniformGridBehavior
+                                ColumnCount="{Binding BoardSize.Value.Width}"
+                                RowCount="{Binding BoardSize.Value.Height}"/>
+                        </b:Interaction.Behaviors>
+                    </Grid>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <ItemsControl.ItemContainerStyle>
+                <Style TargetType="ContentPresenter">
+                    <Setter Property="Grid.Column"  Value="{Binding Position.X}"/>
+                    <Setter Property="Grid.Row"     Value="{Binding Position.Y}"/>
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+                
+            <ItemsControl.Resources>
+                <DataTemplate DataType="{x:Type completed:CompletedGamespaceBoardPositionViewModel}">
+                    <completed:CompletedGamespaceBoardPositionView/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type running:RunningGamespaceBoardPositionViewModel}">
+                    <running:RunningGamespaceBoardPositionView/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type setup:SetupGamespaceBoardPositionViewModel}">
+                    <setup:SetupGamespaceBoardPositionView/>
+                </DataTemplate>
+            </ItemsControl.Resources>
+            
+        </ItemsControl>
+    </u:AspectBox>
+
+</UserControl>
