@@ -27,8 +27,8 @@ namespace Battleship.NET.WPF.Gamespace.Running
                 execute:    () => gameStateStore.Dispatch(new EndTurnAction()),
                 canExecute: gameStateStore
                     .Select(gameState => (gameState.CurrentPlayer == GamePlayer.Player1)
-                        ? !gameState.Player1.CanFireShot
-                        : !gameState.Player2.CanFireShot)
+                        ? gameState.Player1.HasMissed
+                        : gameState.Player2.HasMissed)
                     .DistinctUntilChanged());
 
             TogglePauseCommand = ReactiveCommand.Create(

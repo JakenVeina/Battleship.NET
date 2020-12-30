@@ -10,20 +10,20 @@ namespace Battleship.NET.Domain.Models
         public static PlayerStateModel CreateIdle(
                 IEnumerable<ShipDefinitionModel> ships)
             => new PlayerStateModel(
-                canFireShot:        false,
+                hasMissed:        false,
                 gameBoard:          GameBoardStateModel.CreateIdle(ships),
                 isSetupComplete:    false,
                 playTime:           TimeSpan.Zero,
                 wins:               0);
 
         private PlayerStateModel(
-            bool canFireShot,
             GameBoardStateModel gameBoard,
+            bool hasMissed,
             bool isSetupComplete,
             TimeSpan playTime,
             int wins)
         {
-            CanFireShot     = canFireShot;
+            HasMissed       = hasMissed;
             GameBoard       = gameBoard;
             IsSetupComplete = isSetupComplete;
             PlayTime        = playTime;
@@ -32,17 +32,17 @@ namespace Battleship.NET.Domain.Models
 
         private PlayerStateModel(PlayerStateModel original)
         {
-            CanFireShot     = original.CanFireShot;
             GameBoard       = original.GameBoard;
+            HasMissed       = original.HasMissed;
             IsSetupComplete = original.IsSetupComplete;
             PlayTime        = original.PlayTime;
             Wins            = original.Wins;
         }
 
 
-        public bool CanFireShot { get; private init; }
-
         public GameBoardStateModel GameBoard { get; private init; }
+
+        public bool HasMissed { get; private init; }
 
         public bool IsSetupComplete { get; private init; }
 
@@ -67,7 +67,7 @@ namespace Battleship.NET.Domain.Models
         public PlayerStateModel FireShot(ShotOutcome outcome)
             => new(this)
             {
-                CanFireShot = (outcome == ShotOutcome.Hit)
+                HasMissed = (outcome == ShotOutcome.Miss)
             };
 
         public PlayerStateModel IncrementWins()
@@ -112,7 +112,7 @@ namespace Battleship.NET.Domain.Models
         public PlayerStateModel StartTurn()
             => new(this)
             {
-                CanFireShot = true
+                HasMissed = false
             };
 
         public PlayerStateModel IncrementPlayTime(
