@@ -22,6 +22,7 @@ using Battleship.NET.WPF.Gamespace.Ready;
 using Battleship.NET.WPF.Gamespace.Running;
 using Battleship.NET.WPF.Gamespace.Setup;
 using Battleship.NET.WPF.Player;
+using Battleship.NET.WPF.Ship;
 using Battleship.NET.WPF.State;
 using Battleship.NET.WPF.State.Behaviors;
 using Battleship.NET.WPF.State.Models;
@@ -50,13 +51,14 @@ namespace Battleship.NET.WPF
                     .AddTransient<GameViewModel>()
                     .AddTransient<IdleGamespaceViewModel>()
                     .AddTransient<PausedGamespaceViewModel>()
+                    .AddSingleton<PlayerViewModelFactory>()
                     .AddTransient<ReadyGamespaceViewModel>()
                     .AddTransient<RunningGamespaceBoardPositionViewModelFactory>()
                     .AddTransient<RunningGamespaceViewModel>()
                     .AddSingleton<SetupGamespaceBoardPositionViewModelFactory>()
                     .AddSingleton<SetupGamespaceShipSegmentViewModelFactory>()
                     .AddTransient<SetupGamespaceViewModel>()
-                    .AddSingleton<PlayerViewModelFactory>()
+                    .AddSingleton<ShipStatusViewModelFactory>()
                     .BuildServiceProvider();
 
             _behaviorStopTokens = _serviceProvider.GetServices<IBehavior>()

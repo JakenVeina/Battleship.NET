@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Immutable;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Windows;
 
 using ReduxSharp;
 
 using Battleship.NET.Domain.Models;
+using Battleship.NET.WPF.Ship;
 using Battleship.NET.WPF.State.Models;
 
 namespace Battleship.NET.WPF.Player
@@ -14,9 +17,10 @@ namespace Battleship.NET.WPF.Player
         public PlayerViewModel(
             IStore<GameStateModel> gameStateStore,
             GamePlayer player,
+            ShipStatusViewModelFactory shipStatusFactory,
             IStore<ViewStateModel> viewStateStore)
         {
-            var model = ((player == GamePlayer.Player1)
+            var playerInfo = ((player == GamePlayer.Player1)
                     ? gameStateStore.Select(gameState => 
                     (
                         definition: gameState.Definition.Player1,
@@ -33,16 +37,26 @@ namespace Battleship.NET.WPF.Player
                 .Select(viewState => (viewState.ActivePlayer == player))
                 .ToReactiveProperty();
 
-            Name = model
-                .Select(model => model.definition.Name)
+            Name = playerInfo
+                .Select(playerInfo => playerInfo.definition.Name)
                 .ToReactiveProperty();
 
-            PlayTime = model
-                .Select(model => model.state.PlayTime)
+            PlayTime = playerInfo
+                .Select(playerInfo => playerInfo.state.PlayTime)
                 .ToReactiveProperty();
 
-            Wins = model
-                .Select(model => model.state.Wins)
+            ShipStatuses = gameStateStore
+                .Select(gameState => gameState.Definition.Ships.Length)
+                .DistinctUntilChanged()
+                .Select(shipCount => Enumerable.Range(0, shipCount)
+                    .Select(shipIndex => shipStatusFactory.Create(
+                        player:     player,
+                        shipIndex:  shipIndex))
+                    .ToImmutableArray())
+                .ToReactiveProperty();
+
+            Wins = playerInfo
+                .Select(player => player.state.Wins)
                 .ToReactiveProperty();
         }
 
@@ -51,6 +65,8 @@ namespace Battleship.NET.WPF.Player
         public IReadOnlyObservableProperty<string> Name { get; }
 
         public IReadOnlyObservableProperty<TimeSpan> PlayTime { get; }
+
+        public IReadOnlyObservableProperty<ImmutableArray<ShipStatusViewModel>> ShipStatuses { get; }
 
         public IReadOnlyObservableProperty<int> Wins { get; }
     }

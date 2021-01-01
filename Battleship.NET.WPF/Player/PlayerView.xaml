@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:player="clr-namespace:Battleship.NET.WPF.Player"
+        xmlns:ship="clr-namespace:Battleship.NET.WPF.Ship"
         x:Class="Battleship.NET.WPF.Player.PlayerView"
         mc:Ignorable="d" 
         d:DataContext="{d:DesignInstance Type=player:PlayerViewModel}">
@@ -34,6 +35,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
         
             <TextBlock
@@ -47,6 +49,16 @@
             <TextBlock
                 Grid.Row="2"
                 Text="{Binding PlayTime.Value, StringFormat=hh\\:mm\\:ss}"/>
+            
+            <ItemsControl
+                    Grid.Row="4"
+                    ItemsSource="{Binding ShipStatuses.Value}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <ship:ShipStatusView/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </Grid>
     </Border>
 </UserControl>
