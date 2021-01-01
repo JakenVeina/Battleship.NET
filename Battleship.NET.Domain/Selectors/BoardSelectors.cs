@@ -13,22 +13,26 @@ namespace Battleship.NET.Domain.Selectors
         public static readonly SelectorSet<GameStateModel, bool, (GamePlayer player, Point position)> CanReceiveShot
             = SelectorSet.Create<GameStateModel, bool, (GamePlayer player, Point position)>(@params =>
             {
+                Func<GameStateModel, bool> hasShooterMissedSelector;
                 Func<GameStateModel, ImmutableHashSet<Point>> hitsSelector, missesSelector;
                 if (@params.player == GamePlayer.Player1)
                 {
-                    hitsSelector    = gameState => gameState.Player1.GameBoard.Hits;
-                    missesSelector  = gameState => gameState.Player1.GameBoard.Misses;
+                    hasShooterMissedSelector    = gameState => gameState.Player2.HasMissed;
+                    hitsSelector                = gameState => gameState.Player1.GameBoard.Hits;
+                    missesSelector              = gameState => gameState.Player1.GameBoard.Misses;
                 }
                 else
                 {
-                    hitsSelector    = gameState => gameState.Player2.GameBoard.Hits;
-                    missesSelector  = gameState => gameState.Player2.GameBoard.Misses;
+                    hasShooterMissedSelector    = gameState => gameState.Player1.HasMissed;
+                    hitsSelector                = gameState => gameState.Player2.GameBoard.Hits;
+                    missesSelector              = gameState => gameState.Player2.GameBoard.Misses;
                 }
 
                 return Selector.Create(
+                    hasShooterMissedSelector,
                     hitsSelector,
                     missesSelector,
-                    (hits, misses) => !hits.Contains(@params.position)
+                    (hasShooterMissed, hits, misses) => !hasShooterMissed && !hits.Contains(@params.position)
                         && !misses.Contains(@params.position));
             });
 

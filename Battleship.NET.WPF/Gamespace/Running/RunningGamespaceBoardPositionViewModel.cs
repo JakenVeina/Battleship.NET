@@ -29,10 +29,16 @@ namespace Battleship.NET.WPF.Gamespace.Running
                 .ShareReplay(1);
 
             FireShotCommand = ReactiveCommand.Create(
-                execute:    () => gameStateStore.Dispatch(new FireShotAction(position)),
+                execute: () => gameStateStore.Dispatch(new FireShotAction(position)),
                 canExecute: opponentPlayer
                     .Select(opponentPlayer => gameStateStore
-                        .Select(BoardSelectors.CanReceiveShot[(opponentPlayer, position)]))
+                        .Select(BoardSelectors.CanReceiveShot[(opponentPlayer, position)])
+                        .WithLatestFrom(
+                            gameStateStore
+                                .Select(gameState => (gameState.CurrentPlayer == GamePlayer.Player1)
+                                    ? gameState.Player1.HasMissed
+                                    : gameState.Player2.HasMissed),
+                            (canReceiveShot, hasMissed) => canReceiveShot && !hasMissed))
                     .Switch()
                     .DistinctUntilChanged());
 
