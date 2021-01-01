@@ -73,7 +73,7 @@ namespace Battleship.NET.Domain.Selectors
 
         public static readonly SelectorSet<GameStateModel, ShipSegmentPlacementModel?, (GamePlayer player, Point position)> ShipSegmentPlacement
             = SelectorSet.Create<GameStateModel, ShipSegmentPlacementModel?, (GamePlayer player, Point position)>(
-                @params => Selector.Create<GameStateModel, ImmutableArray<ShipSegmentPlacementModel>, ShipSegmentPlacementModel?>(
+                @params => Selector.Create<GameStateModel, ReadOnlyValueList<ShipSegmentPlacementModel>, ShipSegmentPlacementModel?>(
                     argSelector:    ShipSelectors.AllSegmentPlacements[@params.player],
                     resultSelector: segmentPlacements => segmentPlacements
                         .Where(segmentPlacement => segmentPlacement.Position == @params.position)

@@ -6,10 +6,9 @@ namespace Battleship.NET.Domain.Selectors
     public static class Selector
     {
         public static Func<T, TResult> Memoize<T, TResult>(
-            this Func<T, TResult> selector,
-            IEqualityComparer<T>? argComparer = null)
+            this Func<T, TResult> selector)
         {
-            var cache = new MemoizationCache<T, TResult>(argComparer ?? EqualityComparer<T>.Default);
+            var cache = new MemoizationCache<T, TResult>();
 
             return arg =>
             {
@@ -25,7 +24,7 @@ namespace Battleship.NET.Domain.Selectors
         public static Func<T1, T2, TResult> Memoize<T1, T2, TResult>(
             this Func<T1, T2, TResult> selector)
         {
-            var cache = new MemoizationCache<(T1, T2), TResult>(EqualityComparer<(T1, T2)>.Default);
+            var cache = new MemoizationCache<(T1, T2), TResult>();
 
             return (arg1, arg2) =>
             {
@@ -39,16 +38,14 @@ namespace Battleship.NET.Domain.Selectors
         }
 
         public static Func<T, TResult> Create<T, TResult>(
-                Func<T, TResult> resultSelector,
-                IEqualityComparer<T>? argComparer = null)
-            => resultSelector.Memoize(argComparer ?? EqualityComparer<T>.Default);
+                Func<T, TResult> resultSelector)
+            => resultSelector.Memoize();
 
         public static Func<TIn, TOut> Create<TIn, T1, TOut>(
             Func<TIn, T1> argSelector,
-            Func<T1, TOut> resultSelector,
-            IEqualityComparer<T1>? argComparer = null)
+            Func<T1, TOut> resultSelector)
         {
-            var memoizedResultSelector = resultSelector.Memoize(argComparer ?? EqualityComparer<T1>.Default);
+            var memoizedResultSelector = resultSelector.Memoize();
 
             return Create<TIn, TOut>(
                 input => memoizedResultSelector.Invoke(
