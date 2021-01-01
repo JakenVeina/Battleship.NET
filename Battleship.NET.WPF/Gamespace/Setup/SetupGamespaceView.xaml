@@ -28,45 +28,45 @@
         </Grid.RowDefinitions>
 
         <gamespace:GameBoardView
-            Grid.Column="0"
-            Grid.ColumnSpan="2"
-            Grid.Row="0"/>
-
-        <u:AspectBox
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
-                Grid.Row="0"
-                AspectRatio="1">
-            <ItemsControl
-                    Name="ShipSegments"
-                    ItemsSource="{Binding ShipSegments.Value}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <Grid>
-                            <b:Interaction.Behaviors>
-                                <u:UniformGridBehavior
-                                    ColumnCount="{Binding BoardSize.Value.Width}"
-                                    RowCount="{Binding BoardSize.Value.Height}"/>
-                            </b:Interaction.Behaviors>
-                        </Grid>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
+                Grid.Row="0">
+            <gamespace:GameBoardView.BoardPositionTemplate>
+                <DataTemplate>
+                    <setup:SetupGamespaceBoardPositionView/>
+                </DataTemplate>
+            </gamespace:GameBoardView.BoardPositionTemplate>
+            
+            <gamespace:GameBoardView.BoardPositionsOverlay>
+                <ItemsControl ItemsSource="{Binding ShipSegments.Value}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Grid>
+                                <b:Interaction.Behaviors>
+                                    <u:UniformGridBehavior
+                                        ColumnCount="{Binding BoardSize.Value.Width}"
+                                        RowCount="{Binding BoardSize.Value.Height}"/>
+                                </b:Interaction.Behaviors>
+                            </Grid>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
 
-                <ItemsControl.ItemContainerStyle>
-                    <Style TargetType="ContentPresenter">
-                        <!-- The designer is lying. These are the correct property paths. Nullable<T> values are unwrapped by Bindings, you don't need to call .Value. -->
-                        <Setter Property="Grid.Column"  Value="{Binding Position.Value.X}"/>
-                        <Setter Property="Grid.Row"     Value="{Binding Position.Value.Y}"/>
-                    </Style>
-                </ItemsControl.ItemContainerStyle>
+                    <ItemsControl.ItemContainerStyle>
+                        <Style TargetType="ContentPresenter">
+                            <!-- The designer is lying. These are the correct property paths. Nullable<T> values are unwrapped by Bindings, you don't need to call .Value. -->
+                            <Setter Property="Grid.Column"  Value="{Binding Position.Value.X}"/>
+                            <Setter Property="Grid.Row"     Value="{Binding Position.Value.Y}"/>
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
                 
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <setup:SetupGamespaceShipSegmentView/>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </u:AspectBox>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <setup:SetupGamespaceShipSegmentView/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </gamespace:GameBoardView.BoardPositionsOverlay>
+        </gamespace:GameBoardView>
 
         <Button Grid.Column="0"
                 Grid.Row="1"

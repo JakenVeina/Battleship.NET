@@ -14,8 +14,10 @@ namespace Battleship.NET.WPF.Gamespace
     public class GameBoardViewModelBase<TBoardPositionViewModel>
     {
         protected GameBoardViewModelBase(
-            Func<System.Drawing.Point, TBoardPositionViewModel> boardPositionFactory, 
-            IStore<GameStateModel> gameStateStore)
+            Func<System.Drawing.Point, TBoardPositionViewModel> boardPositionFactory,
+            GameBoardColumnHeadingsViewModel columnHeadings,
+            IStore<GameStateModel> gameStateStore,
+            GameBoardRowHeadingsViewModel rowHeadings)
         {
             BoardPositions = gameStateStore
                 .Select(gameState => gameState.Definition)
@@ -28,10 +30,18 @@ namespace Battleship.NET.WPF.Gamespace
             BoardSize = gameStateStore
                 .Select(BoardSelectors.Size)
                 .ToReactiveProperty();
+
+            ColumnHeadings = columnHeadings;
+
+            RowHeadings = rowHeadings;
         }
 
         public IReadOnlyObservableProperty<ImmutableArray<TBoardPositionViewModel>> BoardPositions { get; }
 
         public IReadOnlyObservableProperty<System.Drawing.Size> BoardSize { get; }
+
+        public GameBoardColumnHeadingsViewModel ColumnHeadings { get; }
+
+        public GameBoardRowHeadingsViewModel RowHeadings { get; }
     }
 }

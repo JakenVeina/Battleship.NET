@@ -32,6 +32,16 @@ namespace Battleship.NET.Domain.Selectors
                         && !misses.Contains(@params.position));
             });
 
+        public static readonly Func<GameStateModel, ImmutableArray<string>> ColumnHeadings
+            = Selector.Create<GameStateModel, GameDefinitionModel, ImmutableArray<string>>(
+                    argSelector:    gameState => gameState.Definition,
+                    resultSelector: definition => definition.GameBoard.Positions
+                        .Select(position => position.X)
+                        .Distinct()
+                        .OrderBy(x => x)
+                        .Select(x => x.ToString())
+                        .ToImmutableArray());
+
         public static readonly SelectorSet<GameStateModel, bool, GamePlayer> IsValid
             = SelectorSet.Create<GameStateModel, bool, GamePlayer>(
                 player => Selector.Create(
@@ -50,6 +60,16 @@ namespace Battleship.NET.Domain.Selectors
 
                         return true;
                     }));
+
+        public static readonly Func<GameStateModel, ImmutableArray<string>> RowHeadings
+            = Selector.Create<GameStateModel, GameDefinitionModel, ImmutableArray<string>>(
+                    argSelector:    gameState => gameState.Definition,
+                    resultSelector: definition => definition.GameBoard.Positions
+                        .Select(position => position.Y)
+                        .Distinct()
+                        .OrderBy(y => y)
+                        .Select(y => Convert.ToChar(y + 'A').ToString())
+                        .ToImmutableArray());
 
         public static readonly SelectorSet<GameStateModel, ShipSegmentPlacementModel?, (GamePlayer player, Point position)> ShipSegmentPlacement
             = SelectorSet.Create<GameStateModel, ShipSegmentPlacementModel?, (GamePlayer player, Point position)>(

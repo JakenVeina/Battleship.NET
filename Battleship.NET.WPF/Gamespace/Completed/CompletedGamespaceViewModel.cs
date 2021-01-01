@@ -21,12 +21,16 @@ namespace Battleship.NET.WPF.Gamespace.Completed
     {
         public CompletedGamespaceViewModel(
                 CompletedGamespaceBoardPositionViewModelFactory boardPositionFactory,
+                GameBoardColumnHeadingsViewModel columnHeadings,
                 IStore<GameStateModel> gameStateStore,
                 Random random,
+                GameBoardRowHeadingsViewModel rowHeadings,
                 IStore<ViewStateModel> viewStateStore)
             : base(
                 boardPositionFactory.Create,
-                gameStateStore)
+                columnHeadings,
+                gameStateStore,
+                rowHeadings)
         {
             BeginSetupCommand = ReactiveCommand.Create(() =>
             {

@@ -21,13 +21,17 @@ namespace Battleship.NET.WPF.Gamespace.Setup
     {
         public SetupGamespaceViewModel(
                 SetupGamespaceBoardPositionViewModelFactory boardPositionFactory,
+                GameBoardColumnHeadingsViewModel columnHeadings,
                 IStore<GameStateModel> gameStateStore,
                 Random random,
+                GameBoardRowHeadingsViewModel rowHeadings,
                 SetupGamespaceShipSegmentViewModelFactory shipSegmentFactory,
                 IStore<ViewStateModel> viewStateStore)
             : base(
                 boardPositionFactory.Create,
-                gameStateStore)
+                columnHeadings,
+                gameStateStore,
+                rowHeadings)
         {
             var activePlayer = viewStateStore
                 .Select(viewState => viewState.ActivePlayer)

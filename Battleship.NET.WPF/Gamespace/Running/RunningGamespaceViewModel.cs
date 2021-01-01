@@ -18,10 +18,14 @@ namespace Battleship.NET.WPF.Gamespace.Running
     {
         public RunningGamespaceViewModel(
                 RunningGamespaceBoardPositionViewModelFactory boardPositionFactory,
-                IStore<GameStateModel> gameStateStore)
+                GameBoardColumnHeadingsViewModel columnHeadings,
+                IStore<GameStateModel> gameStateStore,
+                GameBoardRowHeadingsViewModel rowHeadings)
             : base(
                 boardPositionFactory.Create,
-                gameStateStore)
+                columnHeadings,
+                gameStateStore,
+                rowHeadings)
         {
             EndTurnCommand = ReactiveCommand.Create(
                 execute:    () => gameStateStore.Dispatch(new EndTurnAction()),

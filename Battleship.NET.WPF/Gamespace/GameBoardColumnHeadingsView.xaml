@@ -1,0 +1,36 @@
+﻿<UserControl 
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:gamespace="clr-namespace:Battleship.NET.WPF.Gamespace"
+        x:Class="Battleship.NET.WPF.Gamespace.GameBoardColumnHeadingsView"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance Type=gamespace:GameBoardColumnHeadingsViewModel}">
+
+    <ItemsControl ItemsSource="{Binding ColumnHeadings.Value}">
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <UniformGrid
+                    Columns="{Binding ColumnHeadings.Value.Length}"
+                    Rows="1"/>
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+                
+        <ItemsControl.ItemTemplate>
+            <DataTemplate>
+                <Viewbox Stretch="Uniform">
+                    <Border>
+                        <TextBlock
+                            Width="10"
+                            Height="10"
+                            FontSize="8"
+                            TextAlignment="Center"
+                            VerticalAlignment="Center"
+                            Text="{Binding}"/>
+                    </Border>
+                </Viewbox>
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+    </ItemsControl>
+</UserControl>

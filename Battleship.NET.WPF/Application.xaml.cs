@@ -14,6 +14,7 @@ using Battleship.NET.Domain;
 using Battleship.NET.Domain.Behaviors;
 using Battleship.NET.Domain.Models;
 using Battleship.NET.WPF.Game;
+using Battleship.NET.WPF.Gamespace;
 using Battleship.NET.WPF.Gamespace.Completed;
 using Battleship.NET.WPF.Gamespace.Idle;
 using Battleship.NET.WPF.Gamespace.Paused;
@@ -42,9 +43,11 @@ namespace Battleship.NET.WPF
                     .AddTransient<IBehavior, GameClockBehavior>()
                     .AddSingleton<IStore<ViewStateModel>, Store<ViewStateModel>>(_ => new Store<ViewStateModel>(new ViewStateReducer(), ViewStateModel.Default))
                     .AddTransient<IBehavior, ActivePlayerSynchronizationBehavior>()
-                    .AddTransient<GameViewModel>()
                     .AddTransient<CompletedGamespaceBoardPositionViewModelFactory>()
                     .AddTransient<CompletedGamespaceViewModel>()
+                    .AddTransient<GameBoardColumnHeadingsViewModel>()
+                    .AddTransient<GameBoardRowHeadingsViewModel>()
+                    .AddTransient<GameViewModel>()
                     .AddTransient<IdleGamespaceViewModel>()
                     .AddTransient<PausedGamespaceViewModel>()
                     .AddTransient<ReadyGamespaceViewModel>()
