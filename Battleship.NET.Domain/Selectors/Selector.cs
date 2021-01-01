@@ -44,20 +44,28 @@ namespace Battleship.NET.Domain.Selectors
             => resultSelector.Memoize(argComparer ?? EqualityComparer<T>.Default);
 
         public static Func<TIn, TOut> Create<TIn, T1, TOut>(
-                Func<TIn, T1> argSelector,
-                Func<T1, TOut> resultSelector,
-                IEqualityComparer<T1>? argComparer = null)
-            => Create<TIn, TOut>(
-                input => resultSelector.Memoize(argComparer ?? EqualityComparer<T1>.Default).Invoke(
+            Func<TIn, T1> argSelector,
+            Func<T1, TOut> resultSelector,
+            IEqualityComparer<T1>? argComparer = null)
+        {
+            var memoizedResultSelector = resultSelector.Memoize(argComparer ?? EqualityComparer<T1>.Default);
+
+            return Create<TIn, TOut>(
+                input => memoizedResultSelector.Invoke(
                     argSelector.Invoke(input)));
+        }
 
         public static Func<TIn, TOut> Create<TIn, T1, T2, TOut>(
-                Func<TIn, T1> arg1Selector,
-                Func<TIn, T2> arg2Selector,
-                Func<T1, T2, TOut> resultSelector)
-            => Create<TIn, TOut>(
-                input => resultSelector.Memoize().Invoke(
+            Func<TIn, T1> arg1Selector,
+            Func<TIn, T2> arg2Selector,
+            Func<T1, T2, TOut> resultSelector)
+        {
+            var memoizedResultSelector = resultSelector.Memoize();
+
+            return Create<TIn, TOut>(
+                input => memoizedResultSelector.Invoke(
                     arg1Selector.Invoke(input),
                     arg2Selector.Invoke(input)));
+        }
     }
 }
