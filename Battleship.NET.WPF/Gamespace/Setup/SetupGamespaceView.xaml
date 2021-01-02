@@ -70,13 +70,13 @@
 
         <Button Grid.Column="0"
                 Grid.Row="1"
-                Command="{Binding RandomizeShipsCommand}">
+                Command="{Binding RandomizeShipsCommand, Mode=OneTime}">
             <TextBlock>Randomize</TextBlock>
         </Button>
 
         <Button Grid.Column="1"
                 Grid.Row="1"
-                Command="{Binding CompleteSetupCommand}">
+                Command="{Binding CompleteSetupCommand, Mode=OneTime}">
             <TextBlock>Done</TextBlock>
         </Button>
 

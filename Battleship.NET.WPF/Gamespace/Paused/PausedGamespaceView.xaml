@@ -18,7 +18,7 @@
     </Style>
   </UserControl.Resources>
 
-  <Button Command="{Binding TogglePauseCommand}">
+  <Button Command="{Binding TogglePauseCommand, Mode=OneTime}">
     <TextBlock>Resume</TextBlock>
   </Button>
 </UserControl>

@@ -49,11 +49,11 @@
             <u:DragEnterTrigger
                     DataFormat="Battleship.NET.ShipSegmentAssetModel"
                     Effects="Move">
-                <b:InvokeCommandAction Command="{Binding ReceiveShipSegmentCommand}" PassEventArgsToCommand="True"/>
+                <b:InvokeCommandAction Command="{Binding ReceiveShipSegmentCommand, Mode=OneTime}" PassEventArgsToCommand="True"/>
             </u:DragEnterTrigger>
             
             <b:EventTrigger EventName="MouseDoubleClick">
-                <b:InvokeCommandAction Command="{Binding RotateCommand}"/>
+                <b:InvokeCommandAction Command="{Binding RotateCommand, Mode=OneTime}"/>
             </b:EventTrigger>
         </b:Interaction.Triggers>
     </c:VectorSprite>

@@ -24,7 +24,9 @@
             <u:DragEnterTrigger
                     DataFormat="Battleship.NET.ShipSegmentAssetModel"
                     Effects="Move">
-                <b:InvokeCommandAction Command="{Binding ReceiveShipSegmentCommand}" PassEventArgsToCommand="True" />
+                <b:InvokeCommandAction
+                    Command="{Binding ReceiveShipSegmentCommand, Mode=OneTime}"
+                    PassEventArgsToCommand="True" />
             </u:DragEnterTrigger>
         </b:Interaction.Triggers>
     </Border>

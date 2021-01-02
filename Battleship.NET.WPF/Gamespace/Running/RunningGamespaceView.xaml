@@ -38,13 +38,13 @@
 
         <Button Grid.Column="0"
                 Grid.Row="1"
-                Command="{Binding TogglePauseCommand}">
+                Command="{Binding TogglePauseCommand, Mode=OneTime}">
             <TextBlock>Pause</TextBlock>
         </Button>
 
         <Button Grid.Column="1"
                 Grid.Row="1"
-                Command="{Binding EndTurnCommand}">
+                Command="{Binding EndTurnCommand, Mode=OneTime}">
             <TextBlock>Done</TextBlock>
         </Button>
   </Grid>

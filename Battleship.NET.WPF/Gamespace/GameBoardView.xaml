@@ -30,22 +30,22 @@
             <gamespace:GameBoardColumnHeadingsView
                 Grid.Column="1"
                 Grid.Row="0"
-                DataContext="{Binding ColumnHeadings}"/>
+                DataContext="{Binding ColumnHeadings, Mode=OneTime}"/>
 
             <gamespace:GameBoardColumnHeadingsView
                 Grid.Column="1"
                 Grid.Row="2"
-                DataContext="{Binding ColumnHeadings}"/>
+                DataContext="{Binding ColumnHeadings, Mode=OneTime}"/>
 
             <gamespace:GameBoardRowHeadingsView
                 Grid.Column="0"
                 Grid.Row="1"
-                DataContext="{Binding RowHeadings}"/>
+                DataContext="{Binding RowHeadings, Mode=OneTime}"/>
 
             <gamespace:GameBoardRowHeadingsView
                 Grid.Column="2"
                 Grid.Row="1"
-                DataContext="{Binding RowHeadings}"/>
+                DataContext="{Binding RowHeadings, Mode=OneTime}"/>
 
             <ItemsControl
                     Grid.Column="1"

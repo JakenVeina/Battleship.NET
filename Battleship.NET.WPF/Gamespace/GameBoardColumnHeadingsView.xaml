@@ -27,7 +27,7 @@
                             FontSize="8"
                             TextAlignment="Center"
                             VerticalAlignment="Center"
-                            Text="{Binding}"/>
+                            Text="{Binding Mode=OneTime}"/>
                     </Border>
                 </Viewbox>
             </DataTemplate>

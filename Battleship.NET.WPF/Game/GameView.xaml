@@ -31,9 +31,9 @@
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
-        <player:PlayerView  Grid.Column="0" DataContext="{Binding Player1}"/>
+        <player:PlayerView  Grid.Column="0" DataContext="{Binding Player1, Mode=OneTime}"/>
         <ContentControl     Grid.Column="1" Content="{Binding Gamespace.Value}" />
-        <player:PlayerView  Grid.Column="2" DataContext="{Binding Player2}"/>
+        <player:PlayerView  Grid.Column="2" DataContext="{Binding Player2, Mode=OneTime}"/>
 
     </Grid>
         

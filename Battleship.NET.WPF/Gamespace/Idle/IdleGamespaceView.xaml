@@ -19,7 +19,7 @@
         </Style>
     </UserControl.Resources>
   
-    <Button Command="{Binding BeginSetupCommand}">
+    <Button Command="{Binding BeginSetupCommand, Mode=OneTime}">
         <TextBlock>Begin Setup</TextBlock>
     </Button>
 
