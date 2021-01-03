@@ -1,13 +1,8 @@
-﻿using System.Linq;
-using System.Reactive.Linq;
+﻿using System.Reactive.Linq;
 using System.Windows;
 
-using ReduxSharp;
-
 using Battleship.NET.Domain.Models;
-using Battleship.NET.Domain.Selectors;
 using Battleship.NET.WPF.Ship;
-using Battleship.NET.WPF.State.Models;
 
 namespace Battleship.NET.WPF.Gamespace.Completed
 {
@@ -15,51 +10,19 @@ namespace Battleship.NET.WPF.Gamespace.Completed
         : GameBoardPositionViewModelBase
     {
         public CompletedGamespaceBoardPositionViewModel(
-                IStore<GameStateModel> gameStateStore,
-                System.Drawing.Point position,
-                IStore<ViewStateModel> viewStateStore)
+                System.Drawing.Point position)
             : base(position)
         {
-            var activePlayer = viewStateStore
-                .Select(viewState => viewState.ActivePlayer)
-                .WhereNotNull()
-                .DistinctUntilChanged()
-                .ShareReplay(1);
-
-            var shipSegmentPlacement = activePlayer
-                .Select(activePlayer => gameStateStore
-                    .Select(BoardSelectors.ShipSegmentPlacement[(activePlayer, position)]))
-                .Switch()
-                .DistinctUntilChanged()
-                .ShareReplay(1);
-
-            IsShipSunk = shipSegmentPlacement
-                .WithLatestFrom(
-                    activePlayer,
-                    (shipSegmentPlacement, activePlayer) => (shipSegmentPlacement is not null)
-                        ? gameStateStore
-                            .Select(ShipSelectors.IsSunk[(activePlayer, shipSegmentPlacement.ShipIndex)])
-                        : Observable.Return(false))
-                .Switch()
+            // TODO: Implement this
+            IsShipSunk = Observable.Never<bool>()
                 .ToReactiveProperty();
 
-            ShipAsset = Observable.CombineLatest(
-                    gameStateStore
-                        .Select(gameState => gameState.Definition),
-                    shipSegmentPlacement,
-                    (definition, shipSegmentPlacement) => (shipSegmentPlacement is null)
-                        ? null
-                        : new ShipSegmentAssetModel(
-                            orientation:    shipSegmentPlacement.Orientation,
-                            segment:        shipSegmentPlacement.Segment,
-                            shipIndex:      shipSegmentPlacement.ShipIndex,
-                            shipName:       definition.Ships[shipSegmentPlacement.ShipIndex].Name))
+            // TODO: Implement this
+            ShipAsset = Observable.Never<ShipSegmentAssetModel?>()
                 .ToReactiveProperty();
 
-            ShotOutcome = activePlayer
-                .Select(activePlayer => gameStateStore
-                    .Select(BoardSelectors.ShotOutcome[(activePlayer, position)]))
-                .Switch()
+            // TODO: Implement this
+            ShotOutcome = Observable.Never<ShotOutcome?>()
                 .ToReactiveProperty();
         }
 

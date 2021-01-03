@@ -1,15 +1,5 @@
-﻿using System.Collections.Immutable;
-using System.Linq;
-using System.Reactive.Linq;
-using System.Reactive;
-using System.Windows;
+﻿using System.Reactive;
 using System.Windows.Input;
-
-using ReduxSharp;
-
-using Battleship.NET.Domain.Actions;
-using Battleship.NET.Domain.Models;
-using Battleship.NET.Domain.Selectors;
 
 namespace Battleship.NET.WPF.Gamespace.Running
 {
@@ -17,26 +7,17 @@ namespace Battleship.NET.WPF.Gamespace.Running
         : GameBoardViewModelBase<RunningGamespaceBoardPositionViewModel>
     {
         public RunningGamespaceViewModel(
-                RunningGamespaceBoardPositionViewModelFactory boardPositionFactory,
                 GameBoardColumnHeadingsViewModel columnHeadings,
-                IStore<GameStateModel> gameStateStore,
                 GameBoardRowHeadingsViewModel rowHeadings)
             : base(
-                boardPositionFactory.Create,
                 columnHeadings,
-                gameStateStore,
                 rowHeadings)
         {
-            EndTurnCommand = ReactiveCommand.Create(
-                execute:    () => gameStateStore.Dispatch(new EndTurnAction()),
-                canExecute: gameStateStore
-                    .Select(gameState => (gameState.CurrentPlayer == GamePlayer.Player1)
-                        ? gameState.Player1.HasMissed
-                        : gameState.Player2.HasMissed)
-                    .DistinctUntilChanged());
+            // TODO: Implement this
+            EndTurnCommand = ReactiveCommand.Create(() => { });
 
-            TogglePauseCommand = ReactiveCommand.Create(
-                () => gameStateStore.Dispatch(new TogglePauseAction()));
+            // TODO: Implement this
+            TogglePauseCommand = ReactiveCommand.Create(() => { });
         }
 
         public ICommand<Unit> EndTurnCommand { get; }

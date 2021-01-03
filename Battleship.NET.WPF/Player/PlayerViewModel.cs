@@ -1,62 +1,36 @@
 ﻿using System;
 using System.Collections.Immutable;
-using System.Linq;
 using System.Reactive.Linq;
 using System.Windows;
 
-using ReduxSharp;
-
 using Battleship.NET.Domain.Models;
 using Battleship.NET.WPF.Ship;
-using Battleship.NET.WPF.State.Models;
 
 namespace Battleship.NET.WPF.Player
 {
     public class PlayerViewModel
     {
         public PlayerViewModel(
-            IStore<GameStateModel> gameStateStore,
-            GamePlayer player,
-            ShipStatusViewModelFactory shipStatusFactory,
-            IStore<ViewStateModel> viewStateStore)
+            GamePlayer player)
         {
-            var playerInfo = ((player == GamePlayer.Player1)
-                    ? gameStateStore.Select(gameState => 
-                    (
-                        definition: gameState.Definition.Player1,
-                        state:      gameState.Player1
-                    ))
-                    : gameStateStore.Select(gameState =>
-                    (
-                        definition: gameState.Definition.Player2,
-                        state:      gameState.Player2
-                    )))
+            // TODO: Implement this
+            IsActive = Observable.Never<bool>()
                 .ToReactiveProperty();
 
-            IsActive = viewStateStore
-                .Select(viewState => (viewState.ActivePlayer == player))
+            // TODO: Implement this
+            Name = Observable.Never<string>()
                 .ToReactiveProperty();
 
-            Name = playerInfo
-                .Select(playerInfo => playerInfo.definition.Name)
+            // TODO: Implement this
+            PlayTime = Observable.Never<TimeSpan>()
                 .ToReactiveProperty();
 
-            PlayTime = playerInfo
-                .Select(playerInfo => playerInfo.state.PlayTime)
+            // TODO: Implement this
+            ShipStatuses = Observable.Never<ImmutableArray<ShipStatusViewModel>>()
                 .ToReactiveProperty();
 
-            ShipStatuses = gameStateStore
-                .Select(gameState => gameState.Definition.Ships.Length)
-                .DistinctUntilChanged()
-                .Select(shipCount => Enumerable.Range(0, shipCount)
-                    .Select(shipIndex => shipStatusFactory.Create(
-                        player:     player,
-                        shipIndex:  shipIndex))
-                    .ToImmutableArray())
-                .ToReactiveProperty();
-
-            Wins = playerInfo
-                .Select(player => player.state.Wins)
+            // TODO: Implement this
+            Wins = Observable.Never<int>()
                 .ToReactiveProperty();
         }
 
