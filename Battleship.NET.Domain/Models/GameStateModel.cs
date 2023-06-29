@@ -67,7 +67,7 @@ namespace Battleship.NET.Domain.Models
             {
                 Phase   = GamePhase.Setup,
                 Player1 = Player1.BeginSetup(),
-                Player2 = Player1.BeginSetup()
+                Player2 = Player2.BeginSetup()
             };
 
         public GameStateModel CompleteGame(
