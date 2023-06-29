@@ -40,7 +40,7 @@ namespace Battleship.NET.Domain.Selectors
             = Selector.Create<GameStateModel, GameDefinitionModel, ImmutableArray<string>>(
                     argSelector:    gameState => gameState.Definition,
                     resultSelector: definition => definition.GameBoard.Positions
-                        .Select(position => position.X)
+                        .Select(position => position.X + 1)
                         .Distinct()
                         .OrderBy(x => x)
                         .Select(x => x.ToString())
